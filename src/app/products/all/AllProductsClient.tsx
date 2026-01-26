@@ -26,6 +26,7 @@ import { ChevronDownIcon } from "@/app/utils/svgs/chevronDownIcon";
 import { FiltersCollapsible } from "@/app/components/filtersCollapsible";
 import { handleScrollToTop } from "@/hooks/scrollPageTop";
 import { SearchByVehicle } from "@/app/components/reuseableUI/searchByVehicle";
+import PaginationHead from "@/app/components/seo/PaginationHead";
 
 type ViewMode = "grid" | "list";
 
@@ -370,6 +371,13 @@ function AllProductsClientInner() {
       ref={topRef}
       className="container mx-auto min-h-[100dvh] py-12 px-4 md:px-6 md:py-16 lg:py-24 lg:px-0 relative"
     >
+      {/* SEO pagination links */}
+      <PaginationHead
+        currentPage={currentPage}
+        totalPages={totalPages}
+        basePath="/products/all"
+      />
+
       <div className="space-y-5">
         <Breadcrumb items={productBreadcrumbItems} />
 

@@ -19,9 +19,18 @@ import { TestimonialsGrid } from "./components/showroom/testimonialsGrid";
 import { getStoreName } from "./utils/branding";
 
 export const metadata: Metadata = {
-  title: `Home - ${getStoreName()}`,
+  title: getStoreName(),
   description:
     "Discover our featured products, best sellers, and exclusive offers. Shop quality products with fast shipping and satisfaction guarantee.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: getStoreName(),
+    description:
+      "Discover our featured products, best sellers, and exclusive offers. Shop quality products with fast shipping and satisfaction guarantee.",
+    type: "website",
+  },
 };
 const Promotions = dynamic(
   () =>

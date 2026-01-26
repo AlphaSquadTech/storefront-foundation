@@ -23,6 +23,9 @@ export async function generateMetadata({
     title: `${categoryName} | Shop`,
     description: `Browse our ${categoryName} collection. Find the best products in ${categoryName} category.`,
     keywords: `${categoryName}, shop, products, buy online`,
+    alternates: {
+      canonical: `/category/${slug}`,
+    },
     openGraph: {
       title: `${categoryName} | Shop`,
       description: `Browse our ${categoryName} collection`,

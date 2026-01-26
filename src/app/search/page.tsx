@@ -25,6 +25,7 @@ import { SearchByVehicle } from "../components/reuseableUI/searchByVehicle";
 import { useVehicleData } from "@/hooks/useVehicleData";
 import { generateItemListSchema } from "@/lib/schema";
 import { handleScrollToTop } from "@/hooks/scrollPageTop";
+import PaginationHead from "../components/seo/PaginationHead";
 
 export const dynamic = "force-dynamic";
 
@@ -428,6 +429,13 @@ function SearchPageContent() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
         />
       )}
+
+      {/* SEO pagination links */}
+      <PaginationHead
+        currentPage={currentPage}
+        totalPages={totalPages}
+        basePath="/search"
+      />
 
       <div className="space-y-5">
         <Breadcrumb items={breadcrumbItems} />

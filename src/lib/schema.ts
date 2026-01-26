@@ -245,6 +245,91 @@ export function generateBlogSchema(
 }
 
 /**
+ * FAQ item for FAQPage schema
+ */
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+/**
+ * Generate FAQPage schema for FAQ pages
+ * @see https://schema.org/FAQPage
+ */
+export function generateFAQPageSchema(faqs: FAQItem[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+}
+
+/**
+ * Parse EditorJS content to extract FAQ items
+ * Looks for header blocks as questions and following paragraph/list blocks as answers
+ */
+export function extractFAQsFromEditorContent(content: string | null): FAQItem[] {
+  if (!content) return [];
+
+  try {
+    const parsed = JSON.parse(content);
+    const blocks = parsed.blocks || [];
+    const faqs: FAQItem[] = [];
+
+    let currentQuestion: string | null = null;
+    let currentAnswer: string[] = [];
+
+    for (const block of blocks) {
+      if (block.type === "header" && block.data?.text) {
+        // Save previous Q&A if exists
+        if (currentQuestion && currentAnswer.length > 0) {
+          faqs.push({
+            question: stripHtml(currentQuestion),
+            answer: currentAnswer.map(stripHtml).join(" "),
+          });
+        }
+        // Start new question
+        currentQuestion = block.data.text;
+        currentAnswer = [];
+      } else if (currentQuestion) {
+        // Collect answer content
+        if (block.type === "paragraph" && block.data?.text) {
+          currentAnswer.push(block.data.text);
+        } else if (block.type === "list" && block.data?.items) {
+          currentAnswer.push(block.data.items.join(". "));
+        }
+      }
+    }
+
+    // Don't forget the last Q&A
+    if (currentQuestion && currentAnswer.length > 0) {
+      faqs.push({
+        question: stripHtml(currentQuestion),
+        answer: currentAnswer.map(stripHtml).join(" "),
+      });
+    }
+
+    return faqs;
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Strip HTML tags from text
+ */
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, "").trim();
+}
+
+/**
  * Generate BlogPosting schema for blog posts
  */
 export function generateBlogPostingSchema(
