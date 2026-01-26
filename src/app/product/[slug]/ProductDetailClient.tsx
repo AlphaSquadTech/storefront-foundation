@@ -121,13 +121,13 @@ type EditorBlock =
     };
 
 export default function ProductDetailClient() {
-  const params = useParams<{ id: string }>();
+  const params = useParams<{ slug: string }>();
   const [pdpContent, setPDPContent] = useState<AncillaryPage | null>(null);
   // The URL param contains the normalized slug (with single dashes)
   // We need to pass the original Saleor slug for the API query
   // Since we can't perfectly reconstruct it, we just use the normalized version
   // and rely on Saleor's flexible slug matching
-  const slug = params?.id ? decodeURIComponent(params.id as string) : "";
+  const slug = params?.slug ? decodeURIComponent(params.slug as string) : "";
 
   const channel = process.env.NEXT_PUBLIC_SALEOR_CHANNEL || "default-channel";
   const router = useRouter();

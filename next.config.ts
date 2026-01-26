@@ -67,6 +67,12 @@ const nextConfig: NextConfig = {
         destination: '/terms-and-conditions',
         permanent: true,
       },
+      // Redirect duplicate product route to canonical product URL
+      {
+        source: '/products/product/:slug*',
+        destination: '/product/:slug*',
+        permanent: true,
+      },
     ];
   },
   // SEO: Ensure consistent URL format without trailing slashes

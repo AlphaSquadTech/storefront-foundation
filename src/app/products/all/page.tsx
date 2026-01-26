@@ -7,20 +7,44 @@ import { Metadata } from "next";
 import { Suspense } from "react";
 import { fetchAllProductsServer } from "@/lib/api/fetchProductsServer";
 
-export const metadata: Metadata = {
-  title: "All Products | Shop",
-  description:
-    "Browse our complete collection of products. Find the best products across all categories.",
-  keywords: "products, shop, buy online, all products",
-  alternates: {
-    canonical: "/products/all",
-  },
-  openGraph: {
+// SEO: Dynamic metadata to handle filtered/faceted URLs
+// Filtered URLs should be noindex to prevent crawl budget waste
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}): Promise<Metadata> {
+  const params = await searchParams;
+
+  // Check if any filter parameters are present
+  const hasFilters = !!(
+    params.category ||
+    params.brand ||
+    params.sort ||
+    params.fitment_pairs ||
+    params.q ||
+    (params.page && params.page !== "1")
+  );
+
+  return {
     title: "All Products | Shop",
-    description: "Browse our complete collection of products",
-    type: "website",
-  },
-};
+    description:
+      "Browse our complete collection of products. Find the best products across all categories.",
+    keywords: "products, shop, buy online, all products",
+    alternates: {
+      canonical: "/products/all",
+    },
+    // noindex filtered URLs to prevent crawl budget waste on faceted navigation
+    robots: hasFilters
+      ? { index: false, follow: true }
+      : { index: true, follow: true },
+    openGraph: {
+      title: "All Products | Shop",
+      description: "Browse our complete collection of products",
+      type: "website",
+    },
+  };
+}
 
 export default async function ProductsPage() {
   // Fetch initial products server-side for SEO

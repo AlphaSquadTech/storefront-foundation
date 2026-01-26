@@ -11,11 +11,11 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { id } = await params;
-  const decodedId = decodeURIComponent(id);
-  const brandName = decodedId
+  const { slug } = await params;
+  const decodedSlug = decodeURIComponent(slug);
+  const brandName = decodedSlug
     .replace(/-/g, " ")
     .replace(/\b\w/g, (l) => l.toUpperCase());
 
@@ -24,7 +24,7 @@ export async function generateMetadata({
     description: `Browse our ${brandName} collection. Find the best products from ${brandName}.`,
     keywords: `${brandName}, brand, products, buy online`,
     alternates: {
-      canonical: `/brand/${id}`,
+      canonical: `/brand/${slug}`,
     },
     openGraph: {
       title: `${brandName} | Shop`,
@@ -37,11 +37,11 @@ export async function generateMetadata({
 export default async function BrandPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { id } = await params;
-  const decodedId = decodeURIComponent(id);
-  const brandName = decodedId
+  const { slug } = await params;
+  const decodedSlug = decodeURIComponent(slug);
+  const brandName = decodedSlug
     .replace(/-/g, " ")
     .replace(/\b\w/g, (l) => l.toUpperCase());
 
@@ -49,13 +49,13 @@ export default async function BrandPage({
   const collectionSchema = generateCollectionPageSchema(
     brandName,
     `Browse our ${brandName} collection. Find the best products from ${brandName}.`,
-    `/brand/${id}`
+    `/brand/${slug}`
   );
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: "/" },
-    { name: "Brands", url: "/brand" },
-    { name: brandName, url: `/brand/${id}` },
+    { name: "Brands", url: "/brands" },
+    { name: brandName, url: `/brand/${slug}` },
   ]);
 
   return (
