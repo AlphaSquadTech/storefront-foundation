@@ -25,7 +25,7 @@ const CategorySwiper: React.FC<CategorySwiperProps> = ({ categories }) => {
   return (
     <div className="container mx-auto">
       <div className="flex w-full items-center justify-between ">
-        <Heading content="Shop by Category" />
+        <Heading content="Shop by Category" as="h2" />
         <div className="hidden lg:flex gap-4 items-center">
           <button
             style={{

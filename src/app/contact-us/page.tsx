@@ -8,7 +8,7 @@ import Heading from "../components/reuseableUI/heading";
 import { getStoreName } from "@/app/utils/branding";
 
 export const metadata: Metadata = {
-  title: `Contact Us - ${getStoreName()}`,
+  title: "Contact Us",
   description: "Get in touch with our customer service team. We're here to help with any questions about our products or services.",
   alternates: {
     canonical: "/contact-us",

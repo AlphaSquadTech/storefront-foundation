@@ -8,7 +8,7 @@ import Breadcrumb from "../components/reuseableUI/breadcrumb";
 import Heading from "../components/reuseableUI/heading";
 
 export const metadata: Metadata = {
-  title: `About Us - ${getStoreName()}`,
+  title: "About Us",
   description:
     "Learn about our mission, values, and commitment to providing high-quality products and exceptional customer service.",
   alternates: {
