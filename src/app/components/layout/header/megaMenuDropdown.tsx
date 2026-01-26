@@ -19,7 +19,6 @@ const CATEGORY_ORDER = [
 interface MegaMenuDropdownProps {
   isOpen: boolean;
   categories: CategoryNode[];
-  categoriesLoading: boolean;
   onClose: () => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
@@ -28,7 +27,6 @@ interface MegaMenuDropdownProps {
 export default function MegaMenuDropdown({
   isOpen,
   categories,
-  categoriesLoading,
   onClose,
   onMouseEnter,
   onMouseLeave,
@@ -45,18 +43,7 @@ export default function MegaMenuDropdown({
       onMouseLeave={onMouseLeave}
     >
       <div className="min-w-[304px] mx-auto">
-        {categoriesLoading ? (
-          <div className="flex flex-col items-center justify-center py-8">
-            <div className="animate-pulse">
-              <div className="rounded-full bg-[var(--color-secondary-200)] p-6">
-                <div className="w-8 h-8 bg-[var(--color-secondary-300)] rounded-full"></div>
-              </div>
-            </div>
-            <p className="text-sm text-[var(--color-secondary-600)] mt-4 font-secondary">
-              Loading categories...
-            </p>
-          </div>
-        ) : categories.length === 0 ? (
+        {categories.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8">
             <div className="rounded-full bg-[var(--color-secondary-200)] p-6">
               <span>{NoProductFoundIcon}</span>
