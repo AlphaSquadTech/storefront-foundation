@@ -7,6 +7,7 @@ import { ProductCard } from "@/app/components/reuseableUI/productCard";
 import ItemsPerPageSelectClient from "@/app/components/shop/ItemsPerPageSelectClient";
 import SearchFilterClient from "@/app/components/shop/SearchFilterClient";
 import { shopApi, type PLSearchProduct } from "@/lib/api/shop";
+import PaginationHead from "@/app/components/seo/PaginationHead";
 
 type ItemsPerPage = 10 | 20 | 50 | 100;
 
@@ -87,6 +88,13 @@ export default function CategoryPageClient(props: { slug: string }) {
 
   return (
     <div className="container mx-auto min-h-[100dvh] py-12 px-4 md:px-6 md:py-16 lg:py-24 lg:px-0 relative">
+      {/* SEO pagination links */}
+      <PaginationHead
+        currentPage={pagination.page}
+        totalPages={pagination.total_pages}
+        basePath={`/category/${slug}`}
+      />
+
       <div className="space-y-5">
         <Breadcrumb items={breadcrumbItems} />
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between w-full gap-4">

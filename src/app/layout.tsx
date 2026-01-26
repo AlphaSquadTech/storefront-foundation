@@ -37,9 +37,14 @@ const daysOne = Days_One({
 });
 
 const appIcon = "/favicon.ico";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 export const metadata: Metadata = {
-  title: getStoreName(),
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: getStoreName(),
+    template: `%s | ${getStoreName()}`,
+  },
   description:
     "Your premier online destination for quality products with fast shipping and exceptional service",
   icons: {
@@ -58,6 +63,17 @@ export const metadata: Metadata = {
       },
     ],
   },
+  openGraph: {
+    type: "website",
+    siteName: getStoreName(),
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default async function RootLayout({
@@ -73,6 +89,32 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${archivo.variable} ${daysOne.variable}`}>
       <head>
+        {/* Preconnect hints for performance optimization */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://www.google.com" />
+        {/* Preconnect to API endpoint if configured */}
+        {process.env.NEXT_PUBLIC_API_URL && (
+          <link
+            rel="preconnect"
+            href={new URL(process.env.NEXT_PUBLIC_API_URL).origin}
+          />
+        )}
+        {/* Preconnect to common S3 media buckets */}
+        <link
+          rel="dns-prefetch"
+          href="https://wsmsaleormedia.s3.us-east-1.amazonaws.com"
+        />
+        <link
+          rel="dns-prefetch"
+          href="https://wsm-saleor-assets.s3.us-west-2.amazonaws.com"
+        />
         {configuration?.google?.search_console_verification_content && (
           <meta
             name="google-site-verification"

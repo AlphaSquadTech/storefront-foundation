@@ -4,6 +4,10 @@ import { getStoreName } from "@/app/utils/branding"
 export const metadata: Metadata = {
   title: `Checkout - ${getStoreName()}`,
   description: "Complete your purchase securely. Enter shipping and billing information, select delivery options, and finalize your order.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 }
 
 export default function CheckoutLayout({
