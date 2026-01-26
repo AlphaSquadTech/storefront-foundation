@@ -233,3 +233,18 @@ export async function fetchAllProductsServer(
     sort_by: options.sort_by,
   });
 }
+
+/**
+ * Fetches products by brand slug server-side
+ */
+export async function fetchBrandProductsServer(
+  slug: string,
+  options: { page?: number; per_page?: number; search?: string } = {}
+): Promise<ServerProductsResponse> {
+  return fetchProductsServer({
+    page: options.page || 1,
+    per_page: options.per_page || 20,
+    q: options.search,
+    brand_slug: slug,
+  });
+}

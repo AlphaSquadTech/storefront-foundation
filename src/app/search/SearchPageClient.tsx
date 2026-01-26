@@ -26,8 +26,9 @@ import { useVehicleData } from "@/hooks/useVehicleData";
 import { generateItemListSchema } from "@/lib/schema";
 import { handleScrollToTop } from "@/hooks/scrollPageTop";
 import PaginationHead from "../components/seo/PaginationHead";
+import { ServerProductsResponse } from "@/lib/api/fetchProductsServer";
 
-export const dynamic = "force-dynamic";
+// Note: dynamic export is in page.tsx, not needed in client component
 
 type ViewMode = "grid" | "list";
 
@@ -119,7 +120,11 @@ interface YMMSearchResponse {
   };
 }
 
-function SearchPageContent() {
+interface SearchPageContentProps {
+  initialData?: ServerProductsResponse | null;
+}
+
+function SearchPageContent({ initialData }: SearchPageContentProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -127,15 +132,48 @@ function SearchPageContent() {
   const selectedPairs = searchParams?.get("fitment_pairs") || "";
   const { getSelectedNames, isComplete } = useVehicleData();
 
-  const [itemsPerPage, setItemsPerPage] = useState<ItemsPerPage>(20);
+  // Convert initialData to YMMSearchResponse format
+  const convertedInitialData: YMMSearchResponse | null = initialData ? {
+    products: initialData.products.map((p) => ({
+      id: p.id,
+      name: p.name,
+      slug: p.slug,
+      description: p.description || "",
+      category: p.category || { id: "", name: "" },
+      productType: p.productType || { id: "", name: "", slug: "" },
+      thumbnail: p.thumbnail || { url: "", alt: "" },
+      price_min: p.price_min ?? null,
+      price_max: p.price_max ?? null,
+      media: p.media || [],
+    })),
+    facets: {
+      brands: initialData.facets.brands.map((b) => ({
+        id: b.id,
+        value: b.value,
+        count: b.count,
+        media: b.media,
+      })),
+      categories: initialData.facets.categories,
+      price_ranges: initialData.facets.price_ranges,
+      years: initialData.facets.years,
+      makes: initialData.facets.makes,
+      models: initialData.facets.models,
+    },
+    pagination: initialData.pagination,
+  } : null;
+
+  const [itemsPerPage, setItemsPerPage] = useState<ItemsPerPage>(
+    (initialData?.pagination.per_page as ItemsPerPage) || 20
+  );
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [searchData, setSearchData] = useState<YMMSearchResponse | null>(null);
+  const [currentPage, setCurrentPage] = useState(initialData?.pagination.page || 1);
+  const [loading, setLoading] = useState(!initialData);
+  const [searchData, setSearchData] = useState<YMMSearchResponse | null>(convertedInitialData);
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [sortKey, setSortKey] = useState<string>("name_asc");
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(!!initialData);
+  const [isInitialLoad, setIsInitialLoad] = useState(!!initialData);
   const topRef = useRef<HTMLDivElement>(null);
 
   const categorySlugToId = useMemo(() => {
@@ -252,6 +290,12 @@ function SearchPageContent() {
   ]);
 
   useEffect(() => {
+    // Skip initial fetch if we have server-side data
+    if (isInitialLoad) {
+      setIsInitialLoad(false);
+      return;
+    }
+
     const fetchYMMResults = async () => {
       setLoading(true);
       try {
@@ -323,6 +367,7 @@ function SearchPageContent() {
     selectedCategories,
     selectedBrands,
     sortKey,
+    isInitialLoad,
     // categorySlugToId,
     // brandSlugToId,
   ]);
@@ -732,10 +777,14 @@ function SearchPageContent() {
   );
 }
 
-export default function SearchPage() {
+interface SearchPageProps {
+  initialData?: ServerProductsResponse | null;
+}
+
+export default function SearchPage({ initialData }: SearchPageProps) {
   return (
     <Suspense>
-      <SearchPageContent />
+      <SearchPageContent initialData={initialData} />
     </Suspense>
   );
 }

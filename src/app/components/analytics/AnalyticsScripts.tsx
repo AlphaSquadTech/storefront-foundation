@@ -5,7 +5,7 @@ import { useAppConfiguration } from "../providers/ServerAppConfigurationProvider
 
 export default function AnalyticsScripts() {
   const { getGoogleTagManagerConfig, getGoogleAdSenseConfig } = useAppConfiguration();
-  
+
   useEffect(() => {
     // Only run on client side
     if (typeof window === "undefined") return;
@@ -16,18 +16,8 @@ export default function AnalyticsScripts() {
     const GTM_ID = gtmConfig?.container_id;
     const ADSENSE_CLIENT_ID = adSenseConfig?.publisher_id;
 
-    // Load Authorize.Net Accept.js for payment tokenization FIRST
-    // This loads synchronously (without async) to ensure it's available immediately
-    // when users click on the credit/debit card payment option
-    const acceptJsUrl = 'https://jstest.authorize.net/v1/Accept.js';
-
-    // Check if Accept.js is already loaded
-    if (!document.querySelector(`script[src="${acceptJsUrl}"]`)) {
-      const acceptScript = document.createElement("script");
-      acceptScript.src = acceptJsUrl;
-      // Removed async to load synchronously for faster availability
-      document.head.appendChild(acceptScript);
-    }
+    // Note: Accept.js is now loaded conditionally only on checkout page
+    // via the useAcceptJs hook to improve performance on other pages
 
     // Load Google Tag Manager
     if (GTM_ID) {
@@ -59,20 +49,5 @@ export default function AnalyticsScripts() {
   return null;
 }
 
-interface AuthorizeNetResponse {
-  messages: {
-    resultCode: string;
-    message?: Array<{ text: string }>;
-  };
-  opaqueData?: {
-    dataValue: string;
-  };
-}
-
-declare global {
-  interface Window {
-    Accept: {
-      dispatchData: (secureData: Record<string, unknown>, callback: (response: AuthorizeNetResponse) => void) => void;
-    };
-  }
-}
+// Note: AuthorizeNetResponse and Accept global declarations are now in
+// src/hooks/useAcceptJs.ts since Accept.js is loaded there

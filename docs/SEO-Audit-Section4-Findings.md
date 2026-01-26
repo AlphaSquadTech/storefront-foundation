@@ -24,6 +24,7 @@
 **Section:** 4. Technical SEO
 **Total Items:** 29
 **Subsections:** 4
+
 - 4.1 Rendering & JavaScript (T-001 to T-007) - 7 items
 - 4.2 HTTP Status Codes (T-008 to T-013) - 6 items
 - 4.3 Page Speed Factors (T-014 to T-024) - 11 items
@@ -37,15 +38,15 @@
 
 ### Audit Items
 
-| ID | Check | Priority | Status | Finding |
-|----|-------|----------|--------|---------|
-| T-001 | Critical content renders server-side (SSR/SSG) | P0 | PASS | Product, category, blog pages use SSR with generateMetadata |
-| T-002 | Content visible without JavaScript | P1 | WARN | Search page renders entirely client-side |
-| T-003 | No client-side only rendering for SEO content | P0 | WARN | Search, contact pages are "use client" with SEO content |
-| T-004 | Next.js Server Components used appropriately | P1 | PASS | 31 of 39 pages are Server Components |
-| T-005 | Client components only for interactive elements | P1 | WARN | Contact page could use Server Component wrapper |
-| T-006 | Hydration errors resolved | P1 | PASS | No evidence of hydration issues in code |
-| T-007 | No render-blocking JavaScript | P1 | WARN | Authorize.net script loads synchronously |
+| ID    | Check                                           | Priority | Status | Finding                                                     |
+| ----- | ----------------------------------------------- | -------- | ------ | ----------------------------------------------------------- |
+| T-001 | Critical content renders server-side (SSR/SSG)  | P0       | PASS   | Product, category, blog pages use SSR with generateMetadata |
+| T-002 | Content visible without JavaScript              | P1       | WARN   | Search page renders entirely client-side                    |
+| T-003 | No client-side only rendering for SEO content   | P0       | WARN   | Search, contact pages are "use client" with SEO content     |
+| T-004 | Next.js Server Components used appropriately    | P1       | PASS   | 31 of 39 pages are Server Components                        |
+| T-005 | Client components only for interactive elements | P1       | WARN   | Contact page could use Server Component wrapper             |
+| T-006 | Hydration errors resolved                       | P1       | PASS   | No evidence of hydration issues in code                     |
+| T-007 | No render-blocking JavaScript                   | P1       | WARN   | Authorize.net script loads synchronously                    |
 
 ### Detailed Analysis
 
@@ -54,12 +55,14 @@
 **Finding:** Critical SEO pages properly implement server-side rendering.
 
 **Evidence:**
+
 - Home page (`src/app/page.tsx`): Server Component with Suspense boundaries
 - Product pages (`src/app/product/[id]/page.tsx`): Uses `generateMetadata()` and SSR data fetching
 - Category pages (`src/app/category/[slug]/page.tsx`): SSR with `initialData` passed to client
 - Blog pages: Server-side rendering for blog content
 
 **Pattern Used:**
+
 ```typescript
 // Product page example - proper SSR
 export async function generateMetadata({ params }): Promise<Metadata> {
@@ -87,9 +90,10 @@ export default async function ProductPage({ params }) {
 | `/account/*` (5 pages) | Private user data | NONE - Should not be indexed |
 
 **Critical Issue - Search Page:**
+
 ```typescript
 // src/app/search/page.tsx
-"use client";  // <-- Entire page is client-rendered
+"use client" // <-- Entire page is client-rendered
 
 export default function SearchPage() {
   // All product listings fetch client-side only
@@ -104,10 +108,12 @@ export default function SearchPage() {
 **Finding:** Good adoption of Server Components pattern.
 
 **Statistics:**
+
 - Server Components: 31 pages (79%)
 - Client Components: 8 pages (21%)
 
 **Server Component Pages Include:**
+
 - Home page
 - All product pages
 - All category pages
@@ -121,10 +127,12 @@ export default function SearchPage() {
 
 **Contact Page Issue:**
 The contact page (`src/app/contact/page.tsx`) is entirely client-rendered, but:
+
 - Contact information could be SSR
 - Only the form needs client interactivity
 
 **Recommendation:**
+
 ```typescript
 // Better pattern
 export default async function ContactPage() {
@@ -143,6 +151,7 @@ export default async function ContactPage() {
 **Finding:** No evidence of hydration mismatches in the codebase.
 
 **Good Practices Observed:**
+
 - Server/client data consistency via `initialData` props
 - Proper use of `useEffect` for client-only operations
 - Date/time handling uses client-side rendering appropriately
@@ -152,26 +161,29 @@ export default async function ContactPage() {
 **Finding:** One script loads synchronously, potentially blocking render.
 
 **Issue in `src/app/components/analytics/AnalyticsScripts.tsx`:**
+
 ```typescript
 // Line 22-29 - Authorize.net loads WITHOUT async
-const acceptScript = document.createElement("script");
-acceptScript.src = 'https://jstest.authorize.net/v1/Accept.js';
+const acceptScript = document.createElement("script")
+acceptScript.src = "https://jstest.authorize.net/v1/Accept.js"
 // Note: async was intentionally removed per comment
-document.head.appendChild(acceptScript);
+document.head.appendChild(acceptScript)
 ```
 
 **Good Practices:**
+
 - GTM script uses `async = true`
 - AdSense script uses `async = true`
 - Fonts use `display: "swap"` for FOIT prevention
 
 **Font Loading (Good):**
+
 ```typescript
 // src/app/layout.tsx
 const archivo = Archivo({
-  display: "swap",  // Prevents FOIT
+  display: "swap", // Prevents FOIT
   // ...
-});
+})
 ```
 
 ---
@@ -180,14 +192,14 @@ const archivo = Archivo({
 
 ### Audit Items
 
-| ID | Check | Priority | Status | Finding |
-|----|-------|----------|--------|---------|
-| T-008 | Valid pages return 200 | P0 | PASS | Static and dynamic pages return 200 correctly |
-| T-009 | Not found pages return 404 | P0 | WARN | Product pages return 200 with "not found" content |
-| T-010 | Custom 404 page exists | P1 | PASS | Well-designed 404 page at `/not-found.tsx` |
-| T-011 | Server errors return 5xx | P1 | WARN | No global error.tsx - unhandled errors may show default |
-| T-012 | No soft 404s (empty pages with 200) | P0 | FAIL | Product pages return 200 when product not found |
-| T-013 | Out-of-stock products handled correctly | P1 | PASS | Out-of-stock products accessible with schema indication |
+| ID    | Check                                   | Priority | Status | Finding                                                 |
+| ----- | --------------------------------------- | -------- | ------ | ------------------------------------------------------- |
+| T-008 | Valid pages return 200                  | P0       | PASS   | Static and dynamic pages return 200 correctly           |
+| T-009 | Not found pages return 404              | P0       | WARN   | Product pages return 200 with "not found" content       |
+| T-010 | Custom 404 page exists                  | P1       | PASS   | Well-designed 404 page at `/not-found.tsx`              |
+| T-011 | Server errors return 5xx                | P1       | WARN   | No global error.tsx - unhandled errors may show default |
+| T-012 | No soft 404s (empty pages with 200)     | P0       | FAIL   | Product pages return 200 when product not found         |
+| T-013 | Out-of-stock products handled correctly | P1       | PASS   | Out-of-stock products accessible with schema indication |
 
 ### Detailed Analysis
 
@@ -196,6 +208,7 @@ const archivo = Archivo({
 **Finding:** Valid pages correctly return HTTP 200 status.
 
 **Evidence:**
+
 - Static pages (about, terms, etc.) serve normally
 - Dynamic pages with valid slugs return 200
 - Server components render without status code issues
@@ -209,44 +222,47 @@ const archivo = Archivo({
 ```typescript
 // Current behavior - SOFT 404
 export async function generateMetadata({ params }): Promise<Metadata> {
-  const product = await getProduct(slug);
+  const product = await getProduct(slug)
 
   if (!product) {
     return {
       title: `Product Not Found | ${storeName}`,
       // Returns 200 status, not 404!
       robots: { index: false, follow: true }, // Relies on robots instead of 404
-    };
+    }
   }
 }
 ```
 
 **SEO Impact:**
+
 - Search engines see 200 status code
 - Crawl budget wasted on non-existent products
 - "noindex" is a hint, not a directive - some crawlers may ignore
 - Proper 404 signals page removal more effectively
 
 **Recommendation:**
+
 ```typescript
-import { notFound } from 'next/navigation';
+import { notFound } from "next/navigation"
 
 export default async function ProductPage({ params }) {
-  const product = await getProduct(slug);
+  const product = await getProduct(slug)
 
   if (!product) {
-    notFound(); // Triggers proper 404 response
+    notFound() // Triggers proper 404 response
   }
   // ...rest of component
 }
 ```
 
 **Good Example Found:** Dynamic pages DO use `notFound()` correctly:
+
 ```typescript
 // src/app/[slug]/ClientDynamicPage.tsx - Line 25
 if (response.status === 404) {
-  notFound();
-  return;
+  notFound()
+  return
 }
 ```
 
@@ -257,6 +273,7 @@ if (response.status === 404) {
 **Location:** `src/app/not-found.tsx`
 
 **Features:**
+
 - Clear "404" indicator and "PAGE NOT FOUND" heading
 - Helpful messaging explaining the issue
 - Navigation links back to home and products
@@ -271,7 +288,7 @@ export const metadata: Metadata = {
     index: false,
     follow: true, // Allow following outbound links
   },
-};
+}
 ```
 
 #### T-011: Server Errors (WARN)
@@ -279,11 +296,14 @@ export const metadata: Metadata = {
 **Finding:** No global error boundary exists.
 
 **Missing Files:**
+
 - `src/app/error.tsx` - Route segment error boundary
 - `src/app/global-error.tsx` - Root error boundary
 
 **Current State:**
+
 - API routes properly return 500 on errors:
+
 ```typescript
 // src/app/api/dynamic-page/[slug]/route.ts
 catch (error) {
@@ -292,11 +312,13 @@ catch (error) {
 ```
 
 **Risk:**
+
 - Unhandled errors in pages may show Next.js default error UI
 - Poor user experience on server errors
 - No custom branding on error pages
 
 **Recommendation:** Add error boundaries:
+
 ```typescript
 // src/app/error.tsx
 'use client';
@@ -320,15 +342,16 @@ export default function Error({ error, reset }) {
 const availability =
   firstVariant?.quantityAvailable && firstVariant.quantityAvailable > 0
     ? "InStock"
-    : "OutOfStock";
+    : "OutOfStock"
 
 productSchema = generateProductSchema({
   // ...
   availability, // Passed to schema.org
-});
+})
 ```
 
 **Good Practices:**
+
 - Products remain accessible (no 404 for OOS)
 - Schema.org indicates `OutOfStock` availability
 - Users can still see product info
@@ -340,19 +363,19 @@ productSchema = generateProductSchema({
 
 ### Audit Items
 
-| ID | Check | Priority | Status | Finding |
-|----|-------|----------|--------|---------|
-| T-014 | Images optimized (compression) | P0 | PASS | Next.js Image with quality settings (70-75%) |
-| T-015 | Modern image formats (WebP/AVIF) | P1 | PASS | Next.js auto-converts to WebP/AVIF |
-| T-016 | Images lazy-loaded below fold | P1 | PASS | Proper priority/lazy loading patterns |
-| T-017 | Critical CSS inlined | P2 | PASS | Tailwind CSS 4 with PostCSS handles this |
-| T-018 | JavaScript minified | P1 | PASS | Next.js production build minifies JS |
-| T-019 | CSS minified | P1 | PASS | Next.js production build minifies CSS |
-| T-020 | Gzip/Brotli compression enabled | P1 | N/A | Depends on hosting provider configuration |
-| T-021 | Browser caching configured | P1 | WARN | Only Apple Pay file has explicit cache headers |
-| T-022 | CDN used for static assets | P2 | PASS | DNS prefetch hints for S3 buckets configured |
-| T-023 | Font files optimized | P2 | PASS | Google Fonts with display:swap |
-| T-024 | Third-party scripts async/defer | P1 | WARN | Accept.js loads synchronously |
+| ID    | Check                            | Priority | Status | Finding                                        |
+| ----- | -------------------------------- | -------- | ------ | ---------------------------------------------- |
+| T-014 | Images optimized (compression)   | P0       | PASS   | Next.js Image with quality settings (70-75%)   |
+| T-015 | Modern image formats (WebP/AVIF) | P1       | PASS   | Next.js auto-converts to WebP/AVIF             |
+| T-016 | Images lazy-loaded below fold    | P1       | PASS   | Proper priority/lazy loading patterns          |
+| T-017 | Critical CSS inlined             | P2       | PASS   | Tailwind CSS 4 with PostCSS handles this       |
+| T-018 | JavaScript minified              | P1       | PASS   | Next.js production build minifies JS           |
+| T-019 | CSS minified                     | P1       | PASS   | Next.js production build minifies CSS          |
+| T-020 | Gzip/Brotli compression enabled  | P1       | N/A    | Depends on hosting provider configuration      |
+| T-021 | Browser caching configured       | P1       | WARN   | Only Apple Pay file has explicit cache headers |
+| T-022 | CDN used for static assets       | P2       | PASS   | DNS prefetch hints for S3 buckets configured   |
+| T-023 | Font files optimized             | P2       | PASS   | Google Fonts with display:swap                 |
+| T-024 | Third-party scripts async/defer  | P1       | WARN   | Accept.js loads synchronously                  |
 
 ### Detailed Analysis
 
@@ -361,6 +384,7 @@ productSchema = generateProductSchema({
 **Finding:** Images are properly compressed via Next.js Image component.
 
 **Implementation:**
+
 ```typescript
 // Hero image - src/app/components/showroom/heroClientRenderer.tsx
 <Image
@@ -380,6 +404,7 @@ productSchema = generateProductSchema({
 ```
 
 **Components Using Next.js Image (28+ files):**
+
 - ProductCard, CategoryCard, BrandCard
 - HeroClientRenderer, PromotionSlider
 - Footer, CartDropdown, OrderSummary
@@ -390,6 +415,7 @@ productSchema = generateProductSchema({
 **Finding:** Next.js automatically serves WebP/AVIF based on browser support.
 
 **Configuration in `next.config.ts`:**
+
 ```typescript
 images: {
   remotePatterns: [
@@ -402,9 +428,10 @@ images: {
 ```
 
 **Fallback Pattern:**
+
 ```typescript
 // Uses WebP fallback
-const imageSrc = src?.trim() || "/images/heroSection-fallback.webp";
+const imageSrc = src?.trim() || "/images/heroSection-fallback.webp"
 ```
 
 #### T-016: Lazy Loading (PASS)
@@ -412,6 +439,7 @@ const imageSrc = src?.trim() || "/images/heroSection-fallback.webp";
 **Finding:** Proper lazy loading implementation with priority for above-fold content.
 
 **Above-Fold (Priority):**
+
 ```typescript
 // Hero image - high priority for LCP
 <Image
@@ -426,6 +454,7 @@ const imageSrc = src?.trim() || "/images/heroSection-fallback.webp";
 ```
 
 **Below-Fold (Lazy):**
+
 ```typescript
 // Product cards - lazy loaded
 <Image priority={false} ... />
@@ -439,11 +468,13 @@ const imageSrc = src?.trim() || "/images/heroSection-fallback.webp";
 **Finding:** Build tooling handles CSS and JavaScript optimization.
 
 **Stack:**
+
 - Next.js 15.4.10 with Turbopack
 - Tailwind CSS 4.1.11
 - PostCSS with @tailwindcss/postcss
 
 **Production Build Features:**
+
 - Tree shaking for unused code
 - CSS purging for unused styles
 - JS minification
@@ -460,6 +491,7 @@ const imageSrc = src?.trim() || "/images/heroSection-fallback.webp";
 **Finding:** Limited explicit cache header configuration.
 
 **Only Cache Header Found:**
+
 ```typescript
 // next.config.ts - Apple Pay file only
 {
@@ -471,6 +503,7 @@ const imageSrc = src?.trim() || "/images/heroSection-fallback.webp";
 ```
 
 **Missing:**
+
 - No explicit cache headers for static assets
 - Next.js defaults may be sufficient, but explicit headers recommended
 
@@ -479,6 +512,7 @@ const imageSrc = src?.trim() || "/images/heroSection-fallback.webp";
 **Finding:** DNS prefetch hints configured for CDN/S3 buckets.
 
 **Implementation in `src/app/layout.tsx`:**
+
 ```typescript
 <link rel="dns-prefetch" href="https://wsmsaleormedia.s3.us-east-1.amazonaws.com" />
 <link rel="dns-prefetch" href="https://wsm-saleor-assets.s3.us-west-2.amazonaws.com" />
@@ -491,23 +525,25 @@ const imageSrc = src?.trim() || "/images/heroSection-fallback.webp";
 **Finding:** Fonts properly optimized with Google Fonts loader.
 
 **Implementation in `src/app/layout.tsx`:**
+
 ```typescript
 const archivo = Archivo({
   subsets: ["latin"],
-  display: "swap",  // Prevents FOIT
+  display: "swap", // Prevents FOIT
   variable: "--font-archivo",
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-});
+})
 
 const daysOne = Days_One({
   weight: "400",
   subsets: ["latin"],
-  display: "swap",  // Prevents FOIT
+  display: "swap", // Prevents FOIT
   variable: "--font-days-one",
-});
+})
 ```
 
 **Good Practices:**
+
 - `display: "swap"` prevents Flash of Invisible Text
 - Subsets limited to "latin" reduces file size
 - CSS variables for consistent usage
@@ -517,23 +553,26 @@ const daysOne = Days_One({
 **Finding:** Most scripts load asynchronously, but Accept.js loads synchronously.
 
 **Async Loading (Good):**
+
 ```typescript
 // src/app/components/analytics/AnalyticsScripts.tsx
-gtmScript.async = true;  // GTM
-adSenseScript.async = true;  // AdSense
+gtmScript.async = true // GTM
+adSenseScript.async = true // AdSense
 ```
 
 **Synchronous Loading (Issue):**
+
 ```typescript
 // Accept.js - Line 20-29
 // This loads synchronously (without async) to ensure it's available immediately
-const acceptScript = document.createElement("script");
-acceptScript.src = 'https://jstest.authorize.net/v1/Accept.js';
+const acceptScript = document.createElement("script")
+acceptScript.src = "https://jstest.authorize.net/v1/Accept.js"
 // Removed async to load synchronously for faster availability
-document.head.appendChild(acceptScript);
+document.head.appendChild(acceptScript)
 ```
 
 **Impact:** Accept.js loading synchronously can delay page interactivity. Consider:
+
 - Loading only on checkout page
 - Using dynamic import with loading indicator
 - Implementing intersection observer to load when payment section visible
@@ -544,13 +583,13 @@ document.head.appendChild(acceptScript);
 
 ### Audit Items
 
-| ID | Check | Priority | Status | Finding |
-|----|-------|----------|--------|---------|
-| T-025 | Static pages pre-rendered (SSG) | P1 | PASS | Static pages (about, terms, etc.) use default SSG |
-| T-026 | Dynamic pages use ISR appropriately | P1 | WARN | Some pages could use ISR instead of force-dynamic |
-| T-027 | No unnecessary force-dynamic | P1 | WARN | Product/category pages use force-dynamic when ISR would work |
-| T-028 | Revalidation times appropriate | P2 | PASS | Good variety of revalidation times (60s to 1hr) |
-| T-029 | Cache headers set correctly | P2 | WARN | Limited explicit cache headers in next.config.ts |
+| ID    | Check                               | Priority | Status | Finding                                                      |
+| ----- | ----------------------------------- | -------- | ------ | ------------------------------------------------------------ |
+| T-025 | Static pages pre-rendered (SSG)     | P1       | PASS   | Static pages (about, terms, etc.) use default SSG            |
+| T-026 | Dynamic pages use ISR appropriately | P1       | WARN   | Some pages could use ISR instead of force-dynamic            |
+| T-027 | No unnecessary force-dynamic        | P1       | WARN   | Product/category pages use force-dynamic when ISR would work |
+| T-028 | Revalidation times appropriate      | P2       | PASS   | Good variety of revalidation times (60s to 1hr)              |
+| T-029 | Cache headers set correctly         | P2       | WARN   | Limited explicit cache headers in next.config.ts             |
 
 ### Detailed Analysis
 
@@ -559,6 +598,7 @@ document.head.appendChild(acceptScript);
 **Finding:** Informational pages correctly use static generation.
 
 **Static Pages (No Dynamic Export):**
+
 - `/about/page.tsx` - Static content
 - `/terms-and-conditions/page.tsx` - Static content
 - `/privacy-policy/page.tsx` - Static content
@@ -574,36 +614,39 @@ These pages will be pre-rendered at build time, providing optimal performance.
 
 **Pages Using force-dynamic:**
 
-| Page | force-dynamic? | Alternative |
-|------|---------------|-------------|
-| `/product/[slug]` | Yes | Could use ISR with 60-300s revalidation |
-| `/category/[slug]` | Yes | Could use ISR with 60-300s revalidation |
-| `/brand/[slug]` | Yes | Could use ISR with 300-600s revalidation |
-| `/search` | Yes | Appropriate (user-specific queries) |
-| `/[slug]` (dynamic pages) | Yes | Could use ISR with 300s revalidation |
+| Page                      | force-dynamic? | Alternative                              |
+| ------------------------- | -------------- | ---------------------------------------- |
+| `/product/[slug]`         | Yes            | Could use ISR with 60-300s revalidation  |
+| `/category/[slug]`        | Yes            | Could use ISR with 60-300s revalidation  |
+| `/brand/[slug]`           | Yes            | Could use ISR with 300-600s revalidation |
+| `/search`                 | Yes            | Appropriate (user-specific queries)      |
+| `/[slug]` (dynamic pages) | Yes            | Could use ISR with 300s revalidation     |
 
 **Current Implementation:**
+
 ```typescript
 // src/app/product/[slug]/page.tsx
-export const dynamic = "force-dynamic";  // Forces SSR on every request
+export const dynamic = "force-dynamic" // Forces SSR on every request
 
 // src/app/category/[slug]/page.tsx
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"
 ```
 
 **Recommendation - Use ISR:**
+
 ```typescript
 // Better approach for product pages
-export const revalidate = 300; // Revalidate every 5 minutes
+export const revalidate = 300 // Revalidate every 5 minutes
 
 // Or with on-demand revalidation
 export async function generateStaticParams() {
-  const products = await getTopProducts();
-  return products.map((p) => ({ slug: p.slug }));
+  const products = await getTopProducts()
+  return products.map((p) => ({ slug: p.slug }))
 }
 ```
 
 **Trade-offs:**
+
 - force-dynamic: Always fresh data, higher server load, slower TTFB
 - ISR: Cached data (acceptable for most e-commerce), lower server load, faster TTFB
 
@@ -613,25 +656,26 @@ export async function generateStaticParams() {
 
 **Current Revalidation Configuration:**
 
-| Component/Route | Revalidation | Purpose |
-|-----------------|--------------|---------|
-| `fetchProductsServer` | 60s | Product listings (frequent updates) |
-| Brands page | 3600s (1hr) | Brand list (infrequent changes) |
-| About Us section | 600s (10min) | CMS content |
-| Brands Swiper | 3600s (1hr) | Featured brands |
-| Blog queries | 600s (10min) | Blog posts |
+| Component/Route       | Revalidation | Purpose                             |
+| --------------------- | ------------ | ----------------------------------- |
+| `fetchProductsServer` | 60s          | Product listings (frequent updates) |
+| Brands page           | 3600s (1hr)  | Brand list (infrequent changes)     |
+| About Us section      | 600s (10min) | CMS content                         |
+| Brands Swiper         | 3600s (1hr)  | Featured brands                     |
+| Blog queries          | 600s (10min) | Blog posts                          |
 
 **Good Pattern Found:**
+
 ```typescript
 // src/lib/api/fetchProductsServer.ts
 const response = await fetch(searchUrl, {
   next: { revalidate: 60 }, // Appropriate for product data
-});
+})
 
 // src/app/brands/page.tsx
 const response = await fetch(url, {
   next: { revalidate: 3600 }, // Good for static brand list
-});
+})
 ```
 
 #### T-029: Cache Headers (WARN)
@@ -639,6 +683,7 @@ const response = await fetch(url, {
 **Finding:** Limited explicit cache header configuration beyond security headers.
 
 **Currently Configured:**
+
 ```typescript
 // next.config.ts
 async headers() {
@@ -660,11 +705,13 @@ async headers() {
 ```
 
 **Missing Cache Headers:**
+
 - Static assets (images, fonts, JS, CSS)
 - API routes
 - Page responses
 
 **Recommended Addition:**
+
 ```typescript
 // Add to next.config.ts headers()
 {
@@ -691,12 +738,12 @@ async headers() {
 
 Section 4: Technical SEO has been audited across 4 subsections with 29 total checks.
 
-| Subsection | Result |
-|------------|--------|
-| 4.1 Rendering & JavaScript | 3 PASS, 4 WARN |
-| 4.2 HTTP Status Codes | 3 PASS, 2 WARN, 1 FAIL |
-| 4.3 Page Speed Factors | 8 PASS, 2 WARN, 1 N/A |
-| 4.4 Caching & ISR | 2 PASS, 3 WARN |
+| Subsection                 | Result                 |
+| -------------------------- | ---------------------- |
+| 4.1 Rendering & JavaScript | 3 PASS, 4 WARN         |
+| 4.2 HTTP Status Codes      | 3 PASS, 2 WARN, 1 FAIL |
+| 4.3 Page Speed Factors     | 8 PASS, 2 WARN, 1 N/A  |
+| 4.4 Caching & ISR          | 2 PASS, 3 WARN         |
 
 ### Critical Issues
 
@@ -718,10 +765,11 @@ Section 4: Technical SEO has been audited across 4 subsections with 29 total che
 ### Key Recommendations
 
 1. **Fix Soft 404s:**
+
    ```typescript
    // In product page
    if (!product) {
-     notFound(); // Instead of returning noindex metadata
+     notFound() // Instead of returning noindex metadata
    }
    ```
 
@@ -750,12 +798,14 @@ Section 4: Technical SEO has been audited across 4 subsections with 29 total che
 ## Appendix A: Files Reviewed
 
 ### Core Configuration
+
 - `next.config.ts` - Next.js configuration
 - `package.json` - Dependencies and scripts
 - `postcss.config.mjs` - PostCSS configuration
 - `src/middleware.ts` - Route middleware
 
 ### Page Files
+
 - `src/app/page.tsx` - Home page
 - `src/app/product/[slug]/page.tsx` - Product page
 - `src/app/category/[slug]/page.tsx` - Category page
@@ -765,6 +815,7 @@ Section 4: Technical SEO has been audited across 4 subsections with 29 total che
 - `src/app/[slug]/page.tsx` - Dynamic pages
 
 ### Component Files
+
 - `src/app/components/analytics/AnalyticsScripts.tsx`
 - `src/app/components/showroom/heroClientRenderer.tsx`
 - `src/app/components/showroom/promotion-slider.tsx`
@@ -772,9 +823,11 @@ Section 4: Technical SEO has been audited across 4 subsections with 29 total che
 - `src/app/[slug]/ClientDynamicPage.tsx`
 
 ### API Routes
+
 - `src/app/api/dynamic-page/[slug]/route.ts`
 
 ### Library Files
+
 - `src/lib/api/fetchProductsServer.ts`
 - `src/graphql/queries/getBlogs.ts`
 
@@ -782,26 +835,26 @@ Section 4: Technical SEO has been audited across 4 subsections with 29 total che
 
 ## Appendix B: Audit Statistics
 
-| Subsection | Total | Pass | Fail | Warn | N/A |
-|------------|-------|------|------|------|-----|
-| 4.1 Rendering & JavaScript | 7 | 3 | 0 | 4 | 0 |
-| 4.2 HTTP Status Codes | 6 | 3 | 1 | 2 | 0 |
-| 4.3 Page Speed Factors | 11 | 8 | 0 | 2 | 1 |
-| 4.4 Caching & ISR | 5 | 2 | 0 | 3 | 0 |
-| **Total** | **29** | **16** | **1** | **11** | **1** |
+| Subsection                 | Total  | Pass   | Fail  | Warn   | N/A   |
+| -------------------------- | ------ | ------ | ----- | ------ | ----- |
+| 4.1 Rendering & JavaScript | 7      | 3      | 0     | 4      | 0     |
+| 4.2 HTTP Status Codes      | 6      | 3      | 1     | 2      | 0     |
+| 4.3 Page Speed Factors     | 11     | 8      | 0     | 2      | 1     |
+| 4.4 Caching & ISR          | 5      | 2      | 0     | 3      | 0     |
+| **Total**                  | **29** | **16** | **1** | **11** | **1** |
 
 ### Priority Distribution
 
-| Priority | Total | Pass | Fail | Warn | N/A |
-|----------|-------|------|------|------|-----|
-| P0 (Critical) | 5 | 3 | 1 | 1 | 0 |
-| P1 (High) | 18 | 9 | 0 | 9 | 0 |
-| P2 (Medium) | 6 | 4 | 0 | 1 | 1 |
+| Priority      | Total | Pass | Fail | Warn | N/A |
+| ------------- | ----- | ---- | ---- | ---- | --- |
+| P0 (Critical) | 5     | 3    | 1    | 1    | 0   |
+| P1 (High)     | 18    | 9    | 0    | 9    | 0   |
+| P2 (Medium)   | 6     | 4    | 0    | 1    | 1   |
 
 ### Issue Summary by Severity
 
-| Severity | Count | IDs |
-|----------|-------|-----|
-| FAIL | 1 | T-012 |
-| WARN | 11 | T-002, T-003, T-005, T-007, T-009, T-011, T-021, T-024, T-026, T-027, T-029 |
-| N/A | 1 | T-020 |
+| Severity | Count | IDs                                                                         |
+| -------- | ----- | --------------------------------------------------------------------------- |
+| FAIL     | 1     | T-012                                                                       |
+| WARN     | 11    | T-002, T-003, T-005, T-007, T-009, T-011, T-021, T-024, T-026, T-027, T-029 |
+| N/A      | 1     | T-020                                                                       |

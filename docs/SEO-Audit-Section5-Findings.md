@@ -1066,3 +1066,185 @@ The codebase demonstrates excellent Core Web Vitals optimization patterns:
 - **LCP: 5-10 seconds** - Direct result of high TTFB
 
 **Note:** These results are from development server. Production with proper caching, CDN, and edge deployment should perform significantly better. However, the TTFB issue indicates SSR data fetching patterns need optimization regardless of environment.
+
+---
+
+## Optimization Plan: Minimal SSR Strategy
+
+**Objective:** Reduce TTFB by limiting server-side data fetching to only what's essential for SEO, while loading non-critical content client-side.
+
+### Principle
+
+Search engines need:
+
+1. **Page metadata** (title, description, canonical URL)
+2. **Structured data** (JSON-LD schemas)
+3. **Initial content** (first batch of products for indexing)
+
+Search engines do NOT need:
+
+- Full hero carousel with all slides
+- Complete filter/facet data
+- Pagination beyond page 1
+- Related products
+- Full product counts
+
+### Implementation by Page Type
+
+#### Homepage (`/`)
+
+| Content             | Current | Optimized     | Rationale                         |
+| ------------------- | ------- | ------------- | --------------------------------- |
+| Metadata            | SSR ✓   | SSR           | Essential for SEO                 |
+| Organization schema | SSR ✓   | SSR           | Essential for SEO                 |
+| Hero carousel data  | SSR     | **Client**    | Visual only, not indexed          |
+| Hero images         | SSR     | **Client**    | Visual only, preload hint instead |
+| Featured products   | SSR     | SSR (limit 6) | Indexable content                 |
+| Categories strip    | SSR     | **Client**    | Navigation, not critical          |
+| About section       | SSR     | **Client**    | Can be static or client           |
+
+**Expected TTFB improvement:** ~60-70% reduction
+
+#### Products/Category/Brand Pages (`/products/all`, `/category/[slug]`, `/brand/[slug]`)
+
+| Content               | Current | Optimized  | Rationale                        |
+| --------------------- | ------- | ---------- | -------------------------------- |
+| Metadata              | SSR ✓   | SSR        | Essential for SEO                |
+| BreadcrumbList schema | SSR ✓   | SSR        | Essential for SEO                |
+| CollectionPage schema | SSR ✓   | SSR        | Essential for SEO                |
+| First 12 products     | SSR     | SSR        | Indexable content                |
+| Products beyond 12    | SSR     | **Client** | Pagination is client-side anyway |
+| Filter sidebar        | SSR     | **Client** | Interactive, not indexed         |
+| Product count         | SSR     | **Client** | Can show skeleton                |
+| Sort options          | N/A     | **Client** | Interactive only                 |
+
+**Expected TTFB improvement:** ~50-60% reduction
+
+#### Product Detail Page (`/product/[slug]`)
+
+| Content               | Current | Optimized  | Rationale                       |
+| --------------------- | ------- | ---------- | ------------------------------- |
+| Metadata              | SSR ✓   | SSR        | Essential for SEO               |
+| Product schema        | SSR ✓   | SSR        | Essential for rich snippets     |
+| BreadcrumbList schema | SSR ✓   | SSR        | Essential for SEO               |
+| Product data          | SSR ✓   | SSR        | Essential - this IS the content |
+| Related products      | N/A     | **Client** | Not essential for indexing      |
+| Reviews               | N/A     | **Client** | Can be client-loaded            |
+
+**Note:** Product detail pages should remain mostly SSR since the product data IS the indexed content.
+
+### Technical Implementation
+
+#### 1. Homepage Changes
+
+**File:** `src/app/page.tsx`
+
+```tsx
+// BEFORE: All sections fetch data server-side
+<Suspense fallback={<SkeletonLoader type="hero" />}>
+  <ShowroomHeroCarousel />  // Fetches GraphQL SSR
+</Suspense>
+
+// AFTER: Hero loads client-side, only metadata SSR
+export const metadata = { ... }  // Static or minimal fetch
+
+<HeroCarouselClient />  // Client component fetches own data
+<Suspense fallback={<ProductGridSkeleton count={6} />}>
+  <FeaturedProductsSSR limit={6} />  // Only 6 products SSR
+</Suspense>
+```
+
+#### 2. Products Page Changes
+
+**File:** `src/app/products/all/page.tsx`
+
+```tsx
+// BEFORE
+const products = await fetchAllProducts({ per_page: 20 });
+
+// AFTER
+export async function generateMetadata() { ... }  // Metadata only
+
+export default function ProductsPage() {
+  return (
+    <>
+      <script type="application/ld+json">{/* Static schema */}</script>
+      <ProductsPageClient initialProductCount={12} />
+    </>
+  );
+}
+```
+
+**File:** `src/app/products/all/ProductsPageClient.tsx`
+
+```tsx
+// Fetches products client-side with skeleton during load
+// First 12 can be passed as initialData if SEO critical
+```
+
+#### 3. Category/Brand Pages
+
+Same pattern as Products page - metadata SSR, content client-side with optional initial data for first 12 items.
+
+### SSR Content Checklist
+
+**Must be SSR (SEO critical):**
+
+- [ ] `<title>` tag
+- [ ] `<meta name="description">`
+- [ ] `<link rel="canonical">`
+- [ ] Open Graph tags
+- [ ] JSON-LD structured data
+- [ ] First 6-12 products (for indexing)
+
+**Can be Client-side:**
+
+- [ ] Hero carousel/banner images
+- [ ] Filter sidebar
+- [ ] Pagination controls
+- [ ] Sort dropdowns
+- [ ] Product counts
+- [ ] Related products
+- [ ] Category navigation strips
+
+### Migration Steps
+
+1. **Phase 1: Homepage**
+   - Convert hero carousel to client component
+   - Limit featured products to 6 SSR
+   - Move category/brand strips to client
+
+2. **Phase 2: Listing Pages**
+   - Keep metadata generation SSR
+   - Convert product grid to client with initial 12
+   - Move filters to client component
+
+3. **Phase 3: Measure & Iterate**
+   - Run Lighthouse after each phase
+   - Target: TTFB < 600ms, LCP < 2.5s
+   - Adjust SSR/client split based on results
+
+### Expected Results
+
+| Metric         | Before  | Target | Method                    |
+| -------------- | ------- | ------ | ------------------------- |
+| TTFB           | 2,040ms | <600ms | Minimal SSR               |
+| LCP (Home)     | 10.4s   | <2.5s  | Faster TTFB + preload     |
+| LCP (Products) | 5.2s    | <2.5s  | Faster TTFB               |
+| CLS (Products) | 0.295   | <0.1   | Skeleton + reserved space |
+
+### Trade-offs
+
+**Pros:**
+
+- Significantly faster TTFB
+- Better user experience (faster initial paint)
+- Reduced server load
+- SEO preserved (metadata + initial content SSR)
+
+**Cons:**
+
+- Slightly more complex architecture
+- Client needs to handle loading states
+- Initial content flash possible (mitigated by skeletons)
+- Googlebot handles JS well, but some crawlers may not see full content

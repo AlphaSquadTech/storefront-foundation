@@ -6,28 +6,70 @@ import { ProductCard } from "@/app/components/reuseableUI/productCard";
 import ItemsPerPageSelectClient from "@/app/components/shop/ItemsPerPageSelectClient";
 import SearchFilterClient from "@/app/components/shop/SearchFilterClient";
 import { PLSearchProduct, shopApi } from "@/lib/api/shop";
+import { ServerProductsResponse } from "@/lib/api/fetchProductsServer";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type ItemsPerPage = 10 | 20 | 50 | 100;
 
-export default function BrandPageClient() {
+interface BrandPageClientProps {
+  slug: string;
+  initialData?: ServerProductsResponse;
+}
+
+export default function BrandPageClient({ slug, initialData }: BrandPageClientProps) {
   const pathName = usePathname();
-  const route = pathName.split("/").slice(2).join("/");
-  const [itemsPerPage, setItemsPerPage] = useState<ItemsPerPage>(10);
+  const route = slug || pathName.split("/").slice(2).join("/");
+  const [itemsPerPage, setItemsPerPage] = useState<ItemsPerPage>(
+    (initialData?.pagination.per_page as ItemsPerPage) || 20
+  );
   const [searchQuery, setSearchQuery] = useState("");
-  const [products, setProducts] = useState<PLSearchProduct[]>([]);
+  const [products, setProducts] = useState<PLSearchProduct[]>(
+    initialData?.products?.map((p) => ({
+      id: p.id,
+      name: p.name,
+      slug: p.slug,
+      description: p.description,
+      primary_image: p.primary_image,
+      category_id: p.category_id,
+      category_name: p.category_name,
+      category_slug: p.category_slug,
+      brand_id: p.brand_id,
+      brand_name: p.brand_name,
+      brand_slug: p.brand_slug,
+      category: p.category,
+      price_min: p.price_min,
+      price_max: p.price_max,
+      currency: p.currency,
+      collection_ids: p.collection_ids,
+      collection_names: p.collection_names,
+      skus: p.skus,
+      in_stock: p.in_stock,
+      total_quantity: p.total_quantity,
+    })) || []
+  );
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [categoryName, setCategoryName] = useState<string>("");
-  const [pagination, setPagination] = useState({
-    total: 0,
-    page: 1,
-    per_page: 10,
-    total_pages: 0,
-  });
+  const [categoryName, setCategoryName] = useState<string>(
+    initialData?.products?.[0]?.category_name || route
+  );
+  const [pagination, setPagination] = useState(
+    initialData?.pagination || {
+      total: 0,
+      page: 1,
+      per_page: 20,
+      total_pages: 0,
+    }
+  );
+  const [isInitialLoad, setIsInitialLoad] = useState(!!initialData);
 
   useEffect(() => {
+    // Skip initial fetch if we have server-side data
+    if (isInitialLoad) {
+      setIsInitialLoad(false);
+      return;
+    }
+
     const fetchProducts = async () => {
       setLoading(true);
       try {
@@ -54,7 +96,7 @@ export default function BrandPageClient() {
     };
 
     fetchProducts();
-  }, [itemsPerPage, searchQuery, route]);
+  }, [itemsPerPage, searchQuery, route, isInitialLoad]);
 
   const loadMore = async () => {
     if (loadingMore || pagination.page >= pagination.total_pages) return;
