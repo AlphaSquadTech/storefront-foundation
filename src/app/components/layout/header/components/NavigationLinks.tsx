@@ -10,7 +10,6 @@ import { usePathname } from "next/navigation";
 
 interface NavigationLinksProps {
   categories: CategoryNode[];
-  categoriesLoading: boolean;
   menuItems: MenuItem[];
   isActive: (href: string) => boolean;
 }
@@ -24,7 +23,6 @@ const NAV_LINKS = [
 
 export const NavigationLinks = ({
   categories,
-  categoriesLoading,
   menuItems,
   isActive,
 }: NavigationLinksProps) => {
@@ -85,7 +83,6 @@ export const NavigationLinks = ({
             <MegaMenuDropdown
               isOpen={productsDropdown.isOpen}
               categories={categories}
-              categoriesLoading={categoriesLoading}
               onClose={productsDropdown.close}
               onMouseEnter={productsDropdown.handleMouseEnter}
               onMouseLeave={productsDropdown.handleMouseLeave}

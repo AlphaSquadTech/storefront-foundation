@@ -2,11 +2,15 @@ import { cookies } from "next/headers";
 import { Suspense } from "react";
 import { NavBar } from "./navBar";
 import TopBar from "./topBar";
+import { fetchNavbarData } from "./utils/fetchNavbarData";
 
 export const Header = async () => {
   const cookieStore = await cookies();
   const initialIsLoggedIn =
     cookieStore.get("isLoggedIn")?.value === "1" || !!cookieStore.get("token");
+
+  // Fetch navigation data server-side for SEO
+  const { categories, menuItems } = await fetchNavbarData();
 
   return (
     <header className="w-full">
@@ -21,7 +25,11 @@ export const Header = async () => {
         {/* Contact + Timings Banner */}
         <TopBar />
       </Suspense>
-      <NavBar initialIsLoggedIn={initialIsLoggedIn} />
+      <NavBar
+        initialIsLoggedIn={initialIsLoggedIn}
+        initialCategories={categories}
+        initialMenuItems={menuItems}
+      />
     </header>
   );
 };
