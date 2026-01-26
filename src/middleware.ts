@@ -24,6 +24,14 @@ const FEATURE_ROUTES = {
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  // SEO: Redirect uppercase URLs to lowercase for consistent indexing
+  // This prevents duplicate content issues from case variations (e.g., /About vs /about)
+  if (pathname !== pathname.toLowerCase()) {
+    const url = req.nextUrl.clone();
+    url.pathname = pathname.toLowerCase();
+    return NextResponse.redirect(url, 308); // Permanent redirect
+  }
+
   const normalizedPath =
     pathname.endsWith('/') && pathname.length > 1
       ? pathname.slice(0, -1)

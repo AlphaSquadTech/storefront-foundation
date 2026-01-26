@@ -4,6 +4,9 @@ import { getStoreName } from "@/app/utils/branding"
 export const metadata: Metadata = {
   title: `Store Locator - ${getStoreName()}`,
   description: `Find ${getStoreName()} locations near you. Get directions, hours, and contact information for our retail partners.`,
+  alternates: {
+    canonical: "/locator",
+  },
 }
 
 export default function LocatorLayout({

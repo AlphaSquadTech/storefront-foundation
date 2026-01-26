@@ -49,6 +49,28 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // SEO: Redirect duplicate content pages to canonical URLs
+  async redirects() {
+    return [
+      {
+        source: '/contact',
+        destination: '/contact-us',
+        permanent: true,
+      },
+      {
+        source: '/privacy',
+        destination: '/privacy-policy',
+        permanent: true,
+      },
+      {
+        source: '/terms',
+        destination: '/terms-and-conditions',
+        permanent: true,
+      },
+    ];
+  },
+  // SEO: Ensure consistent URL format without trailing slashes
+  trailingSlash: false,
   images: {
     remotePatterns: [
       {
