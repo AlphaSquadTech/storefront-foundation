@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   if (!post || !post.title) {
     return {
-      title: `Site Map - ${getStoreName()}`,
+      title: "Site Map",
       description: `Explore the comprehensive site map of ${getStoreName()} to easily navigate through all sections and find what you're looking for quickly.`,
       robots: {
         index: false,
@@ -26,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   return {
-    title: `${post.title} - ${getStoreName()}`,
+    title: post.title,
     description:
       post.title ||
       `Explore the comprehensive site map of ${getStoreName()} to easily navigate through all sections and find what you're looking for quickly.`,

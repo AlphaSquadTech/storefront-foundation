@@ -5,7 +5,7 @@ import Breadcrumb from "@/app/components/reuseableUI/breadcrumb";
 import Heading from "@/app/components/reuseableUI/heading";
 import EditorRenderer from "@/app/components/richText/EditorRenderer";
 import { fetchBlogBySlug } from "@/graphql/queries/getBlogs";
-import { getStoreName } from "@/app/utils/branding";
+import { getStoreName, truncateTitle } from "@/app/utils/branding";
 import {
   generateBlogPostingSchema,
   generateBreadcrumbSchema,
@@ -21,19 +21,24 @@ export async function generateMetadata({
 
   if (!post || !post.title) {
     return {
-      title: `Blog Post Not Found - ${getStoreName()}`,
+      title: "Blog Post Not Found",
     };
   }
 
+  // Generate a proper description from post content or use a fallback
+  const postDescription = post.content
+    ? post.content.replace(/<[^>]*>/g, "").substring(0, 155).trim() + "..."
+    : `Read "${post.title}" on the ${getStoreName()} blog. Discover insights, tips, and the latest news.`;
+
   return {
-    title: `${post.title} - ${getStoreName()}`,
-    description: post.title,
+    title: truncateTitle(post.title, 45),
+    description: postDescription,
     alternates: {
       canonical: `/blog/${slug}`,
     },
     openGraph: {
-      title: `${post.title} - ${getStoreName()}`,
-      description: post.title,
+      title: post.title,
+      description: postDescription,
       type: "article",
       publishedTime: post.created || undefined,
     },

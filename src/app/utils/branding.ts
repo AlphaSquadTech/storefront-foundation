@@ -33,6 +33,49 @@ function cleanPathToken(input?: string, fallback = "") {
   return v.replace(/^\"|\"$/g, "");
 }
 
+/**
+ * Truncates a page title to fit within SEO-recommended character limits.
+ * Titles should be 50-60 characters for optimal display in SERPs.
+ * @param title - The title content (before brand suffix)
+ * @param maxLength - Maximum length for the title portion (default: 50)
+ * @returns Truncated title with ellipsis if needed
+ */
+export function truncateTitle(title: string, maxLength = 50): string {
+  if (title.length <= maxLength) return title;
+  // Truncate at word boundary if possible
+  const truncated = title.substring(0, maxLength);
+  const lastSpace = truncated.lastIndexOf(" ");
+  if (lastSpace > maxLength * 0.7) {
+    return truncated.substring(0, lastSpace) + "...";
+  }
+  return truncated.trim() + "...";
+}
+
+/**
+ * Creates a full page title with store name, ensuring it doesn't exceed recommended length.
+ * @param title - The main title content
+ * @param separator - Separator between title and store name (default: " | ")
+ * @param maxTotal - Maximum total length (default: 60)
+ * @returns Full title string optimized for SEO
+ */
+export function createSeoTitle(
+  title: string,
+  separator = " | ",
+  maxTotal = 60
+): string {
+  const storeName = getStoreName();
+  const suffix = separator + storeName;
+  const maxTitleLength = maxTotal - suffix.length;
+
+  if (maxTitleLength <= 0) {
+    // Store name is too long, just return store name
+    return storeName;
+  }
+
+  const truncatedTitle = truncateTitle(title, maxTitleLength);
+  return truncatedTitle + suffix;
+}
+
 export function getAppIconUrl() {
   const explicit = pickFirstUrlToken(process.env.NEXT_PUBLIC_APP_ICON);
   if (explicit && /^https?:\/\//i.test(explicit)) return explicit;

@@ -86,7 +86,7 @@ export const TestimonialsGrid = async ({ first = 6 }: { first?: number }) => {
       className="py-12 px-4 md:px-6 md:py-16 lg:py-24 lg:px-0"
     >
       <div className="container mx-auto">
-        <Heading content="What Our Customers Say" />
+        <Heading content="What Our Customers Say" as="h2" />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-6 lg:pt-16">
           {items.map((t) => (

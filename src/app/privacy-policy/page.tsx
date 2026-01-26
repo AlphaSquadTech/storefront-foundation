@@ -8,7 +8,7 @@ import Heading from "../components/reuseableUI/heading";
 import Breadcrumb from "../components/reuseableUI/breadcrumb";
 
 export const metadata: Metadata = {
-  title: `Privacy Policy - ${getStoreName()}`,
+  title: "Privacy Policy",
   description: `Read our privacy policy to understand how ${getStoreName()} collects, uses, and protects your personal information.`,
   alternates: {
     canonical: "/privacy-policy",

@@ -8,7 +8,7 @@ import Breadcrumb from "../components/reuseableUI/breadcrumb";
 import Heading from "../components/reuseableUI/heading";
 
 export const metadata: Metadata = {
-  title: `Shipping & Returns - ${getStoreName()}`,
+  title: "Shipping & Returns",
   description:
     "Learn about our shipping options, delivery times, return policy, and how to process returns for your products.",
   alternates: {

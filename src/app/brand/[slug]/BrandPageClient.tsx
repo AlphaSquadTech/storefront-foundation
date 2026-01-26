@@ -95,9 +95,9 @@ export default function BrandPageClient() {
         <Breadcrumb items={breadcrumbItems} />
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between w-full gap-4">
           <div className="space-y-2">
-            <p className="font-normal uppercase text-[var(--color-secondary-800)] text-xl md:text-3xl lg:text-5xl font-primary">
+            <h1 className="font-normal uppercase text-[var(--color-secondary-800)] text-xl md:text-3xl lg:text-5xl font-primary">
               {Title}
-            </p>
+            </h1>
             {searchQuery && (
               <div className="flex items-center gap-2 text-sm text-[var(--color-secondary-600)]">
                 <div className="flex items-center gap-2">

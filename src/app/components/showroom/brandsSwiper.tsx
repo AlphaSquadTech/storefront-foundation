@@ -33,7 +33,7 @@ export const BrandsSwiper = () => {
       {!brandsData.length ? (
         <div className="container mx-auto">
           <div className="flex w-full items-center justify-between ">
-            <Heading content=" Brands" />
+            <Heading content="Brands" as="h2" />
           </div>
           <EmptyState
             text="No brands available"
