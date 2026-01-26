@@ -11,6 +11,9 @@ import {
 export const metadata: Metadata = {
   title: `Categories - ${getStoreName()}`,
   description: "Browse our product categories. Find products organized by type, category, and performance level.",
+  alternates: {
+    canonical: "/category",
+  },
 }
 
 const categories = [

@@ -11,11 +11,18 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-// Simplified metadata - no async operations
-export const metadata: Metadata = {
-  title: "Dynamic Page",
-  description: "Dynamic content page.",
-};
+// Generate dynamic metadata with canonical URL
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+
+  return {
+    title: "Dynamic Page",
+    description: "Dynamic content page.",
+    alternates: {
+      canonical: `/${slug}`,
+    },
+  };
+}
 
 export default async function DynamicPage({ params }: PageProps) {
   const { slug } = await params;
