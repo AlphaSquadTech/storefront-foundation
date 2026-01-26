@@ -28,6 +28,15 @@ export async function generateMetadata({
   return {
     title: `${post.title} - ${getStoreName()}`,
     description: post.title,
+    alternates: {
+      canonical: `/blog/${slug}`,
+    },
+    openGraph: {
+      title: `${post.title} - ${getStoreName()}`,
+      description: post.title,
+      type: "article",
+      publishedTime: post.created || undefined,
+    },
   };
 }
 

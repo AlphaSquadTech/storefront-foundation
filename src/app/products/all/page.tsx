@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   description:
     "Browse our complete collection of products. Find the best products across all categories.",
   keywords: "products, shop, buy online, all products",
+  alternates: {
+    canonical: "/products/all",
+  },
   openGraph: {
     title: "All Products | Shop",
     description: "Browse our complete collection of products",
