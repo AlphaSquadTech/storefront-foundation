@@ -2,10 +2,10 @@ import React from "react";
 import { Metadata } from "next";
 import ClientDynamicPage from "./ClientDynamicPage";
 
-// Force dynamic rendering - don't try to statically generate these pages
-export const dynamic = 'force-dynamic';
+// Use ISR with 10-minute revalidation for CMS pages
+// These pages change infrequently so caching improves performance
 export const dynamicParams = true;
-export const revalidate = false;
+export const revalidate = 600;
 
 interface PageProps {
   params: Promise<{ slug: string }>;
