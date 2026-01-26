@@ -6,10 +6,36 @@ export async function GET() {
   const robotsTxt = `User-agent: *
 Allow: /
 
-# Sitemaps
-Sitemap: ${baseUrl}/sitemap.xml
+# Block API routes
+Disallow: /api/
 
-# For production, replace with your actual domain in NEXT_PUBLIC_SITE_URL environment variable`
+# Block transactional pages
+Disallow: /cart
+Disallow: /checkout
+Disallow: /order-confirmation
+
+# Block account pages
+Disallow: /account
+
+# Block auth pages
+Disallow: /account/login
+Disallow: /account/register
+Disallow: /account/forgot-password
+Disallow: /account/reset-password
+
+# Block search with parameters
+Disallow: /search?*
+
+# Block preview/staging content
+Disallow: /*?preview=
+Disallow: /*?draft=
+
+# Block internal utility pages
+Disallow: /authorize-net-success
+Disallow: /site-map
+
+# Sitemaps
+Sitemap: ${baseUrl}/sitemap.xml`
 
   return new NextResponse(robotsTxt, {
     headers: {

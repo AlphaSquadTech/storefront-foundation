@@ -1,6 +1,16 @@
+import type { Metadata } from "next";
 import { CategoryAPIType } from "@/lib/api/shop";
 import Heading from "../components/reuseableUI/heading";
 import BrandsListingClient from "./components/brandsListingClient";
+import { getStoreName } from "@/app/utils/branding";
+
+export const metadata: Metadata = {
+  title: `Brands - ${getStoreName()}`,
+  description: "Browse our selection of top brands. Find products from trusted manufacturers and premium brands.",
+  alternates: {
+    canonical: "/brands",
+  },
+};
 
 async function fetchBrands(): Promise<CategoryAPIType[]> {
   try {
