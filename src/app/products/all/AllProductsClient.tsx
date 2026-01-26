@@ -27,6 +27,7 @@ import { FiltersCollapsible } from "@/app/components/filtersCollapsible";
 import { handleScrollToTop } from "@/hooks/scrollPageTop";
 import { SearchByVehicle } from "@/app/components/reuseableUI/searchByVehicle";
 import PaginationHead from "@/app/components/seo/PaginationHead";
+import type { ServerProductsResponse } from "@/lib/api/fetchProductsServer";
 
 type ViewMode = "grid" | "list";
 
@@ -102,7 +103,11 @@ interface YMMSearchResponse {
   };
 }
 
-function AllProductsClientInner() {
+interface AllProductsClientInnerProps {
+  initialData?: ServerProductsResponse;
+}
+
+function AllProductsClientInner({ initialData }: AllProductsClientInnerProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -114,11 +119,17 @@ function AllProductsClientInner() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [searchData, setSearchData] = useState<YMMSearchResponse | null>(null);
+  // Start with no loading state if we have initial server data
+  const [loading, setLoading] = useState(!initialData);
+  // Initialize with server-provided data for SEO
+  const [searchData, setSearchData] = useState<YMMSearchResponse | null>(
+    initialData as YMMSearchResponse | null
+  );
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [sortKey, setSortKey] = useState<string>("name_asc");
   const [isInitialized, setIsInitialized] = useState(false);
+  // Track if this is the initial render with server data
+  const [hasInitialData] = useState(!!initialData);
 
   const categorySlugToId = useMemo(() => {
     const flattenCategories = (
@@ -233,7 +244,16 @@ function AllProductsClientInner() {
     updateURL,
   ]);
 
+  // Track if we should skip the initial fetch (when server data is provided)
+  const skipInitialFetch = useRef(hasInitialData);
+
   useEffect(() => {
+    // Skip the initial fetch if we already have server-provided data
+    if (skipInitialFetch.current) {
+      skipInitialFetch.current = false;
+      return;
+    }
+
     const fetchYMMResults = async () => {
       setLoading(true);
       try {
@@ -656,10 +676,14 @@ function AllProductsClientInner() {
   );
 }
 
-export default function AllProductsClient() {
+interface AllProductsClientProps {
+  initialData?: ServerProductsResponse;
+}
+
+export default function AllProductsClient({ initialData }: AllProductsClientProps) {
   return (
     <Suspense>
-      <AllProductsClientInner />
+      <AllProductsClientInner initialData={initialData} />
     </Suspense>
   );
 }

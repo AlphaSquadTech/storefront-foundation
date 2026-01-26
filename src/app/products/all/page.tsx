@@ -5,6 +5,7 @@ import {
 } from "@/lib/schema";
 import { Metadata } from "next";
 import { Suspense } from "react";
+import { fetchAllProductsServer } from "@/lib/api/fetchProductsServer";
 
 export const metadata: Metadata = {
   title: "All Products | Shop",
@@ -21,7 +22,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  // Fetch initial products server-side for SEO
+  const initialData = await fetchAllProductsServer({ per_page: 20 });
+
   // Generate schema.org structured data
   const collectionSchema = generateCollectionPageSchema(
     "All Products",
@@ -46,7 +50,7 @@ export default function ProductsPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <Suspense>
-        <AllProductsClient />
+        <AllProductsClient initialData={initialData} />
       </Suspense>
     </>
   );
