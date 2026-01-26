@@ -8,18 +8,27 @@ import { MobileNavbar } from "./components/MobileNavbar";
 import { NavbarBrand } from "./components/NavbarBrand";
 import { NavigationLinks } from "./components/NavigationLinks";
 import { NavbarActions } from "./components/NavbarActions";
-import { LoadingState } from "./components/LoadingState";
-import { useNavbarData } from "./hooks/useNavbarData";
+import { useNavbarData, type CategoryNode, type MenuItem } from "./hooks/useNavbarData";
 import { useNavbarState } from "./hooks/useNavbarState";
 import { navbarStyles } from "./styles/navbarStyles";
 
 interface NavBarProps {
   initialIsLoggedIn?: boolean;
+  initialCategories?: CategoryNode[];
+  initialMenuItems?: MenuItem[];
 }
 
-export const NavBar = ({ initialIsLoggedIn = false }: NavBarProps) => {
+export const NavBar = ({
+  initialIsLoggedIn = false,
+  initialCategories = [],
+  initialMenuItems = [],
+}: NavBarProps) => {
   // Custom hooks for state and data management
-  const { categories, menuItems, loading, error } = useNavbarData();
+  // Pass server-provided data to skip client-side loading state
+  const { categories, menuItems } = useNavbarData({
+    initialCategories,
+    initialMenuItems,
+  });
   const {
     isAccountOpen,
     setIsAccountOpen,
@@ -63,42 +72,6 @@ export const NavBar = ({ initialIsLoggedIn = false }: NavBarProps) => {
     }
   }, [isLoggingOut, logout, setIsAccountOpen, setIsLoggingOut]);
 
-  // Show loading state while data is being fetched
-  if (loading && !error) {
-    return (
-      <>
-        <MobileNavbar 
-          {...brandConfig}
-          isEnableSearch={isEnableSearch}
-          toggleSearch={toggleSearch}
-          isHamMenuOpen={isHamMenuOpen}
-          toggleHamMenu={toggleHamMenu}
-          isLoggedIn={isLoggedIn}
-          totalItems={totalItems}
-          syncingCart={syncingCart}
-          isActive={isActive}
-        />
-        <nav className={navbarStyles.desktopContainer}>
-          <div className={navbarStyles.linksContainer}>
-            <NavbarBrand {...brandConfig} />
-            <LoadingState />
-          </div>
-          <NavbarActions
-            isLoggedIn={isLoggedIn}
-            isAccountOpen={isAccountOpen}
-            setIsAccountOpen={setIsAccountOpen}
-            isLoggingOut={isLoggingOut}
-            handleLogout={handleLogout}
-            totalItems={totalItems}
-            syncingCart={syncingCart}
-            toggleAccount={toggleAccount}
-            isActive={isActive}
-          />
-        </nav>
-      </>
-    );
-  }
-
   return (
     <>
       <MobileNavbar 
@@ -119,7 +92,6 @@ export const NavBar = ({ initialIsLoggedIn = false }: NavBarProps) => {
           <NavbarBrand {...brandConfig} />
           <NavigationLinks
             categories={categories}
-            categoriesLoading={loading}
             menuItems={menuItems}
             isActive={isActive}
           />
