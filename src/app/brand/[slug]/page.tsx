@@ -5,6 +5,7 @@ import {
 } from "@/lib/schema";
 import { Metadata } from "next";
 import { Suspense } from "react";
+import { getStoreName } from "@/app/utils/branding";
 
 export const dynamic = "force-dynamic";
 
@@ -18,17 +19,18 @@ export async function generateMetadata({
   const brandName = decodedSlug
     .replace(/-/g, " ")
     .replace(/\b\w/g, (l) => l.toUpperCase());
+  const storeName = getStoreName();
 
   return {
-    title: `${brandName} | Shop`,
-    description: `Browse our ${brandName} collection. Find the best products from ${brandName}.`,
-    keywords: `${brandName}, brand, products, buy online`,
+    title: `${brandName} Products`,
+    description: `Shop authentic ${brandName} products at ${storeName}. Genuine parts, competitive prices, and expert support. Order now.`,
+    keywords: `${brandName}, ${brandName} products, buy ${brandName}`,
     alternates: {
       canonical: `/brand/${slug}`,
     },
     openGraph: {
-      title: `${brandName} | Shop`,
-      description: `Browse our ${brandName} collection`,
+      title: `${brandName} Products`,
+      description: `Shop genuine ${brandName} products with expert support.`,
       type: "website",
     },
   };
@@ -44,11 +46,12 @@ export default async function BrandPage({
   const brandName = decodedSlug
     .replace(/-/g, " ")
     .replace(/\b\w/g, (l) => l.toUpperCase());
+  const storeName = getStoreName();
 
   // Generate schema.org structured data
   const collectionSchema = generateCollectionPageSchema(
     brandName,
-    `Browse our ${brandName} collection. Find the best products from ${brandName}.`,
+    `Shop genuine ${brandName} products at ${storeName}.`,
     `/brand/${slug}`
   );
 

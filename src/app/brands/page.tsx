@@ -5,7 +5,7 @@ import BrandsListingClient from "./components/brandsListingClient";
 import { getStoreName } from "@/app/utils/branding";
 
 export const metadata: Metadata = {
-  title: `Brands - ${getStoreName()}`,
+  title: "Brands",
   description: "Browse our selection of top brands. Find products from trusted manufacturers and premium brands.",
   alternates: {
     canonical: "/brands",

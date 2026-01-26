@@ -18,7 +18,7 @@ const NAV_LINKS = [
   { name: "Shop By Category", href: "/products/all" },
   { name: "About", href: "/about" },
   { name: "Blog", href: "/blog" },
-  { name: "Contact", href: "/contact" },
+  { name: "Contact", href: "/contact-us" },
 ] as const;
 
 export const NavigationLinks = ({
@@ -118,7 +118,7 @@ export const NavigationLinks = ({
                 : undefined
             }
             className={`${
-              (pathName === "/contact" && item.name === "Contact") ||
+              (pathName === "/contact-us" && item.name === "Contact") ||
               (pathName === "/frequently-asked-questions" &&
                 item.name === "FAQ")
                 ? "text-[var(--color-primary-500)]"

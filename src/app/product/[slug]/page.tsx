@@ -7,7 +7,7 @@ import {
   type ProductDetailsByIdVars,
 } from "@/graphql/queries/productDetailsById";
 import { generateProductSchema, generateBreadcrumbSchema } from "@/lib/schema";
-import { getStoreName } from "@/app/utils/branding";
+import { getStoreName, truncateTitle } from "@/app/utils/branding";
 import ProductDetailClient from "./ProductDetailClient";
 
 // Force dynamic rendering since product data changes frequently
@@ -45,7 +45,7 @@ export async function generateMetadata({
 
   if (!product) {
     return {
-      title: `Product Not Found | ${storeName}`,
+      title: "Product Not Found",
       description: "The requested product could not be found.",
       robots: {
         index: false,
@@ -62,7 +62,7 @@ export async function generateMetadata({
     `Shop ${product.name} at ${storeName}. Quality products with fast shipping.`;
 
   return {
-    title: `${product.name} | ${storeName}`,
+    title: truncateTitle(product.name, 45),
     description,
     alternates: {
       canonical: `/product/${slug}`,

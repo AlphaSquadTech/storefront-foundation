@@ -13,7 +13,7 @@ import {
 } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: `FAQ - ${getStoreName()}`,
+  title: "FAQ",
   description: `Find answers to frequently asked questions about ordering, shipping, returns, and product compatibility at ${getStoreName()}.`,
   alternates: {
     canonical: "/frequently-asked-questions",
