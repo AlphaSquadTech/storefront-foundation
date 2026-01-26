@@ -160,7 +160,7 @@ const HamMenuSlide = ({
               <div
                 onClick={() => handleNavigation(item.url, item.metadata)}
                 className={`block pb-4 hover:text-[var(--color-primary-500)] transition-all duration-300 ease-in-out cursor-pointer ${
-                  (pathName === "/contact" && item.name === "Contact") ||
+                  (pathName === "/contact-us" && item.name === "Contact") ||
                   (pathName === "/frequently-asked-questions" &&
                     item.name === "FAQ")
                     ? "text-[var(--color-primary-500)]"

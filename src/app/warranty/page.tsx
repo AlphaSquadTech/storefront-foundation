@@ -8,7 +8,7 @@ import Breadcrumb from "../components/reuseableUI/breadcrumb";
 import Heading from "../components/reuseableUI/heading";
 
 export const metadata: Metadata = {
-  title: `Warranty - ${getStoreName()}`,
+  title: "Warranty",
   description: `Learn about warranty coverage for products purchased from ${getStoreName()}. Understand your protection and claims process.`,
   alternates: {
     canonical: "/warranty",

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getStoreName } from "./utils/branding";
 
 export const metadata: Metadata = {
-  title: `Page Not Found | ${getStoreName()}`,
+  title: "Page Not Found",
   description: "The page you are looking for could not be found.",
   robots: {
     index: false,

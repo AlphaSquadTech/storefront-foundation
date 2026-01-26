@@ -6,6 +6,7 @@ import {
 import { Metadata } from "next";
 import { Suspense } from "react";
 import { fetchCategoryProductsServer } from "@/lib/api/fetchProductsServer";
+import { getStoreName } from "@/app/utils/branding";
 
 export const dynamic = "force-dynamic";
 
@@ -19,17 +20,18 @@ export async function generateMetadata({
   const categoryName = decodedSlug
     .replace(/-/g, " ")
     .replace(/\b\w/g, (l) => l.toUpperCase());
+  const storeName = getStoreName();
 
   return {
-    title: `${categoryName} | Shop`,
-    description: `Browse our ${categoryName} collection. Find the best products in ${categoryName} category.`,
-    keywords: `${categoryName}, shop, products, buy online`,
+    title: categoryName,
+    description: `Shop ${categoryName} at ${storeName}. Browse our curated selection of quality products with fast shipping and great prices. Find what you need today.`,
+    keywords: `${categoryName}, shop, products, buy online, ${storeName}`,
     alternates: {
       canonical: `/category/${slug}`,
     },
     openGraph: {
-      title: `${categoryName} | Shop`,
-      description: `Browse our ${categoryName} collection`,
+      title: `Shop ${categoryName}`,
+      description: `Discover our ${categoryName} collection with competitive prices and fast shipping.`,
       type: "website",
     },
   };
@@ -48,11 +50,12 @@ export default async function CategoryPage({
 
   // Fetch initial products server-side for SEO
   const initialData = await fetchCategoryProductsServer(slug, { per_page: 20 });
+  const storeName = getStoreName();
 
   // Generate schema.org structured data
   const categoryPageSchema = generateProductCategoryPageSchema(
     categoryName,
-    `Browse our ${categoryName} collection. Find the best products in ${categoryName} category.`,
+    `Shop ${categoryName} at ${storeName}. Quality products with fast shipping.`,
     `/category/${slug}`
   );
 

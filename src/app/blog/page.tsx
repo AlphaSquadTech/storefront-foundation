@@ -12,13 +12,13 @@ import {
 } from "@/lib/schema"
 
 export const metadata: Metadata = {
-  title: `Blog - ${getStoreName()}`,
+  title: "Blog",
   description: "Read our latest articles, news, and insights about our products and services.",
   alternates: {
     canonical: "/blog",
   },
   openGraph: {
-    title: `Blog - ${getStoreName()}`,
+    title: "Blog",
     description: "Read our latest articles, news, and insights about our products and services.",
     type: "website",
   },
