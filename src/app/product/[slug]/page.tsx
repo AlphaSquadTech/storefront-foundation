@@ -36,10 +36,10 @@ async function getProduct(slug: string) {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { id } = await params;
-  const slug = decodeURIComponent(id);
+  const { slug: rawSlug } = await params;
+  const slug = decodeURIComponent(rawSlug);
   const product = await getProduct(slug);
   const storeName = getStoreName();
 
@@ -98,10 +98,10 @@ export async function generateMetadata({
 export default async function ProductPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { id } = await params;
-  const slug = decodeURIComponent(id);
+  const { slug: rawSlug } = await params;
+  const slug = decodeURIComponent(rawSlug);
   const product = await getProduct(slug);
   const storeName = getStoreName();
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "";

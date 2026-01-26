@@ -26,6 +26,13 @@ Disallow: /account/reset-password
 # Block search with parameters
 Disallow: /search?*
 
+# Block faceted navigation URLs (prevents crawl budget waste)
+Disallow: /*?category=
+Disallow: /*?brand=
+Disallow: /*?sort=
+Disallow: /*?fitment_pairs=
+Disallow: /*?page=
+
 # Block preview/staging content
 Disallow: /*?preview=
 Disallow: /*?draft=
