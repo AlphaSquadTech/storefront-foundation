@@ -1,32 +1,54 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Breadcrumb from "@/app/components/reuseableUI/breadcrumb";
 import EmptyState from "@/app/components/reuseableUI/emptyState";
 import { ProductCard } from "@/app/components/reuseableUI/productCard";
 import ItemsPerPageSelectClient from "@/app/components/shop/ItemsPerPageSelectClient";
-import SearchFilterClient from "@/app/components/shop/SearchFilterClient";
 import { shopApi, type PLSearchProduct } from "@/lib/api/shop";
 import PaginationHead from "@/app/components/seo/PaginationHead";
+import type { ServerProductsResponse } from "@/lib/api/fetchProductsServer";
 
 type ItemsPerPage = 10 | 20 | 50 | 100;
 
-export default function CategoryPageClient(props: { slug: string }) {
-  const { slug } = props;
-  const [itemsPerPage, setItemsPerPage] = useState<ItemsPerPage>(10);
+interface CategoryPageClientProps {
+  slug: string;
+  initialData?: ServerProductsResponse;
+}
+
+export default function CategoryPageClient({ slug, initialData }: CategoryPageClientProps) {
+  const [itemsPerPage, setItemsPerPage] = useState<ItemsPerPage>(20);
   const [searchQuery, setSearchQuery] = useState("");
-  const [products, setProducts] = useState<PLSearchProduct[]>([]);
-  const [loading, setLoading] = useState(false);
+  // Initialize with server-provided data for SEO
+  const [products, setProducts] = useState<PLSearchProduct[]>(
+    (initialData?.products as PLSearchProduct[]) || []
+  );
+  // Start with no loading state if we have initial server data
+  const [loading, setLoading] = useState(!initialData);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [categoryName, setCategoryName] = useState<string>("");
-  const [pagination, setPagination] = useState({
-    total: 0,
-    page: 1,
-    per_page: 10,
-    total_pages: 0,
-  });
+  const [categoryName, setCategoryName] = useState<string>(
+    initialData?.products?.[0]?.category_name || slug
+  );
+  const [pagination, setPagination] = useState(
+    initialData?.pagination || {
+      total: 0,
+      page: 1,
+      per_page: 20,
+      total_pages: 0,
+    }
+  );
+
+  // Track if this is the initial render with server data
+  const [hasInitialData] = useState(!!initialData);
+  const skipInitialFetch = useRef(hasInitialData);
 
   useEffect(() => {
+    // Skip the initial fetch if we already have server-provided data
+    if (skipInitialFetch.current) {
+      skipInitialFetch.current = false;
+      return;
+    }
+
     const fetchProducts = async () => {
       setLoading(true);
       try {

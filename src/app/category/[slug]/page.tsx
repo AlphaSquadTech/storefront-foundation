@@ -5,6 +5,7 @@ import {
 } from "@/lib/schema";
 import { Metadata } from "next";
 import { Suspense } from "react";
+import { fetchCategoryProductsServer } from "@/lib/api/fetchProductsServer";
 
 export const dynamic = "force-dynamic";
 
@@ -45,6 +46,9 @@ export default async function CategoryPage({
     .replace(/-/g, " ")
     .replace(/\b\w/g, (l) => l.toUpperCase());
 
+  // Fetch initial products server-side for SEO
+  const initialData = await fetchCategoryProductsServer(slug, { per_page: 20 });
+
   // Generate schema.org structured data
   const categoryPageSchema = generateProductCategoryPageSchema(
     categoryName,
@@ -70,7 +74,7 @@ export default async function CategoryPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <Suspense>
-        <CategoryPageClient slug={slug} />
+        <CategoryPageClient slug={slug} initialData={initialData} />
       </Suspense>
     </>
   );
