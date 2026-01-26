@@ -14,6 +14,14 @@ import {
 export const metadata: Metadata = {
   title: `Blog - ${getStoreName()}`,
   description: "Read our latest articles, news, and insights about our products and services.",
+  alternates: {
+    canonical: "/blog",
+  },
+  openGraph: {
+    title: `Blog - ${getStoreName()}`,
+    description: "Read our latest articles, news, and insights about our products and services.",
+    type: "website",
+  },
 }
 
 export default async function BlogPage() {

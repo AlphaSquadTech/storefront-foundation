@@ -1,9 +1,39 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Configure headers for Apple Pay domain association file
+  // Configure headers for security and Apple Pay
   async headers() {
+    // Security headers applied to all routes
+    const securityHeaders = [
+      {
+        key: 'X-Content-Type-Options',
+        value: 'nosniff',
+      },
+      {
+        key: 'X-Frame-Options',
+        value: 'SAMEORIGIN',
+      },
+      {
+        key: 'X-XSS-Protection',
+        value: '1; mode=block',
+      },
+      {
+        key: 'Referrer-Policy',
+        value: 'strict-origin-when-cross-origin',
+      },
+      {
+        key: 'Permissions-Policy',
+        value: 'camera=(), microphone=(), geolocation=(self), interest-cohort=()',
+      },
+    ];
+
     return [
+      // Apply security headers to all routes
+      {
+        source: '/:path*',
+        headers: securityHeaders,
+      },
+      // Apple Pay domain association file
       {
         source: '/.well-known/apple-developer-merchantid-domain-association',
         headers: [

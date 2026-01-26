@@ -18,6 +18,10 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: `Site Map - ${getStoreName()}`,
       description: `Explore the comprehensive site map of ${getStoreName()} to easily navigate through all sections and find what you're looking for quickly.`,
+      robots: {
+        index: false,
+        follow: true,
+      },
     };
   }
 
@@ -26,6 +30,10 @@ export async function generateMetadata(): Promise<Metadata> {
     description:
       post.title ||
       `Explore the comprehensive site map of ${getStoreName()} to easily navigate through all sections and find what you're looking for quickly.`,
+    robots: {
+      index: false,
+      follow: true,
+    },
   };
 }
 

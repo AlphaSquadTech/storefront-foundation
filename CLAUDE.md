@@ -23,6 +23,7 @@ NEXT_PUBLIC_API_URL=<saleor-graphql-endpoint>  # Must end with /graphql/
 NEXT_PUBLIC_BRAND_NAME=<store-name>
 NEXT_PUBLIC_THEME_PALETTE=<theme-name>         # e.g., "base-template"
 NEXT_PUBLIC_APP_ICON=/icons/appIcon.png
+NEXT_PUBLIC_SITE_URL=<full-site-url>           # e.g., "https://example.com" (for SEO/canonical URLs)
 NEXT_PUBLIC_PARTSLOGIC_URL=<ymm-api-base>      # Optional: for vehicle fitment
 ```
 
