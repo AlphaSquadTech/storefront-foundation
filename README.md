@@ -46,3 +46,4 @@ NEXT_PUBLIC_APP_ICON=/icons/appIcon.png
 ```
 The `NEXT_PUBLIC_API_URL` is required for fetching menu data and other content. Without it, the application will use a default localhost URL which may not work in all environments.
  
+ 
