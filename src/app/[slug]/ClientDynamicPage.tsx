@@ -18,26 +18,25 @@ export default function ClientDynamicPage({ slug }: ClientDynamicPageProps) {
     async function fetchPageData() {
       let isNotFound = false;
       try {
-        
         const response = await fetch(`/api/dynamic-page/${slug}`);
-        
+
         if (!response.ok) {
           if (response.status === 404) {
             isNotFound = true;
-            return;
+          } else {
+            throw new Error(`HTTP error! status: ${response.status}`);
           }
-          throw new Error(`HTTP error! status: ${response.status}`);
+        } else {
+          const data = await response.json();
+          setPageData(data);
         }
-        
-        const data = await response.json();
-        setPageData(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load page');
       } finally {
         setLoading(false);
-      }
-      if (isNotFound) {
-        notFound();
+        if (isNotFound) {
+          notFound();
+        }
       }
     }
 
