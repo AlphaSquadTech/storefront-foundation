@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { notFound } from "next/navigation";
 import createApolloServerClient from "@/graphql/server-client";
 import {
   PRODUCT_DETAILS_BY_ID,
@@ -10,8 +11,9 @@ import { generateProductSchema, generateBreadcrumbSchema } from "@/lib/schema";
 import { getStoreName, truncateTitle } from "@/app/utils/branding";
 import ProductDetailClient from "./ProductDetailClient";
 
-// Force dynamic rendering since product data changes frequently
-export const dynamic = "force-dynamic";
+// Use ISR with 5-minute revalidation for better performance
+// Product data will be cached and refreshed every 5 minutes
+export const revalidate = 300;
 
 async function getProduct(slug: string) {
   try {
@@ -103,76 +105,70 @@ export default async function ProductPage({
   const { slug: rawSlug } = await params;
   const slug = decodeURIComponent(rawSlug);
   const product = await getProduct(slug);
-  const storeName = getStoreName();
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "";
+
+  // Return proper 404 status when product not found (not just noindex metadata)
+  if (!product) {
+    notFound();
+  }
 
   // Generate structured data for SSR (search engines will see this)
-  let productSchema = null;
-  let breadcrumbSchema = null;
+  const price = product.pricing?.priceRange?.start?.gross?.amount || 0;
+  const currency =
+    product.pricing?.priceRange?.start?.gross?.currency || "USD";
+  const firstVariant = product.variants?.[0];
+  const availability =
+    firstVariant?.quantityAvailable && firstVariant.quantityAvailable > 0
+      ? "InStock"
+      : "OutOfStock";
 
-  if (product) {
-    const price = product.pricing?.priceRange?.start?.gross?.amount || 0;
-    const currency =
-      product.pricing?.priceRange?.start?.gross?.currency || "USD";
-    const firstVariant = product.variants?.[0];
-    const availability =
-      firstVariant?.quantityAvailable && firstVariant.quantityAvailable > 0
-        ? "InStock"
-        : "OutOfStock";
+  // Extract rating/review data from metadata if available
+  // Common metadata keys: "rating", "average_rating", "review_count", "reviews_count"
+  const ratingMeta = product.metadata?.find(
+    (m) => m.key === "rating" || m.key === "average_rating"
+  );
+  const reviewCountMeta = product.metadata?.find(
+    (m) => m.key === "review_count" || m.key === "reviews_count"
+  );
+  const rating = ratingMeta ? parseFloat(ratingMeta.value) : undefined;
+  const reviewCount = reviewCountMeta
+    ? parseInt(reviewCountMeta.value, 10)
+    : undefined;
 
-    // Extract rating/review data from metadata if available
-    // Common metadata keys: "rating", "average_rating", "review_count", "reviews_count"
-    const ratingMeta = product.metadata?.find(
-      (m) => m.key === "rating" || m.key === "average_rating"
-    );
-    const reviewCountMeta = product.metadata?.find(
-      (m) => m.key === "review_count" || m.key === "reviews_count"
-    );
-    const rating = ratingMeta ? parseFloat(ratingMeta.value) : undefined;
-    const reviewCount = reviewCountMeta
-      ? parseInt(reviewCountMeta.value, 10)
-      : undefined;
+  const productSchema = generateProductSchema({
+    id: product.id,
+    name: product.name,
+    description: product.description || "",
+    image: product.media?.map((m) => m.url) || [],
+    price,
+    currency,
+    availability,
+    sku: firstVariant?.sku || product.id,
+    brand: product.category?.name,
+    // Include rating data if both values are valid numbers
+    rating: rating && !isNaN(rating) ? rating : undefined,
+    reviewCount:
+      reviewCount && !isNaN(reviewCount) && reviewCount > 0
+        ? reviewCount
+        : undefined,
+  });
 
-    productSchema = generateProductSchema({
-      id: product.id,
-      name: product.name,
-      description: product.description || "",
-      image: product.media?.map((m) => m.url) || [],
-      price,
-      currency,
-      availability,
-      sku: firstVariant?.sku || product.id,
-      brand: product.category?.name,
-      // Include rating data if both values are valid numbers
-      rating: rating && !isNaN(rating) ? rating : undefined,
-      reviewCount:
-        reviewCount && !isNaN(reviewCount) && reviewCount > 0
-          ? reviewCount
-          : undefined,
-    });
-
-    breadcrumbSchema = generateBreadcrumbSchema([
-      { name: "Home", url: "/" },
-      { name: "Products", url: "/products/all" },
-      { name: product.name, url: `/product/${slug}` },
-    ]);
-  }
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Products", url: "/products/all" },
+    { name: product.name, url: `/product/${slug}` },
+  ]);
 
   return (
     <>
       {/* Server-side rendered structured data for SEO */}
-      {productSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
-        />
-      )}
-      {breadcrumbSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-        />
-      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
 
       {/* Client component handles all interactivity */}
       <Suspense
