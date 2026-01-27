@@ -1556,7 +1556,7 @@ export default function ProductDetailClient() {
                       variant="secondary"
                     >
                       {isAdding ? (
-                        <span className="flex size-6 items-center text-black justify-center w-full">
+                        <span className="flex size-6 items-center justify-center w-full">
                           {SpinnerIcon}
                         </span>
                       ) : (

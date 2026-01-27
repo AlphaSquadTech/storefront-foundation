@@ -592,7 +592,8 @@ function AllProductsClientInner({ initialData }: AllProductsClientInnerProps) {
                         id={product.node.id}
                         name={product.node.name}
                         image={imageUrl}
-                        price={product.node.price_min || 0}
+                        minPrice={product.node.price_min || 0}
+                        maxPrice={product.node.price_max || 0}
                         href={href}
                         category_id={product.node.category?.id || ""}
                         category={product.node.category?.name || ""}

@@ -54,11 +54,6 @@ export default async function CategoryPage({
   // Fetch initial products server-side for SEO
   const initialData = await fetchCategoryProductsServer(slug, { per_page: 20 });
 
-  // Return 404 if category has no products (likely doesn't exist)
-  if (initialData.pagination.total === 0) {
-    notFound();
-  }
-
   const storeName = getStoreName();
 
   // Generate schema.org structured data
