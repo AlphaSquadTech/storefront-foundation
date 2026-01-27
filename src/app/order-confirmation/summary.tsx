@@ -1265,17 +1265,17 @@ export default function Summary() {
   }
 
   return (
-    <div className="container mx-auto py-24 grid grid-cols-3 gap-14">
-      <div className="col-span-2 border-r border-[var(--color-secondary-200)] pr-14">
-        <div className="flex items-center w-full justify-between pb-8">
+    <div className="container mx-auto px-4 py-8 md:py-16 lg:py-24 grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-14">
+      <div className="lg:col-span-2 lg:border-r border-[var(--color-secondary-200)] lg:pr-14">
+        <div className="flex flex-col sm:flex-row sm:items-center w-full sm:justify-between pb-6 md:pb-8 gap-4">
           <div className="flex items-center gap-2">
-            <span className="[&>svg]:size-10">{SuccessTickIcon}</span>
+            <span className="[&>svg]:size-8 md:[&>svg]:size-10">{SuccessTickIcon}</span>
             <div className="space-y-1">
-              <p className="uppercase font-medium text-xl font-secondary text-[var(--color-secondary-800)]">
+              <p className="uppercase font-medium text-base md:text-xl font-secondary text-[var(--color-secondary-800)]">
                 THANK YOU,{" "}
                 {orderData ? getBillingFirstName(orderData) : "Customer"}!
               </p>
-              <p className="font-normal text-sm font-secondary text-[var(--color-secondary-600)]">
+              <p className="font-normal text-xs md:text-sm font-secondary text-[var(--color-secondary-600)]">
                 YOUR ORDER HAS BEEN CONFIRMED.
               </p>
             </div>
@@ -1283,40 +1283,40 @@ export default function Summary() {
           <div className="flex items-center gap-1 cursor-pointer">
             <CommonButton
               onClick={() => route.push("/")}
-              className="p-0"
+              className="p-0 text-sm md:text-base"
               content="CONTINUE SHOPPING"
               variant="tertiary"
             />
-            <span className="size-5 text-[var(--color-primary-600)]">
+            <span className="size-4 md:size-5 text-[var(--color-primary-600)]">
               {ArrowIcon}
             </span>
           </div>
         </div>
 
-        <div className="p-10 border border-[var(--color-secondary-200)]">
+        <div className="p-4 md:p-6 lg:p-10 border border-[var(--color-secondary-200)]">
           {orderData && (
             <>
               <div className="grid gap-3">
-                <div className="space-y-5">
-                  <p className="text-xl font-semibold leading-7 tracking-[-0.05px] text-[var(--color-secondary-800)]">
+                <div className="space-y-3 md:space-y-5">
+                  <p className="text-base md:text-xl font-semibold leading-6 md:leading-7 tracking-[-0.05px] text-[var(--color-secondary-800)]">
                     ORDER DETAILS
                   </p>
-                  <div className="flex flex-col items-start gap-3 uppercase text-[var(--color-secondary-600)] font-normal text-sm font-secondary">
-                    <div className="flex items-center gap-1">
-                      <p className=" text-sm font-normal leading-5 tracking-[-0.035px] text-[var(--color-secondary-600)]">
+                  <div className="flex flex-col items-start gap-2 md:gap-3 uppercase text-[var(--color-secondary-600)] font-normal text-xs md:text-sm font-secondary">
+                    <div className="flex flex-wrap items-center gap-1">
+                      <p className="text-xs md:text-sm font-normal leading-5 tracking-[-0.035px] text-[var(--color-secondary-600)]">
                         Order Number
                       </p>
-                      <p className="text-[var(--color-secondary-800)] text-sm font-semibold leading-5 tracking-[-0.035px]">
+                      <p className="text-[var(--color-secondary-800)] text-xs md:text-sm font-semibold leading-5 tracking-[-0.035px] break-all">
                         {isOrder(orderData) && orderData.number
-                          ? orderData.number
+                          ? `#${orderData.number}`
                           : orderData.id}
                       </p>
                     </div>
                     <div className="flex items-center gap-1">
-                      <p className=" text-sm font-normal leading-5 tracking-[-0.035px] text-[var(--color-secondary-600)]">
+                      <p className="text-xs md:text-sm font-normal leading-5 tracking-[-0.035px] text-[var(--color-secondary-600)]">
                         Placed on
                       </p>
-                      <p className="text-[var(--color-secondary-800)] text-sm font-semibold leading-5 tracking-[-0.035px]">
+                      <p className="text-[var(--color-secondary-800)] text-xs md:text-sm font-semibold leading-5 tracking-[-0.035px]">
                         {formatDateTime(orderData.created)}
                       </p>
                     </div>
@@ -1325,45 +1325,46 @@ export default function Summary() {
 
                 <hr className="border border-[var(--color-secondary-200)]" />
 
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-4">
                   {getLines(orderData).map((line) => (
                     <div
-                      className="flex items-center justify-between gap-5"
+                      className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-5"
                       key={line.id}
                     >
-                      <div className="relative w-20 h-20 flex-shrink-0 rounded-md overflow-hidden">
-                        <Image
-                          src={
-                            line?.thumbnail?.url || "/no-image-avail-large.png"
-                          }
-                          alt={line?.thumbnail?.alt || 'Product Image'}
-                          className="object-contain w-full h-full"
-                          width={100}
-                          height={100}
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <span className="text-sm font-normal leading-5 tracking-[-0.035px]">
-                          {line.category}
-                        </span>
-                        <span className="font-medium text-xl leading-7 tracking[-0.05px]">
-                          {line.name} x
-                        </span>
-                        <span>
-                          <span
-                            style={{ color: "var(--color-secondary-600)" }}
-                            className="text-sm font-normal leading-5 tracking-[-0.035px] mt-3"
-                          >
-                            QTY
-                          </span>{" "}
-                          <span className="text-sm font-semibold leading-5 tracking-[-0.035px] uppercase">
-                            {line.quantity}
+                      <div className="flex items-center gap-3 sm:gap-4">
+                        <div className="relative w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 rounded-md overflow-hidden">
+                          <Image
+                            src={
+                              line?.thumbnail?.url || "/no-image-avail-large.png"
+                            }
+                            alt={line?.thumbnail?.alt || 'Product Image'}
+                            className="object-contain w-full h-full"
+                            width={100}
+                            height={100}
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1 flex-1 min-w-0">
+                          <span className="text-xs sm:text-sm font-normal leading-5 tracking-[-0.035px] text-[var(--color-secondary-600)]">
+                            {line.category}
                           </span>
-                        </span>
+                          <span className="font-medium text-sm sm:text-base md:text-lg leading-tight line-clamp-2">
+                            {line.name}
+                          </span>
+                          <span>
+                            <span
+                              style={{ color: "var(--color-secondary-600)" }}
+                              className="text-xs sm:text-sm font-normal leading-5 tracking-[-0.035px]"
+                            >
+                              QTY
+                            </span>{" "}
+                            <span className="text-xs sm:text-sm font-semibold leading-5 tracking-[-0.035px] uppercase">
+                              {line.quantity}
+                            </span>
+                          </span>
+                        </div>
                       </div>
-                      <span className="text-xl font-semibold leading-7 tracking-[-0.05px]">
-                        {line.totalPrice.gross.amount}
-                        {line.totalPrice.gross.currency}
+                      <span className="text-base sm:text-lg md:text-xl font-semibold leading-7 tracking-[-0.05px] text-right sm:text-left">
+                        ${line.totalPrice.gross.amount.toFixed(2)} {line.totalPrice.gross.currency}
                       </span>
                     </div>
                   ))}
@@ -1373,38 +1374,38 @@ export default function Summary() {
               <hr className="my-4 border border-[var(--color-secondary-200)]" />
 
               <div>
-                <h2 className="text-xl not-italic font-semibold leading-7 tracking-[-0.05px] text-[var(--color-secondary-800)] uppercase  mb-4">
+                <h2 className="text-base md:text-xl not-italic font-semibold leading-7 tracking-[-0.05px] text-[var(--color-secondary-800)] uppercase mb-2 md:mb-4">
                   Shipping Address
                 </h2>
-                <p className="flex items-center gap-2 text-xl not-italic font-medium leading-7 tracking-[-0.05px] font-secondary text-[var(--color-secondary-800)]">
-                  <span>{orderData.shippingAddress?.streetAddress1}</span>
-                  <span>
+                <div className="text-sm md:text-base lg:text-lg font-medium leading-6 md:leading-7 font-secondary text-[var(--color-secondary-800)]">
+                  <p>{orderData.shippingAddress?.streetAddress1}</p>
+                  <p>
                     {orderData.shippingAddress?.city},{" "}
                     {orderData.shippingAddress?.countryArea}{" "}
                     {orderData.shippingAddress?.postalCode}
-                  </span>
-                  <span>{orderData.shippingAddress?.country.country}</span>
-                </p>
-                <p className="text-lg not-italic font-normal leading-7 tracking-[-0.045px] text-[var(--color-secondary-500)] mt-1">
+                  </p>
+                  <p>{orderData.shippingAddress?.country.country}</p>
+                </div>
+                <p className="text-sm md:text-base lg:text-lg font-normal leading-6 md:leading-7 text-[var(--color-secondary-500)] mt-1">
                   {orderData.shippingAddress?.phone}
                 </p>
               </div>
 
               <hr className="my-4 border border-[var(--color-secondary-200)]" />
               <div>
-                <h2 className="text-xl font-secondary text-[var(--color-secondary-800)] uppercase font-semibold mb-4">
+                <h2 className="text-base md:text-xl font-secondary text-[var(--color-secondary-800)] uppercase font-semibold mb-2 md:mb-4">
                   Billing Address
                 </h2>
-                <p className="flex items-center gap-2 text-medium text-xl font-secondary text-[var(--color-secondary-800)]">
-                  <span>{orderData.billingAddress?.streetAddress1}</span>
-                  <span>
+                <div className="text-sm md:text-base lg:text-lg font-medium leading-6 md:leading-7 font-secondary text-[var(--color-secondary-800)]">
+                  <p>{orderData.billingAddress?.streetAddress1}</p>
+                  <p>
                     {orderData.billingAddress?.city},{" "}
                     {orderData.billingAddress?.countryArea}{" "}
                     {orderData.billingAddress?.postalCode}
-                  </span>
-                  <span>{orderData.billingAddress?.country.country}</span>
-                </p>
-                <p className="text-medium text-lg font-secondary text-[var(--color-secondary-500)] mt-1">
+                  </p>
+                  <p>{orderData.billingAddress?.country.country}</p>
+                </div>
+                <p className="text-sm md:text-base lg:text-lg font-normal leading-6 md:leading-7 font-secondary text-[var(--color-secondary-500)] mt-1">
                   {orderData.billingAddress?.phone}
                 </p>
               </div>
@@ -1412,10 +1413,10 @@ export default function Summary() {
                 <>
                   <hr className="my-4 border border-[var(--color-secondary-200)]" />
                   <div>
-                    <h2 className="text-xl font-secondary text-[var(--color-secondary-800)] uppercase font-semibold mb-4">
+                    <h2 className="text-base md:text-xl font-secondary text-[var(--color-secondary-800)] uppercase font-semibold mb-2 md:mb-4">
                       Delivery Method
                     </h2>
-                    <p className="text-lg not-italic font-normal leading-7 tracking-[-0.045px] uppercase mt-1 text-[var(--color-secondary-500)]">
+                    <p className="text-sm md:text-base lg:text-lg font-normal leading-6 md:leading-7 uppercase mt-1 text-[var(--color-secondary-500)]">
                       {orderData?.shippingMethod?.name}
                     </p>
                   </div>
@@ -1426,12 +1427,12 @@ export default function Summary() {
         </div>
       </div>
 
-      <div className="col-span-1 flex flex-col">
-        <h2 className="font-medium font-secondary text-base text-[var(--color-secondary-800)] text-start pb-4 uppercase">
+      <div className="lg:col-span-1 flex flex-col order-first lg:order-last">
+        <h2 className="font-medium font-secondary text-sm md:text-base text-[var(--color-secondary-800)] text-start pb-3 md:pb-4 uppercase">
           Summary
         </h2>
 
-        <div className="w-full text-normal text-[var(--color-secondary-600)] text-base">
+        <div className="w-full text-sm md:text-base text-[var(--color-secondary-600)] bg-[var(--color-secondary-50)] p-4 lg:p-0 lg:bg-transparent rounded-lg lg:rounded-none">
           {orderData &&
             (() => {
               const pricing = getPricing(orderData);
@@ -1440,8 +1441,8 @@ export default function Summary() {
                   <div className="flex justify-between mb-2">
                     <span>Sub-Total</span>
                     <span className="font-medium">
-                      {pricing.subtotal.net?.amount ||
-                        pricing.subtotal.gross.amount}{" "}
+                      ${(pricing.subtotal.net?.amount ||
+                        pricing.subtotal.gross.amount).toFixed(2)}{" "}
                       {pricing.subtotal.currency}
                     </span>
                   </div>
@@ -1488,15 +1489,15 @@ export default function Summary() {
                   <div className="flex justify-between mb-2">
                     <span>Shipping Cost</span>
                     <span className="font-medium">
-                      {pricing.shipping.net?.amount ||
-                        pricing.shipping.gross.amount}{" "}
+                      ${(pricing.shipping.net?.amount ||
+                        pricing.shipping.gross.amount).toFixed(2)}{" "}
                       {pricing.shipping.currency}
                     </span>
                   </div>
-                  <div className="border-t border-gray-200 pt-4 flex justify-between text-xl text-[var(--color-secondary-600)] font-medium ">
+                  <div className="border-t border-gray-200 pt-3 md:pt-4 mt-2 flex justify-between text-base md:text-xl text-[var(--color-secondary-600)] font-medium">
                     <span>TOTAL</span>
                     <span className="font-semibold text-[var(--color-secondary-800)]">
-                      {pricing.total.gross.amount} {pricing.total.currency}
+                      ${pricing.total.gross.amount.toFixed(2)} {pricing.total.currency}
                     </span>
                   </div>
                 </>

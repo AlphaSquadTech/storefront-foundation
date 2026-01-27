@@ -68,7 +68,8 @@ const ProductSwiper: React.FC<ProductSwiperProps> = ({ products }) => {
                 name={p.name}
                 image={p.media?.[0]?.url || "/no-image-avail-large.png"}
                 href={`/product/${encodeURIComponent(p.slug)}`}
-                price={p.pricing?.priceRange?.start?.gross?.amount || 0}
+                minPrice={p.pricing?.priceRange?.start?.gross?.amount || 0}
+                maxPrice={p.pricing?.priceRange?.stop?.gross?.amount || 0}
                 category_id={p.category?.id}
                 category={p.category?.name}
                 discount={p.pricing?.discount?.gross?.amount || 0}
