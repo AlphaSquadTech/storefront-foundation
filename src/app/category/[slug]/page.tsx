@@ -5,10 +5,13 @@ import {
 } from "@/lib/schema";
 import { Metadata } from "next";
 import { Suspense } from "react";
+import { notFound } from "next/navigation";
 import { fetchCategoryProductsServer } from "@/lib/api/fetchProductsServer";
 import { getStoreName } from "@/app/utils/branding";
 
-export const dynamic = "force-dynamic";
+// Use ISR with 5-minute revalidation for better performance
+// Category data will be cached and refreshed every 5 minutes
+export const revalidate = 300;
 
 export async function generateMetadata({
   params,
@@ -50,6 +53,12 @@ export default async function CategoryPage({
 
   // Fetch initial products server-side for SEO
   const initialData = await fetchCategoryProductsServer(slug, { per_page: 20 });
+
+  // Return 404 if category has no products (likely doesn't exist)
+  if (initialData.pagination.total === 0) {
+    notFound();
+  }
+
   const storeName = getStoreName();
 
   // Generate schema.org structured data

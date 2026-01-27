@@ -47,6 +47,7 @@ import {
   type UpdateCheckoutMetadataVariables,
   type UpdateCheckoutMetadataData,
 } from "@/graphql/mutations/updateCheckoutMetadata";
+import { useAcceptJs } from "@/hooks/useAcceptJs";
 
 interface PaymentGateway {
   id: string;
@@ -288,6 +289,14 @@ export function SaleorNativePayment({
   const { recaptchaRef, resetRecaptcha } = useRecaptcha();
   const config = useAppConfiguration();
   const gtmConfig = config.getGoogleTagManagerConfig();
+
+  // Load Accept.js conditionally for Authorize.Net payments
+  const { isLoaded: isAcceptJsLoaded, isLoading: isAcceptJsLoading, loadAcceptJs, error: acceptJsError } = useAcceptJs();
+
+  // Load Accept.js when component mounts (only on checkout page)
+  useEffect(() => {
+    loadAcceptJs();
+  }, [loadAcceptJs]);
 
   const [cardData, setCardData] = useState<CardData>({
     cardNumber: "",

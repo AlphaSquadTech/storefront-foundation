@@ -5,9 +5,13 @@ import {
 } from "@/lib/schema";
 import { Metadata } from "next";
 import { Suspense } from "react";
+import { notFound } from "next/navigation";
 import { getStoreName } from "@/app/utils/branding";
+import { fetchBrandProductsServer } from "@/lib/api/fetchProductsServer";
 
-export const dynamic = "force-dynamic";
+// Use ISR with 10-minute revalidation for better performance
+// Brand data changes less frequently than products/categories
+export const revalidate = 600;
 
 export async function generateMetadata({
   params,
@@ -46,6 +50,15 @@ export default async function BrandPage({
   const brandName = decodedSlug
     .replace(/-/g, " ")
     .replace(/\b\w/g, (l) => l.toUpperCase());
+
+  // Fetch initial products server-side for SEO
+  const initialData = await fetchBrandProductsServer(slug, { per_page: 20 });
+
+  // Return 404 if brand has no products (likely doesn't exist)
+  if (initialData.pagination.total === 0) {
+    notFound();
+  }
+
   const storeName = getStoreName();
 
   // Generate schema.org structured data
@@ -73,7 +86,7 @@ export default async function BrandPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <Suspense>
-        <BrandPageClient />
+        <BrandPageClient slug={slug} initialData={initialData} />
       </Suspense>
     </>
   );
