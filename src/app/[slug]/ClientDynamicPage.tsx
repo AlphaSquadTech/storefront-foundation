@@ -16,13 +16,14 @@ export default function ClientDynamicPage({ slug }: ClientDynamicPageProps) {
 
   useEffect(() => {
     async function fetchPageData() {
+      let isNotFound = false;
       try {
         
         const response = await fetch(`/api/dynamic-page/${slug}`);
         
         if (!response.ok) {
           if (response.status === 404) {
-            notFound();
+            isNotFound = true;
             return;
           }
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -34,6 +35,9 @@ export default function ClientDynamicPage({ slug }: ClientDynamicPageProps) {
         setError(err instanceof Error ? err.message : 'Failed to load page');
       } finally {
         setLoading(false);
+      }
+      if (isNotFound) {
+        notFound();
       }
     }
 
