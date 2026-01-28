@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import createApolloServerClient from "@/graphql/server-client";
 import {
   PRODUCT_DETAILS_BY_ID,
@@ -10,10 +10,74 @@ import { generateProductSchema, generateBreadcrumbSchema } from "@/lib/schema";
 import { getStoreName, truncateTitle } from "@/app/utils/branding";
 import { extractPlainTextFromEditorJs } from "@/app/utils/editorJsUtils";
 import ProductDetailClient from "./ProductDetailClient";
+import { gql } from "@apollo/client";
 
 // Use ISR with 5-minute revalidation for better performance
 // Product data will be cached and refreshed every 5 minutes
 export const revalidate = 300;
+
+// GraphQL query to search products by name
+const SEARCH_PRODUCTS_BY_NAME = gql`
+  query SearchProductsByName($query: String!, $channel: String!) {
+    products(first: 5, channel: $channel, filter: { search: $query }) {
+      edges {
+        node {
+          id
+          name
+          slug
+        }
+      }
+    }
+  }
+`;
+
+// Convert a human-readable slug to a search term
+// e.g., "access-original-93-98-ford-ranger" → "access original 93 98 ford ranger"
+function slugToSearchTerm(slug: string): string {
+  return slug
+    .replace(/-/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+// Try to find a product by searching with the slug converted to a name
+async function findProductByNameSearch(slug: string): Promise<string | null> {
+  try {
+    const client = createApolloServerClient();
+    const channel = process.env.NEXT_PUBLIC_SALEOR_CHANNEL || "default-channel";
+    const searchTerm = slugToSearchTerm(slug);
+
+    const { data } = await client.query<{
+      products: { edges: Array<{ node: { id: string; name: string; slug: string } }> };
+    }>({
+      query: SEARCH_PRODUCTS_BY_NAME,
+      variables: { query: searchTerm, channel },
+    });
+
+    if (data?.products?.edges?.length) {
+      // Find the best match by comparing normalized names
+      const normalizedSearch = searchTerm.toLowerCase();
+      for (const edge of data.products.edges) {
+        const normalizedName = edge.node.name.toLowerCase().replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, " ");
+        // Check if the search term contains most of the product name words
+        const searchWords = normalizedSearch.split(" ").filter(w => w.length > 2);
+        const nameWords = normalizedName.split(" ").filter(w => w.length > 2);
+        const matchCount = searchWords.filter(w => nameWords.some(nw => nw.includes(w) || w.includes(nw))).length;
+        
+        if (matchCount >= Math.min(3, nameWords.length * 0.5)) {
+          return edge.node.slug;
+        }
+      }
+      // If no good match, return first result's slug
+      return data.products.edges[0].node.slug;
+    }
+
+    return null;
+  } catch (error) {
+    console.error("[ProductPage] Error searching for product by name:", error);
+    return null;
+  }
+}
 
 async function getProduct(slug: string) {
   try {
@@ -42,8 +106,16 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug: rawSlug } = await params;
   const slug = decodeURIComponent(rawSlug);
-  const product = await getProduct(slug);
+  let product = await getProduct(slug);
   const storeName = getStoreName();
+
+  // If product not found, try fallback search (for metadata generation)
+  if (!product) {
+    const correctSlug = await findProductByNameSearch(slug);
+    if (correctSlug && correctSlug !== slug) {
+      product = await getProduct(correctSlug);
+    }
+  }
 
   if (!product) {
     return {
@@ -108,8 +180,14 @@ export default async function ProductPage({
   const slug = decodeURIComponent(rawSlug);
   const product = await getProduct(slug);
 
-  // Return proper 404 status when product not found (not just noindex metadata)
+  // If product not found by slug, try searching by name (fallback for PartsLogic slug mismatch)
   if (!product) {
+    const correctSlug = await findProductByNameSearch(slug);
+    if (correctSlug && correctSlug !== slug) {
+      // Redirect to the correct product URL (permanent redirect for SEO)
+      redirect(`/product/${correctSlug}`);
+    }
+    // Still not found, return 404
     notFound();
   }
 

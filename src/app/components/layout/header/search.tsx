@@ -263,7 +263,8 @@ const Search = ({ className }: { className?: string }) => {
                     onClick={(e) => {
                       e.stopPropagation();
                       // Navigate to product detail page using original slug
-                      router.push(`/product/${encodeURIComponent(p.slug)}`);
+                      // Don't double-encode - Next.js handles URL encoding automatically
+                      router.push(`/product/${p.slug}`);
                       setOpen(false);
                     }}
                     className="w-full font-secondary p-3 text-left hover:bg-[var(--color-secondary-200)] flex items-center justify-between -tracking-[0.035px] text-[var(--color-secondary-800)] text-base transition-colors duration-200"
