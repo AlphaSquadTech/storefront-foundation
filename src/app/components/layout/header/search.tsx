@@ -262,9 +262,12 @@ const Search = ({ className }: { className?: string }) => {
                     key={p.id}
                     onClick={(e) => {
                       e.stopPropagation();
-                      // Navigate to product detail page using original slug
-                      // Don't double-encode - Next.js handles URL encoding automatically
-                      router.push(`/product/${p.slug}`);
+                      // Navigate to product detail page with ID for reliable lookup
+                      // PartsLogic slugs may not match Saleor slugs, but IDs are consistent
+                      const url = p.id 
+                        ? `/product/${p.slug}?pid=${encodeURIComponent(p.id)}`
+                        : `/product/${p.slug}`;
+                      router.push(url);
                       setOpen(false);
                     }}
                     className="w-full font-secondary p-3 text-left hover:bg-[var(--color-secondary-200)] flex items-center justify-between -tracking-[0.035px] text-[var(--color-secondary-800)] text-base transition-colors duration-200"
