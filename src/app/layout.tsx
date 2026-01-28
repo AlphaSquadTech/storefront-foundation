@@ -3,7 +3,7 @@ import { ThemeProvider } from "@/app/components/theme/theme-provider";
 import { Theme } from "@/app/utils/functions";
 import ConditionalGoogleAnalytics from "./components/analytics/ConditionalGoogleAnalytics";
 import ConditionalGTMNoscript from "./components/analytics/ConditionalGTMNoscript";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Archivo, Days_One } from "next/font/google";
 import type React from "react";
 import "swiper/css";
@@ -39,6 +39,15 @@ const daysOne = Days_One({
 const appIcon = "/favicon.ico";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
@@ -47,6 +56,15 @@ export const metadata: Metadata = {
   },
   description:
     "Your premier online destination for quality products with fast shipping and exceptional service",
+  manifest: "/site.webmanifest",
+  authors: [{ name: getStoreName() }],
+  creator: getStoreName(),
+  publisher: getStoreName(),
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   icons: {
     icon: [
       {
@@ -67,9 +85,18 @@ export const metadata: Metadata = {
     type: "website",
     siteName: getStoreName(),
     locale: "en_US",
+    images: [
+      {
+        url: "/og-default.png",
+        width: 1200,
+        height: 630,
+        alt: getStoreName(),
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
+    images: ["/og-default.png"],
   },
   alternates: {
     canonical: "/",
@@ -87,7 +114,7 @@ export default async function RootLayout({
   const configuration = await getClientSafeConfiguration();
 
   return (
-    <html lang="en" className={`${archivo.variable} ${daysOne.variable}`}>
+    <html lang="en" className={`${archivo.variable} ${daysOne.variable}`} style={{ colorScheme: "light dark" }}>
       <head>
         {/* Preconnect hints for performance optimization */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
