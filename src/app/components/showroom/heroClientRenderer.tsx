@@ -24,7 +24,7 @@ const HeroBackground = ({ src, alt }: { src?: string | null; alt: string }) => {
         quality={70}
         sizes="100vw"
         fetchPriority="high"
-        className="w-full h-full object-cover object-left"
+        className="w-full h-full object-cover object-center md:object-left"
       />
       <div className="absolute inset-0 bg-gradient-to-l from-transparent to-black/60" />
     </div>
