@@ -40,9 +40,9 @@ const CheckoutTermsModal: React.FC<CheckoutTermsModalProps> = ({
       isModalOpen={isModalOpen}
       onClose={onClose}
       heading={page?.title || "Terms and Conditions"}
-      className="lg:max-w-4xl max-h-[80vh] overflow-y-auto"
+      className="lg:max-w-4xl !h-[85vh] lg:!h-auto lg:max-h-[80vh] flex flex-col"
     >
-      <div className="mt-6 lg:mt-8 px-2 pb-4">
+      <div className="mt-6 lg:mt-8 px-2 pb-4 flex-1 overflow-y-auto min-h-0">
         {loading && (
           <div className="flex items-center justify-center py-12">
             <div className="flex items-center gap-3 text-[var(--color-secondary-600)]">
