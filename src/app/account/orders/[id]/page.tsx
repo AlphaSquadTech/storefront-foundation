@@ -23,8 +23,12 @@ export default function OrderDetailsPage() {
         </Link>
         <h1 className="text-2xl font-bold mt-2">Order Details</h1>
       </div>
+      {/* Show loading during client-side Apollo query */}
+      {/* Note: loading.tsx only covers server-side Suspense, not client-side fetching */}
       {loading ? (
-        <div className="p-8 text-center text-gray-500">Loading order...</div>
+        <div className="p-8 text-center text-gray-500">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-primary)] mx-auto"></div>
+        </div>
       ) : error ? (
         <div className="p-8 text-center text-red-600">Failed to load order.</div>
       ) : !order ? (
