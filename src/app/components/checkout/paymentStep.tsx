@@ -1,8 +1,23 @@
 'use client';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import { PaymentProcessingState, KountConfigResponse } from '@/graphql/types/checkout';
-import { SaleorNativePayment } from './saleorNativePayment';
 import { ProductInquiryIcon } from '@/app/utils/svgs/productInquiryIcon';
+
+// Lazy load the heavy payment component (60KB)
+const SaleorNativePayment = dynamic(
+  () => import('./saleorNativePayment').then(mod => ({ default: mod.SaleorNativePayment })),
+  {
+    loading: () => (
+      <div className="animate-pulse space-y-4">
+        <div className="h-12 bg-gray-200 rounded"></div>
+        <div className="h-12 bg-gray-200 rounded"></div>
+        <div className="h-12 bg-gray-200 rounded"></div>
+      </div>
+    ),
+    ssr: false,
+  }
+);
 
 interface PaymentGateway {
   id: string;

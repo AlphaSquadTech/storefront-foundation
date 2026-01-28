@@ -1,14 +1,35 @@
 "use client";
-import AddressManagement from "@/app/components/checkout/AddressManagement";
+import dynamic from "next/dynamic";
 import CheckoutHeader from "@/app/components/checkout/CheckoutHeader";
 import ContactDetailsSection from "@/app/components/checkout/ContactDetailsSection";
 import DeliveryMethodSection from "@/app/components/checkout/DeliveryMethodSection";
-import DealerShippingSection from "@/app/components/checkout/DealerShippingSection";
-import WillCallSection from "@/app/components/checkout/WillCallSection";
 import OrderSummary from "@/app/components/checkout/OrderSummary";
-import PaymentStep from "@/app/components/checkout/paymentStep";
-import CheckoutQuestions from "@/app/components/checkout/CheckoutQuestions";
-import CheckoutTermsModal from "@/app/components/checkout/CheckoutTermsModal";
+
+// Lazy load heavy checkout components
+const AddressManagement = dynamic(
+  () => import("@/app/components/checkout/AddressManagement"),
+  { loading: () => <div className="animate-pulse h-48 bg-gray-100 rounded" /> }
+);
+const DealerShippingSection = dynamic(
+  () => import("@/app/components/checkout/DealerShippingSection"),
+  { loading: () => <div className="animate-pulse h-32 bg-gray-100 rounded" /> }
+);
+const WillCallSection = dynamic(
+  () => import("@/app/components/checkout/WillCallSection"),
+  { loading: () => <div className="animate-pulse h-32 bg-gray-100 rounded" /> }
+);
+const PaymentStep = dynamic(
+  () => import("@/app/components/checkout/paymentStep"),
+  { loading: () => <div className="animate-pulse h-48 bg-gray-100 rounded" />, ssr: false }
+);
+const CheckoutQuestions = dynamic(
+  () => import("@/app/components/checkout/CheckoutQuestions"),
+  { loading: () => <div className="animate-pulse h-24 bg-gray-100 rounded" /> }
+);
+const CheckoutTermsModal = dynamic(
+  () => import("@/app/components/checkout/CheckoutTermsModal"),
+  { ssr: false }
+);
 import {
   GET_CHECKOUT_TERMS_AND_CONDITIONS,
   type CheckoutTermsAndConditionsResponse,
