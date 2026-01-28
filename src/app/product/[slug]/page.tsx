@@ -6,30 +6,19 @@ import {
   type ProductDetailsByIdData,
   type ProductDetailsByIdVars,
 } from "@/graphql/queries/productDetailsById";
+import {
+  SEARCH_PRODUCTS_BY_NAME,
+  type SearchProductsByNameData,
+  type SearchProductsByNameVars,
+} from "@/graphql/queries/searchProductsByName";
 import { generateProductSchema, generateBreadcrumbSchema } from "@/lib/schema";
 import { getStoreName, truncateTitle } from "@/app/utils/branding";
 import { extractPlainTextFromEditorJs } from "@/app/utils/editorJsUtils";
 import ProductDetailClient from "./ProductDetailClient";
-import { gql } from "@apollo/client";
 
 // Use ISR with 5-minute revalidation for better performance
 // Product data will be cached and refreshed every 5 minutes
 export const revalidate = 300;
-
-// GraphQL query to search products by name
-const SEARCH_PRODUCTS_BY_NAME = gql`
-  query SearchProductsByName($query: String!, $channel: String!) {
-    products(first: 5, channel: $channel, filter: { search: $query }) {
-      edges {
-        node {
-          id
-          name
-          slug
-        }
-      }
-    }
-  }
-`;
 
 // Convert a human-readable slug to a search term
 // e.g., "access-original-93-98-ford-ranger" → "access original ford ranger"
@@ -55,9 +44,10 @@ async function findProductByNameSearch(slug: string): Promise<string | null> {
     const channel = process.env.NEXT_PUBLIC_SALEOR_CHANNEL || "default-channel";
     const searchTerm = slugToSearchTerm(slug);
 
-    const { data } = await client.query<{
-      products: { edges: Array<{ node: { id: string; name: string; slug: string } }> };
-    }>({
+    const { data } = await client.query<
+      SearchProductsByNameData,
+      SearchProductsByNameVars
+    >({
       query: SEARCH_PRODUCTS_BY_NAME,
       variables: { query: searchTerm, channel },
     });
@@ -115,6 +105,7 @@ export async function generateMetadata({
   const { slug: rawSlug } = await params;
   const slug = decodeURIComponent(rawSlug);
   let product = await getProduct(slug);
+  let canonicalSlug = slug; // Track the correct slug for canonical URL
   const storeName = getStoreName();
 
   // If product not found, try fallback search (for metadata generation)
@@ -122,6 +113,7 @@ export async function generateMetadata({
     const correctSlug = await findProductByNameSearch(slug);
     if (correctSlug && correctSlug !== slug) {
       product = await getProduct(correctSlug);
+      canonicalSlug = correctSlug; // Use the correct slug for canonical URL
     }
   }
 
@@ -149,7 +141,7 @@ export async function generateMetadata({
     title: truncateTitle(product.name, 45),
     description,
     alternates: {
-      canonical: `/product/${slug}`,
+      canonical: `/product/${canonicalSlug}`, // Use resolved slug for SEO
     },
     openGraph: {
       title: product.name,
