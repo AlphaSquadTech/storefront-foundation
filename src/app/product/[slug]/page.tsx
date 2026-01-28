@@ -32,12 +32,20 @@ const SEARCH_PRODUCTS_BY_NAME = gql`
 `;
 
 // Convert a human-readable slug to a search term
-// e.g., "access-original-93-98-ford-ranger" → "access original 93 98 ford ranger"
+// e.g., "access-original-93-98-ford-ranger" → "access original ford ranger"
+// Only use the first few significant words to avoid overly specific searches
 function slugToSearchTerm(slug: string): string {
-  return slug
+  const words = slug
     .replace(/-/g, " ")
     .replace(/\s+/g, " ")
-    .trim();
+    .trim()
+    .split(" ")
+    // Filter out numbers (like year ranges) and very short words
+    .filter(w => w.length > 2 && !/^\d+$/.test(w))
+    // Take first 4 significant words for the search
+    .slice(0, 4);
+  
+  return words.join(" ");
 }
 
 // Try to find a product by searching with the slug converted to a name
