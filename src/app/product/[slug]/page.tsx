@@ -1,11 +1,21 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import createApolloServerClient from "@/graphql/server-client";
 import {
   PRODUCT_DETAILS_BY_ID,
   type ProductDetailsByIdData,
   type ProductDetailsByIdVars,
 } from "@/graphql/queries/productDetailsById";
+import {
+  SEARCH_PRODUCTS_BY_NAME,
+  type SearchProductsByNameData,
+  type SearchProductsByNameVars,
+} from "@/graphql/queries/searchProductsByName";
+import {
+  PRODUCT_BY_ID,
+  type ProductByIdData,
+  type ProductByIdVars,
+} from "@/graphql/queries/productById";
 import { generateProductSchema, generateBreadcrumbSchema } from "@/lib/schema";
 import { getStoreName, truncateTitle } from "@/app/utils/branding";
 import { extractPlainTextFromEditorJs } from "@/app/utils/editorJsUtils";
@@ -14,6 +24,81 @@ import ProductDetailClient from "./ProductDetailClient";
 // Use ISR with 5-minute revalidation for better performance
 // Product data will be cached and refreshed every 5 minutes
 export const revalidate = 300;
+
+// Lookup product slug by ID (for when PartsLogic ID is passed)
+async function getSlugById(id: string): Promise<string | null> {
+  try {
+    const client = createApolloServerClient();
+    const channel = process.env.NEXT_PUBLIC_SALEOR_CHANNEL || "default-channel";
+
+    const { data } = await client.query<ProductByIdData, ProductByIdVars>({
+      query: PRODUCT_BY_ID,
+      variables: { id, channel },
+    });
+
+    return data?.product?.slug || null;
+  } catch (error) {
+    console.error("[ProductPage] Error fetching product by ID:", error);
+    return null;
+  }
+}
+
+// Convert a human-readable slug to a search term
+// e.g., "access-original-93-98-ford-ranger" → "access original ford ranger"
+// Only use the first few significant words to avoid overly specific searches
+function slugToSearchTerm(slug: string): string {
+  const words = slug
+    .replace(/-/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .split(" ")
+    // Filter out numbers (like year ranges) and very short words
+    .filter(w => w.length > 2 && !/^\d+$/.test(w))
+    // Take first 4 significant words for the search
+    .slice(0, 4);
+  
+  return words.join(" ");
+}
+
+// Try to find a product by searching with the slug converted to a name
+async function findProductByNameSearch(slug: string): Promise<string | null> {
+  try {
+    const client = createApolloServerClient();
+    const channel = process.env.NEXT_PUBLIC_SALEOR_CHANNEL || "default-channel";
+    const searchTerm = slugToSearchTerm(slug);
+
+    const { data } = await client.query<
+      SearchProductsByNameData,
+      SearchProductsByNameVars
+    >({
+      query: SEARCH_PRODUCTS_BY_NAME,
+      variables: { query: searchTerm, channel },
+    });
+
+    if (data?.products?.edges?.length) {
+      // Find the best match by comparing normalized names
+      const normalizedSearch = searchTerm.toLowerCase();
+      for (const edge of data.products.edges) {
+        const normalizedName = edge.node.name.toLowerCase().replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, " ");
+        // Check if the search term contains most of the product name words
+        const searchWords = normalizedSearch.split(" ").filter(w => w.length > 2);
+        const nameWords = normalizedName.split(" ").filter(w => w.length > 2);
+        const matchCount = searchWords.filter(w => nameWords.some(nw => nw.includes(w) || w.includes(nw))).length;
+        
+        if (matchCount >= Math.min(3, nameWords.length * 0.5)) {
+          return edge.node.slug;
+        }
+      }
+      // If no good match, return null to properly 404 rather than redirect to wrong product
+      return null;
+    }
+
+    return null;
+  } catch (error) {
+    console.error("[ProductPage] Error searching for product by name:", error);
+    return null;
+  }
+}
 
 async function getProduct(slug: string) {
   try {
@@ -42,8 +127,18 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug: rawSlug } = await params;
   const slug = decodeURIComponent(rawSlug);
-  const product = await getProduct(slug);
+  let product = await getProduct(slug);
+  let canonicalSlug = slug; // Track the correct slug for canonical URL
   const storeName = getStoreName();
+
+  // If product not found, try fallback search (for metadata generation)
+  if (!product) {
+    const correctSlug = await findProductByNameSearch(slug);
+    if (correctSlug && correctSlug !== slug) {
+      product = await getProduct(correctSlug);
+      canonicalSlug = correctSlug; // Use the correct slug for canonical URL
+    }
+  }
 
   if (!product) {
     return {
@@ -69,7 +164,7 @@ export async function generateMetadata({
     title: truncateTitle(product.name, 45),
     description,
     alternates: {
-      canonical: `/product/${slug}`,
+      canonical: `/product/${canonicalSlug}`, // Use resolved slug for SEO
     },
     openGraph: {
       title: product.name,
@@ -101,15 +196,34 @@ export async function generateMetadata({
 
 export default async function ProductPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ pid?: string }>;
 }) {
   const { slug: rawSlug } = await params;
+  const { pid } = await searchParams;
   const slug = decodeURIComponent(rawSlug);
+  
+  // If product ID is provided (from PartsLogic search), use it for reliable lookup
+  if (pid) {
+    const correctSlug = await getSlugById(pid);
+    if (correctSlug && correctSlug !== slug) {
+      // Redirect to the canonical URL with the correct Saleor slug
+      redirect(`/product/${correctSlug}`);
+    }
+  }
+  
   const product = await getProduct(slug);
 
-  // Return proper 404 status when product not found (not just noindex metadata)
+  // If product not found by slug, try searching by name (fallback for PartsLogic slug mismatch)
   if (!product) {
+    const correctSlug = await findProductByNameSearch(slug);
+    if (correctSlug && correctSlug !== slug) {
+      // Redirect to the correct product URL (permanent redirect for SEO)
+      redirect(`/product/${correctSlug}`);
+    }
+    // Still not found, return 404
     notFound();
   }
 
