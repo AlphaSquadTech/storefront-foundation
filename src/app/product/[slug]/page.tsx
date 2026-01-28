@@ -66,8 +66,8 @@ async function findProductByNameSearch(slug: string): Promise<string | null> {
           return edge.node.slug;
         }
       }
-      // If no good match, return first result's slug
-      return data.products.edges[0].node.slug;
+      // If no good match, return null to properly 404 rather than redirect to wrong product
+      return null;
     }
 
     return null;
