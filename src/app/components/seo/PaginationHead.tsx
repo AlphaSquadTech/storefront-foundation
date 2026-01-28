@@ -1,5 +1,11 @@
 "use client";
 
+/**
+ * Client-side pagination head tags.
+ * For server components, prefer using PaginationMeta.tsx instead
+ * which renders link tags server-side for better SEO.
+ */
+
 import { useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
