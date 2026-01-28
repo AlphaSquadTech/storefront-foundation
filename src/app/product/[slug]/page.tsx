@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import createApolloServerClient from "@/graphql/server-client";
 import {
@@ -171,31 +170,8 @@ export default async function ProductPage({
       />
 
       {/* Client component handles all interactivity */}
-      <Suspense
-        fallback={
-          <div className="lg:container lg:mx-auto px-4 py-12 md:px-6 md:py-16 lg:px-4 lg:py-24">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-              <div>
-                <div className="relative w-full aspect-square bg-gray-100 overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="animate-pulse w-3/4 h-3/4 bg-gray-200" />
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div className="space-y-3">
-                  <div className="h-8 bg-gray-200 rounded w-2/3 animate-pulse" />
-                  <div className="h-5 bg-gray-200 rounded w-1/3 animate-pulse" />
-                  <div className="h-24 bg-gray-100 rounded animate-pulse" />
-                  <div className="h-10 bg-gray-200 rounded w-1/2 animate-pulse" />
-                </div>
-              </div>
-            </div>
-          </div>
-        }
-      >
-        <ProductDetailClient />
-      </Suspense>
+      {/* Loading state handled by loading.tsx at route level */}
+      <ProductDetailClient />
     </>
   );
 }
