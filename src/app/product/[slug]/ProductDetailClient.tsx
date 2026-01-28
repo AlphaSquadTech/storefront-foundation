@@ -1178,33 +1178,7 @@ export default function ProductDetailClient() {
   return (
     <>
       <div className="lg:container lg:mx-auto px-4 py-12 md:px-6 md:py-16 lg:px-4 lg:py-24">
-        {isLoading && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            <div>
-              <div className="relative w-full aspect-square bg-gray-100  overflow-hidden">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="animate-pulse w-3/4 h-3/4 bg-gray-200 " />
-                </div>
-              </div>
-              <div className="flex gap-2 mt-2 md:mt-5">
-                {Array.from({ length: 4 }).map((_, idx) => (
-                  <div
-                    key={idx}
-                    className="size-20 md:size-24 bg-gray-200 rounded animate-pulse"
-                  />
-                ))}
-              </div>
-            </div>
-            <div>
-              <div className="space-y-3">
-                <div className="h-8 bg-gray-200 rounded w-2/3 animate-pulse" />
-                <div className="h-5 bg-gray-200 rounded w-1/3 animate-pulse" />
-                <div className="h-24 bg-gray-100 rounded animate-pulse" />
-                <div className="h-10 bg-gray-200 rounded w-1/2 animate-pulse" />
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Loading state handled by loading.tsx at route level */}
 
         {error && <div className="text-red-600">Failed to load product.</div>}
         {!isLoading &&

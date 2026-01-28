@@ -1,5 +1,3 @@
-import LoadingUI from "@/app/components/reuseableUI/loadingUI";
-
 export default function ProductLoading() {
   return (
     <div className="lg:container lg:mx-auto px-4 py-12 md:px-6 md:py-16 lg:px-4 lg:py-24">
