@@ -43,7 +43,17 @@ export default function ClientDynamicPage({ slug }: ClientDynamicPageProps) {
     fetchPageData();
   }, [slug]);
 
-  // Loading state handled by loading.tsx at route level
+  // Show loading spinner during client-side data fetch
+  // Note: loading.tsx only covers server-side Suspense, not client-side fetching
+  if (loading) {
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-primary)]"></div>
+        </div>
+      </main>
+    );
+  }
 
   if (error) {
     return (
@@ -61,8 +71,7 @@ export default function ClientDynamicPage({ slug }: ClientDynamicPageProps) {
     return null;
   }
 
-  // Still loading - render nothing (loading.tsx handles this)
-  if (loading || !pageData) {
+  if (!pageData) {
     return null;
   }
 
