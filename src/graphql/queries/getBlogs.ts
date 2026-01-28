@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { cache } from "react";
 import createApolloServerClient from "../server-client";
 
 // Query to get the page type ID for articles-blogs
@@ -191,8 +192,8 @@ export async function fetchBlogPages(): Promise<
   }
 }
 
-// Fetch a single blog page by slug
-export async function fetchBlogBySlug(slug: string): Promise<BlogPage | null> {
+// Fetch a single blog page by slug - cached for request deduplication
+export const fetchBlogBySlug = cache(async (slug: string): Promise<BlogPage | null> => {
   if (!process.env.NEXT_PUBLIC_API_URL) {
     console.warn("API URL not configured, skipping blog fetch");
     return null;
@@ -237,4 +238,4 @@ export async function fetchBlogBySlug(slug: string): Promise<BlogPage | null> {
     );
     return null;
   }
-}
+});
