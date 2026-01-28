@@ -8,6 +8,7 @@ import {
 } from "@/graphql/queries/productDetailsById";
 import { generateProductSchema, generateBreadcrumbSchema } from "@/lib/schema";
 import { getStoreName, truncateTitle } from "@/app/utils/branding";
+import { extractPlainTextFromEditorJs } from "@/app/utils/editorJsUtils";
 import ProductDetailClient from "./ProductDetailClient";
 
 // Use ISR with 5-minute revalidation for better performance
@@ -58,8 +59,10 @@ export async function generateMetadata({
   const price = product.pricing?.priceRange?.start?.gross?.amount || 0;
   const currency = product.pricing?.priceRange?.start?.gross?.currency || "USD";
   const imageUrl = product.media?.[0]?.url || "/no-image-avail-large.png";
+  
+  // Extract plain text from Editor.js JSON for meta description
   const description =
-    product.description?.substring(0, 160).replace(/<[^>]*>/g, "") ||
+    extractPlainTextFromEditorJs(product.description, 160) ||
     `Shop ${product.name} at ${storeName}. Quality products with fast shipping.`;
 
   return {
