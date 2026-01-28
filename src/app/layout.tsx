@@ -114,7 +114,7 @@ export default async function RootLayout({
   const configuration = await getClientSafeConfiguration();
 
   return (
-    <html lang="en" className={`${archivo.variable} ${daysOne.variable}`} style={{ colorScheme: "light dark" }}>
+    <html lang="en" className={`${archivo.variable} ${daysOne.variable}`}>
       <head>
         {/* Preconnect hints for performance optimization */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
