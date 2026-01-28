@@ -23,6 +23,110 @@ export type EditorJsBlock =
   | EditorJsGenericBlock;
 export type EditorJsDoc = { time?: number; blocks?: EditorJsBlock[]; version?: string };
 
+/**
+ * Extract plain text from Editor.js JSON content.
+ * Useful for meta descriptions, OG tags, and other places where plain text is needed.
+ * @param content - Editor.js JSON string or null/undefined
+ * @param maxLength - Maximum length of the output (default: 160 for meta descriptions)
+ * @returns Plain text extracted from the content, or null if content is invalid
+ */
+export function extractPlainTextFromEditorJs(
+  content: string | null | undefined,
+  maxLength: number = 160
+): string | null {
+  if (!content) return null;
+
+  try {
+    const parsed = JSON.parse(content) as EditorJsDoc;
+    const blocks = parsed.blocks || [];
+    if (!blocks.length) return null;
+
+    const textParts: string[] = [];
+
+    for (const block of blocks) {
+      if (block.type === "paragraph") {
+        const paragraphData = (block as EditorJsParagraphBlock).data;
+        const text = String(paragraphData?.text || "")
+          .replace(/<[^>]*>/g, "") // Strip HTML tags
+          .replace(/&nbsp;/g, " ") // Replace &nbsp; with space
+          .replace(/&amp;/g, "&") // Replace &amp; with &
+          .replace(/&lt;/g, "<") // Replace &lt; with <
+          .replace(/&gt;/g, ">") // Replace &gt; with >
+          .replace(/&quot;/g, '"') // Replace &quot; with "
+          .replace(/&#39;/g, "'") // Replace &#39; with '
+          .trim();
+        if (text) textParts.push(text);
+      } else if (block.type === "header") {
+        const headerData = (block as EditorJsHeaderBlock).data;
+        const text = String(headerData?.text || "")
+          .replace(/<[^>]*>/g, "")
+          .trim();
+        if (text) textParts.push(text);
+      } else if (block.type === "list") {
+        const listData = (block as EditorJsListBlock).data || {};
+        const items: string[] = Array.isArray(listData.items) ? listData.items : [];
+        items.forEach((item) => {
+          const text = String(item)
+            .replace(/<[^>]*>/g, "")
+            .trim();
+          if (text) textParts.push(text);
+        });
+      } else if (block.type === "quote") {
+        const quoteData = (block as EditorJsQuoteBlock).data || {};
+        const text = String(quoteData.text || "")
+          .replace(/<[^>]*>/g, "")
+          .trim();
+        if (text) textParts.push(text);
+      }
+
+      // Check if we've accumulated enough text
+      const currentText = textParts.join(" ");
+      if (currentText.length >= maxLength) {
+        break;
+      }
+    }
+
+    const fullText = textParts.join(" ").replace(/\s+/g, " ").trim();
+    
+    if (!fullText) return null;
+
+    // Truncate to maxLength and add ellipsis if needed
+    if (fullText.length <= maxLength) {
+      return fullText;
+    }
+
+    // Find a good break point (end of word)
+    const truncated = fullText.substring(0, maxLength);
+    const lastSpace = truncated.lastIndexOf(" ");
+    
+    if (lastSpace > maxLength - 30) {
+      return truncated.substring(0, lastSpace) + "...";
+    }
+    
+    return truncated + "...";
+  } catch {
+    // If JSON parsing fails, the content might be plain text or HTML
+    // Try to strip HTML and return as-is
+    const plainText = content
+      .replace(/<[^>]*>/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+    
+    if (!plainText) return null;
+    
+    if (plainText.length <= maxLength) {
+      return plainText;
+    }
+    
+    const lastSpace = plainText.substring(0, maxLength).lastIndexOf(" ");
+    if (lastSpace > maxLength - 30) {
+      return plainText.substring(0, lastSpace) + "...";
+    }
+    
+    return plainText.substring(0, maxLength) + "...";
+  }
+}
+
 export function parseEditorJsToSections(content: string | null | undefined) {
   if (!content) return null;
   try {

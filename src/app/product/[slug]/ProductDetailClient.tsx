@@ -1235,7 +1235,7 @@ export default function ProductDetailClient() {
                       />
                     ) : (
                       <Image
-                        src={"/no-image-avail-large.jpg"}
+                        src={"/no-image-avail-large.png"}
                         alt={"no-image-avail-large"}
                         fill
                         quality={90}
