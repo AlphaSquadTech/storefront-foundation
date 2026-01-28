@@ -11,6 +11,11 @@ import {
   type SearchProductsByNameData,
   type SearchProductsByNameVars,
 } from "@/graphql/queries/searchProductsByName";
+import {
+  PRODUCT_BY_ID,
+  type ProductByIdData,
+  type ProductByIdVars,
+} from "@/graphql/queries/productById";
 import { generateProductSchema, generateBreadcrumbSchema } from "@/lib/schema";
 import { getStoreName, truncateTitle } from "@/app/utils/branding";
 import { extractPlainTextFromEditorJs } from "@/app/utils/editorJsUtils";
@@ -19,6 +24,24 @@ import ProductDetailClient from "./ProductDetailClient";
 // Use ISR with 5-minute revalidation for better performance
 // Product data will be cached and refreshed every 5 minutes
 export const revalidate = 300;
+
+// Lookup product slug by ID (for when PartsLogic ID is passed)
+async function getSlugById(id: string): Promise<string | null> {
+  try {
+    const client = createApolloServerClient();
+    const channel = process.env.NEXT_PUBLIC_SALEOR_CHANNEL || "default-channel";
+
+    const { data } = await client.query<ProductByIdData, ProductByIdVars>({
+      query: PRODUCT_BY_ID,
+      variables: { id, channel },
+    });
+
+    return data?.product?.slug || null;
+  } catch (error) {
+    console.error("[ProductPage] Error fetching product by ID:", error);
+    return null;
+  }
+}
 
 // Convert a human-readable slug to a search term
 // e.g., "access-original-93-98-ford-ranger" → "access original ford ranger"
@@ -173,11 +196,24 @@ export async function generateMetadata({
 
 export default async function ProductPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ pid?: string }>;
 }) {
   const { slug: rawSlug } = await params;
+  const { pid } = await searchParams;
   const slug = decodeURIComponent(rawSlug);
+  
+  // If product ID is provided (from PartsLogic search), use it for reliable lookup
+  if (pid) {
+    const correctSlug = await getSlugById(pid);
+    if (correctSlug && correctSlug !== slug) {
+      // Redirect to the canonical URL with the correct Saleor slug
+      redirect(`/product/${correctSlug}`);
+    }
+  }
+  
   const product = await getProduct(slug);
 
   // If product not found by slug, try searching by name (fallback for PartsLogic slug mismatch)
