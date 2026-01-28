@@ -171,7 +171,8 @@ export default function CategoryPageClient({ slug, initialData }: CategoryPageCl
                   name={item.name}
                   image={item.primary_image || "/no-image-avail-large.png"}
                   href={`/product/${item.slug}`}
-                  price={item.price_min || 0}
+                  minPrice={item.price_min || 0}
+                  maxPrice={item.price_max || 0}
                   category_id={item.category_id || ""}
                   category={item.category_name || ""}
                   discount={

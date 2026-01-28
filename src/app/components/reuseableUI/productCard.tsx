@@ -12,7 +12,8 @@ export interface ProductCardProps {
   name: string;
   image: string;
   href: string;
-  price: number;
+  minPrice: number;
+  maxPrice: number;
   category_id: string;
   category: string;
   discount?: number | null;
@@ -25,7 +26,8 @@ export const ProductCard = ({
   name,
   image,
   href,
-  price,
+  minPrice,
+  maxPrice,
   category,
   discount,
   isFeatured = false,
@@ -33,8 +35,6 @@ export const ProductCard = ({
 }: ProductCardProps) => {
   const [loaded, setLoaded] = useState(false);
 
-  const hasDiscount = discount != null && discount > 0;
-  const priceValue = hasDiscount ? price + discount : price;
   const fallbackImage = "/no-image-avail-large.png";
 
   // Ensure image URL has full S3 path if it's relative
@@ -106,7 +106,7 @@ export const ProductCard = ({
           </p>
 
           <div className="flex gap-2 text-2xl items-center mt-3">
-            {price === 0 ? (
+            {minPrice === 0 ? (
               <p
                 style={{ color: "var(--color-primary-700)" }}
                 className="text-lg"
@@ -118,16 +118,16 @@ export const ProductCard = ({
                 style={{ color: "var(--color-primary-700)" }}
                 className="font-semibold text-base md:text-xl lg:text-2xl -tracking-[0.06px]"
               >
-                ${price.toFixed(2)}
+                ${minPrice.toFixed(2)}
               </p>
             )}
 
-            {hasDiscount && (
+            {maxPrice && maxPrice > minPrice && (
               <p
-                style={{ color: "var(--color-secondary-400)" }}
-                className="font-semibold -tracking-[0.06px] line-through"
+                style={{ color: "var(--color-primary-700)" }}
+                className="font-semibold text-base md:text-xl lg:text-2xl -tracking-[0.06px]"
               >
-                ${priceValue.toFixed(2)}
+                {`- $${maxPrice.toFixed(2)}`}
               </p>
             )}
           </div>

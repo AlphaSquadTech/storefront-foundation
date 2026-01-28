@@ -33,7 +33,19 @@ export function generateOrganizationSchema(
   siteName: string,
   siteUrl: string,
   logoUrl?: string,
-  socialLinks?: string[]
+  socialLinks?: string[],
+  contactInfo?: {
+    telephone?: string;
+    email?: string;
+    contactType?: string;
+  },
+  address?: {
+    streetAddress?: string;
+    addressLocality?: string;
+    addressRegion?: string;
+    postalCode?: string;
+    addressCountry?: string;
+  }
 ) {
   const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || siteUrl).replace(
     /\/$/,
@@ -52,6 +64,20 @@ export function generateOrganizationSchema(
         }
       : undefined,
     sameAs: socialLinks || [],
+    ...(contactInfo && {
+      contactPoint: {
+        "@type": "ContactPoint",
+        ...(contactInfo.telephone && { telephone: contactInfo.telephone }),
+        ...(contactInfo.email && { email: contactInfo.email }),
+        contactType: contactInfo.contactType || "customer service",
+      },
+    }),
+    ...(address && {
+      address: {
+        "@type": "PostalAddress",
+        ...address,
+      },
+    }),
   };
 }
 

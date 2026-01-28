@@ -184,7 +184,8 @@ export default function ProductsGrid({
         }`}>
           {edges.map(({ node }) => {
             const img = node.media?.[0]?.url || "/no-image-avail-large.png";
-            const price = node.pricing?.priceRange?.start?.gross?.amount ?? 0;
+            const minPrice = node.pricing?.priceRange?.start?.gross?.amount ?? 0;
+            const maxPrice = node.pricing?.priceRange?.stop?.gross?.amount ?? 0;
             // Use the original Saleor slug as-is for the URL
             const href = `/product/${encodeURIComponent(node.slug)}`;
             return (
@@ -194,7 +195,8 @@ export default function ProductsGrid({
                 name={node.name}
                 image={img}
                 href={href}
-                price={price}
+                minPrice={minPrice}
+                maxPrice={maxPrice}
                 category_id={node.category?.id || ""}
                 category={node.category?.name || ""}
                 onSale={Boolean(node.pricing?.onSale)}

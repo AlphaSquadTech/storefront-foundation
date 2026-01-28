@@ -128,6 +128,7 @@ const nextConfig: NextConfig = {
   // SEO: Ensure consistent URL format without trailing slashes
   trailingSlash: false,
   images: {
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: "https",

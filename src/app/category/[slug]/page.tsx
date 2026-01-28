@@ -37,6 +37,11 @@ export async function generateMetadata({
       description: `Discover our ${categoryName} collection with competitive prices and fast shipping.`,
       type: "website",
     },
+    twitter: {
+      card: "summary_large_image",
+      title: `Shop ${categoryName}`,
+      description: `Discover our ${categoryName} collection with competitive prices and fast shipping.`,
+    },
   };
 }
 
@@ -53,11 +58,6 @@ export default async function CategoryPage({
 
   // Fetch initial products server-side for SEO
   const initialData = await fetchCategoryProductsServer(slug, { per_page: 20 });
-
-  // Return 404 if category has no products (likely doesn't exist)
-  if (initialData.pagination.total === 0) {
-    notFound();
-  }
 
   const storeName = getStoreName();
 

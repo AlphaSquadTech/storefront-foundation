@@ -101,39 +101,39 @@ const Footer = async () => {
   // Always show static data, add dynamic data if available
   const dynamicSections: FooterSection[] =
     footerMenu &&
-    typeof footerMenu === "object" &&
-    "items" in footerMenu &&
-    Array.isArray(footerMenu.items) &&
-    footerMenu.items.length > 0
+      typeof footerMenu === "object" &&
+      "items" in footerMenu &&
+      Array.isArray(footerMenu.items) &&
+      footerMenu.items.length > 0
       ? (
-          footerMenu.items as Array<{
+        footerMenu.items as Array<{
+          id: string;
+          name: string;
+          url: string;
+          children?: Array<{
             id: string;
             name: string;
+            href: string;
             url: string;
-            children?: Array<{
-              id: string;
-              name: string;
-              href: string;
-              url: string;
-              metadata?: Array<{
-                key: string;
-                value: string;
-              }>;
+            metadata?: Array<{
+              key: string;
+              value: string;
             }>;
-          }>
-        ).map((item) => ({
-          id: item.id,
-          name: item.name,
-          url: item.url,
-          children:
-            item.children?.map((child) => ({
-              id: child.id,
-              name: child.name,
-              href: child.href,
-              url: child.url,
-              metadata: child.metadata,
-            })) || [],
-        }))
+          }>;
+        }>
+      ).map((item) => ({
+        id: item.id,
+        name: item.name,
+        url: item.url,
+        children:
+          item.children?.map((child) => ({
+            id: child.id,
+            name: child.name,
+            href: child.href,
+            url: child.url,
+            metadata: child.metadata,
+          })) || [],
+      }))
       : [];
 
   // Combine static sections with dynamic sections
@@ -198,6 +198,9 @@ const Footer = async () => {
               </Link>
             ))}
           </div>
+          <PaymentMethods />
+        </div>
+        <div className="flex flex-col items-center justify-center gap-2">
           <p className="font-normal text-center text-xs font-secondary text-[var(--color-secondary-50)] uppercase">
             <strong>
               {" "}
@@ -214,7 +217,6 @@ const Footer = async () => {
               Powered by&nbsp;Web Shop Manager.
             </Link>
           </p>
-          <PaymentMethods />
         </div>
       </div>
     </footer>
