@@ -36,10 +36,10 @@ export const PromotionSlider = ({
         loop={promotions.length > 1}
         spaceBetween={0}
         slidesPerView={1}
-        className="promotion-swiper
+        className="promotion-swiper pb-12 lg:pb-0
           [&_.swiper-pagination-bullet]:!bg-neutral-300
           [&_.swiper-pagination-bullet-active]:!bg-[var(--color-primary)]
-          [&_.swiper-pagination]:!bottom-4"
+          [&_.swiper-pagination]:!-bottom-2 lg:[&_.swiper-pagination]:!bottom-4"
       >
         {promotions &&
           promotions.map(
