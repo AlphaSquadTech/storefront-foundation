@@ -23,13 +23,12 @@ export default function OrderDetailsPage() {
         </Link>
         <h1 className="text-2xl font-bold mt-2">Order Details</h1>
       </div>
-      {loading ? (
-        <div className="p-8 text-center text-gray-500">Loading order...</div>
-      ) : error ? (
+      {/* Loading state handled by loading.tsx at route level */}
+      {error ? (
         <div className="p-8 text-center text-red-600">Failed to load order.</div>
-      ) : !order ? (
+      ) : !loading && !order ? (
         <div className="p-8 text-center text-gray-500">Order not found.</div>
-      ) : (
+      ) : order && (
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
