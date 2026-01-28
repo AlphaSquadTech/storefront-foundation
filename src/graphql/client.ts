@@ -27,23 +27,61 @@ interface TypedGraphQLError {
   path?: readonly (string | number)[];
 }
 
-function normalizeGraphqlUrl(raw?: string) {
-  if (!raw) return undefined;
+function normalizeGraphqlUrl(raw?: string): string | undefined {
+  if (!raw) {
+    return undefined;
+  }
   let url = raw.trim();
   // If the user passed the Saleor base URL, append /graphql/
   const lower = url.toLowerCase();
   const hasGraphql = lower.endsWith('/graphql') || lower.endsWith('/graphql/');
   if (!hasGraphql) {
     url = url.replace(/\/+$/, '') + '/graphql/';
-    if (typeof window !== 'undefined') {
-      console.warn('[Apollo] NEXT_PUBLIC_API_URL did not include /graphql. Using:', url);
-    }
   }
   return url;
 }
 
+// Cache the endpoint after first successful resolution (client-side only)
+let cachedEndpoint: string | null = null;
+
+function getGraphqlEndpoint(): string {
+  // Only cache and use on client side to avoid SSR timing issues
+  if (typeof window === 'undefined') {
+    // During SSR, always read fresh from env
+    const endpoint = normalizeGraphqlUrl(process.env.NEXT_PUBLIC_API_URL);
+    if (!endpoint) {
+      console.error('[Apollo SSR] NEXT_PUBLIC_API_URL is not set');
+      // Return a non-empty placeholder that will fail gracefully
+      // This prevents Apollo from defaulting to current host
+      return 'https://placeholder-ssr-endpoint.invalid/graphql/';
+    }
+    return endpoint;
+  }
+
+  // Client-side: use cache
+  if (cachedEndpoint) {
+    return cachedEndpoint;
+  }
+
+  const endpoint = normalizeGraphqlUrl(process.env.NEXT_PUBLIC_API_URL);
+
+  if (!endpoint) {
+    console.error('[Apollo] NEXT_PUBLIC_API_URL is not set. GraphQL queries will fail.');
+    // Return a non-empty invalid URL instead of empty string
+    // Empty string causes Apollo to use current host (localhost:3000)
+    return 'https://api-url-not-configured.invalid/graphql/';
+  }
+
+  // Cache the endpoint (client-side only)
+  cachedEndpoint = endpoint;
+  console.log('[Apollo] GraphQL endpoint:', endpoint);
+
+  return endpoint;
+}
+
+// Use a function for URI to ensure it's evaluated at request time, not module load time
 const httpLink = createHttpLink({
-  uri: normalizeGraphqlUrl(process.env.NEXT_PUBLIC_API_URL), // Set in .env.local
+  uri: () => getGraphqlEndpoint(),
 });
 
 // Attach JWT from localStorage for client-side requests
@@ -214,7 +252,7 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
     return;
   }
 
-  const endpoint = normalizeGraphqlUrl(process.env.NEXT_PUBLIC_API_URL) as string;
+  const endpoint = getGraphqlEndpoint();
 
   // If we're not already refreshing, start the refresh process
   if (!isRefreshing) {
@@ -292,6 +330,9 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
 const client = new ApolloClient({
   link: from([errorLink, authLink, httpLink]),
   cache: new InMemoryCache(),
+  // Disable SSR mode - queries should only run on the client
+  // This prevents issues with env vars not being available during SSR
+  ssrMode: typeof window === 'undefined',
   defaultOptions: {
     watchQuery: {
       fetchPolicy: 'cache-first',

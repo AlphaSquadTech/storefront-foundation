@@ -43,7 +43,7 @@ const ModalLayout = ({
         )}
         <div
           className={cn(
-            `fixed bottom-0 overflow-y-auto lg:inset-0 h-[calc(100dvh-8rem)] m-auto w-full lg:h-fit lg:overflow-hidden z-[120] bg-white lg:max-w-5xl px-4 py-6 md:px-6 lg:p-10 transition-all duration-[400ms] ease-in-out`,
+            `fixed bottom-0 overflow-y-auto lg:inset-0 h-[calc(100dvh-8rem)] m-auto w-full lg:h-fit z-[120] bg-white lg:max-w-5xl px-4 py-6 md:px-6 lg:p-10 transition-all duration-[400ms] ease-in-out`,
             isModalOpen ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none",
             className
           )}
