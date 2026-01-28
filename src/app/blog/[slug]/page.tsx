@@ -78,9 +78,13 @@ export default async function BlogPostPage({
     : "";
 
   // Generate schema.org structured data
+  const blogDescription = post.content
+    ? post.content.replace(/<[^>]*>/g, "").substring(0, 155).trim()
+    : `Read "${post.title}" on the ${getStoreName()} blog.`;
+
   const blogSchema = generateBlogPostingSchema(
     post.title,
-    post.title,
+    blogDescription,
     `/blog/${slug}`,
     post.created || new Date().toISOString(),
     post.created || new Date().toISOString()
