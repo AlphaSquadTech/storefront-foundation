@@ -19,9 +19,9 @@ export default  function RootLayout({ children }: LayoutProps) {
       </a>
 
       {/* Sticky Header */}
-      <header className="sticky top-0 z-20">
+      <div className="sticky top-0 z-20">
         <Header />
-      </header>
+      </div>
 
       {/* Main Content */}
       <main id="main-content" className="min-h-screen">{children}</main>
