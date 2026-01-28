@@ -37,6 +37,11 @@ export async function generateMetadata({
       description: `Discover our ${categoryName} collection with competitive prices and fast shipping.`,
       type: "website",
     },
+    twitter: {
+      card: "summary_large_image",
+      title: `Shop ${categoryName}`,
+      description: `Discover our ${categoryName} collection with competitive prices and fast shipping.`,
+    },
   };
 }
 
