@@ -21,8 +21,11 @@ type MenuItem = {
 };
 
 const NAV_LINKS = [
-    { name: "Home", href: "/" },
-    { name: "Shop By Category", href: "/products/all" },
+  { name: "Home", href: "/" },
+  { name: "Shop By Category", href: "/products/all" },
+  { name: "About", href: "/about" },
+  { name: "Blog", href: "/blog" },
+  { name: "Contact", href: "/contact-us" },
 ];
 
 const HamMenuSlide = ({
@@ -42,6 +45,13 @@ const HamMenuSlide = ({
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const blockCheckout = process.env.NEXT_PUBLIC_BLOCK_CHECKOUT === "true";
   const pathName = usePathname();
+
+  // Filter out menuItems that duplicate static NAV_LINKS (by name, case-insensitive)
+  const staticLinkNames = new Set(NAV_LINKS.map((link) => link.name.toLowerCase()));
+  const filteredMenuItems = menuItems.filter(
+    (item) => !staticLinkNames.has(item.name.toLowerCase())
+  );
+
   const toggleExpanded = (itemId: string) => {
     setExpandedItems((prev) => {
       const newSet = new Set(prev);
@@ -123,7 +133,7 @@ const HamMenuSlide = ({
           </div>
         ))}
 
-        {menuItems.map((item) => (
+        {filteredMenuItems.map((item) => (
           <div key={item.id}>
             {item.children && item.children.length > 0 ? (
               <>
