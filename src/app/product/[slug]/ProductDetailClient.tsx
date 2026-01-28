@@ -1,10 +1,16 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Breadcrumb from "@/app/components/reuseableUI/breadcrumb";
 import CommonButton from "@/app/components/reuseableUI/commonButton";
 import PrimaryButton from "@/app/components/reuseableUI/primaryButton";
 import Toast from "@/app/components/reuseableUI/Toast";
-import EditorRenderer from "@/app/components/richText/EditorRenderer";
+
+// Lazy load content renderer for description section
+const EditorRenderer = dynamic(
+  () => import("@/app/components/richText/EditorRenderer"),
+  { loading: () => <div className="animate-pulse h-32 bg-gray-100 rounded" /> }
+);
 import { MinusIcon } from "@/app/utils/svgs/minusIcon";
 import { PlusIcon } from "@/app/utils/svgs/plusIcon";
 import { ProductInquiryIcon } from "@/app/utils/svgs/productInquiryIcon";
@@ -48,7 +54,11 @@ import {
   gtmViewItem,
   Product,
 } from "../../utils/googleTagManager";
-import ItemInquiryModal from "./components/itemInquiryModal";
+// Lazy load inquiry modal (only shown on user action)
+const ItemInquiryModal = dynamic(
+  () => import("./components/itemInquiryModal"),
+  { ssr: false }
+);
 /* ---------------- helpers (local) ---------------- */
 type AddressInputTS = {
   firstName: string;
