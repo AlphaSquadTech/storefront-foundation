@@ -252,14 +252,14 @@ function SearchPageContent({ initialData }: SearchPageContentProps) {
   );
 
   const readFiltersFromURL = useCallback(() => {
-    const categoriesParam = searchParams.getAll("categories");
-    const productTypesParam = searchParams.getAll("productTypes");
+    const categoriesParam = searchParams.getAll("category");
+    const brandsParam = searchParams.getAll("brand");
     const sortParam = searchParams.get("sort");
     const pageParam = searchParams.get("page");
 
     return {
       categories: categoriesParam,
-      brands: productTypesParam,
+      brands: brandsParam,
       sortKey: sortParam || "name_asc",
       page: pageParam ? parseInt(pageParam, 10) : 1,
     };
