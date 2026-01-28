@@ -43,16 +43,7 @@ export default function ClientDynamicPage({ slug }: ClientDynamicPageProps) {
     fetchPageData();
   }, [slug]);
 
-  if (loading) {
-    return (
-      <main className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-          <p className="mt-4 text-lg">Loading page...</p>
-        </div>
-      </main>
-    );
-  }
+  // Loading state handled by loading.tsx at route level
 
   if (error) {
     return (
@@ -65,8 +56,13 @@ export default function ClientDynamicPage({ slug }: ClientDynamicPageProps) {
     );
   }
 
-  if (!pageData) {
+  if (!loading && !pageData) {
     notFound();
+    return null;
+  }
+
+  // Still loading - render nothing (loading.tsx handles this)
+  if (loading || !pageData) {
     return null;
   }
 
