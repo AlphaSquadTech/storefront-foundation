@@ -118,6 +118,18 @@ type EditorBlock =
         caption?: string;
         alignment?: "left" | "center" | "right";
       };
+    }
+  | {
+      id: string;
+      type: "image";
+      data: {
+        file?: { url?: string };
+        url?: string;
+        caption?: string;
+        withBorder?: boolean;
+        withBackground?: boolean;
+        stretched?: boolean;
+      };
     };
 
 export default function ProductDetailClient() {
@@ -896,6 +908,53 @@ export default function ProductDetailClient() {
               />
             ))}
           </ListTag>
+        );
+      }
+      case "image": {
+        // Handle Editor.js image blocks
+        const imageData = b.data as {
+          file?: { url?: string };
+          url?: string;
+          caption?: string;
+          withBorder?: boolean;
+          withBackground?: boolean;
+          stretched?: boolean;
+        };
+        const imageUrl = imageData.file?.url || imageData.url;
+        
+        // Skip rendering if no valid image URL
+        if (!imageUrl) {
+          return null;
+        }
+
+        // Check if URL is valid (not empty, not just a placeholder)
+        const isValidUrl = imageUrl.startsWith('http') || imageUrl.startsWith('/');
+        if (!isValidUrl) {
+          return null;
+        }
+
+        return (
+          <figure
+            key={b.id}
+            className={`my-4 ${imageData.stretched ? "w-full" : "max-w-2xl mx-auto"}`}
+          >
+            <img
+              src={imageUrl}
+              alt={imageData.caption || "Product description image"}
+              className={`w-full h-auto rounded-lg ${
+                imageData.withBorder ? "border border-gray-200" : ""
+              } ${imageData.withBackground ? "bg-gray-50 p-4" : ""}`}
+              onError={(e) => {
+                // Hide broken images
+                (e.target as HTMLImageElement).style.display = "none";
+              }}
+            />
+            {imageData.caption && (
+              <figcaption className="text-sm text-gray-600 text-center mt-2 italic">
+                {imageData.caption}
+              </figcaption>
+            )}
+          </figure>
         );
       }
       case "paragraph":
