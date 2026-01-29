@@ -34,8 +34,8 @@ export default function SearchFilters({
   onCategoriesChange,
   onBrandsChange,
 }: SearchFiltersProps) {
-  const [categoriesExpanded, setCategoriesExpanded] = useState(true);
-  const [brandsExpanded, setBrandsExpanded] = useState(true);
+  const [categoriesExpanded] = useState(true);
+  const [brandsExpanded] = useState(true);
 
   const toggleCategory = (categoryId: string) => {
     if (selectedCategories.includes(categoryId)) {
