@@ -32,7 +32,7 @@ const CategorySwiper: React.FC<CategorySwiperProps> = ({ categories }) => {
             }}
             className="p-2 rounded-full disabled:opacity-50 cursor-pointer category-prev bg-[var(--color-secondary-50)]"
           >
-            <span className="size-6 block">{SwiperArrowIconLeft}</span>
+            <span aria-hidden="true" className="size-6 block">{SwiperArrowIconLeft}</span>
           </button>
           <button
             style={{
@@ -40,7 +40,7 @@ const CategorySwiper: React.FC<CategorySwiperProps> = ({ categories }) => {
             }}
             className="p-2 rounded-full disabled:opacity-50 cursor-pointer category-next bg-[var(--color-secondary-50)]"
           >
-            <span className="size-6 flex-shrink-0 block">
+            <span aria-hidden="true" className="size-6 flex-shrink-0 block">
               {SwiperArrowIconRight}
             </span>
           </button>

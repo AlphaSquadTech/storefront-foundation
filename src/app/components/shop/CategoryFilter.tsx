@@ -129,7 +129,8 @@ export default function CategoryFilter({ categories, selectedSlugs, onChangeSele
                 {node.children?.edges?.length ? (
                   <button
                     type="button"
-                    aria-label={expanded.has(node.id) ? "Collapse" : "Expand"}
+                    aria-expanded={expanded.has(node.id)}
+                    aria-label={expanded.has(node.id) ? "Collapse subcategories" : "Expand subcategories"}
                     className="p-2 md:p-1 text-[var(--color-secondary-700)] hover:text-[var(--color-secondary-900)] transition-transform cursor-pointer"
                     onClick={() => toggleParent(node.id)}
                   >
