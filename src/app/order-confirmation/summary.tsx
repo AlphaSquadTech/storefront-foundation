@@ -377,13 +377,13 @@ function errMsg(e: unknown): string {
 
 export default function Summary() {
   const [orderData, setOrderData] = useState<OrderData | null>(null);
-  const [orderId, setOrderId] = useState<string | null>(null);
+  const [, setOrderId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [completing, setCompleting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const route = useRouter();
   const [flowRan, setFlowRan] = useState(false);
-  const [processingStatus, setProcessingStatus] = useState<
+  const [, setProcessingStatus] = useState<
     "idle" | "running" | "success" | "fail"
   >("idle");
 

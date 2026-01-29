@@ -2,7 +2,6 @@ import { CategoryCard } from "../components/reuseableUI/categoryCard";
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { CategorySkeleton } from "../components/reuseableUI/categorySkeleton";
-import { getStoreName } from "@/app/utils/branding";
 import {
   generateCollectionPageSchema,
   generateBreadcrumbSchema,

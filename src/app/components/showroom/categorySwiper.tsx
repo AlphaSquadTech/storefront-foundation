@@ -14,7 +14,6 @@ import {
 import { Swiper, SwiperSlide } from "swiper/react";
 import { CategoryCard } from "../reuseableUI/categoryCard";
 import { CategorySkeleton } from "../reuseableUI/categorySkeleton";
-import CommonButton from "../reuseableUI/commonButton";
 import Heading from "../reuseableUI/heading";
 
 interface CategorySwiperProps {

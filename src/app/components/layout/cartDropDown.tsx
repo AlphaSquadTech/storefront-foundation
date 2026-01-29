@@ -7,10 +7,8 @@ import { useQuery } from '@apollo/client';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import Breadcrumb from '@/app/components/reuseableUI/breadcrumb';
 import CommonButton from '@/app/components/reuseableUI/commonButton';
 import EmptyState from '@/app/components/reuseableUI/emptyState';
-import { ArrowIcon } from '@/app/utils/svgs/arrowIcon';
 import { CartIcon } from '@/app/utils/svgs/cart/cartIcon';
 import { PlusIcon } from '@/app/utils/svgs/cart/plusIcon';
 import { SubtractIcon } from '@/app/utils/svgs/cart/subtractIcon';
@@ -28,7 +26,7 @@ type CartItem = {
 };
 
 export default function CartDropDown() {
-    const { cartItems: items, totalItems, totalAmount, removeFromCart, updateQuantity, addToCart, checkoutId, setCheckoutId, setCheckoutToken, isLoggedIn, user, guestEmail, guestShippingInfo, setGuestShippingInfo } = useGlobalStore();
+    const { cartItems: items, totalAmount, removeFromCart, updateQuantity, addToCart, checkoutId, setCheckoutId, setCheckoutToken, isLoggedIn, user, guestEmail } = useGlobalStore();
     const { getGoogleTagManagerConfig } = useAppConfiguration();
     const router = useRouter();
     const [creating, setCreating] = useState(false);
@@ -59,11 +57,6 @@ export default function CartDropDown() {
         if (!/\/graphql\/?$/i.test(url)) url = url.replace(/\/+$/, '') + '/graphql';
         return url;
     }, []);
-
-    const handleCountryChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-        setGuestShippingInfo({ country: value });
-    }, [setGuestShippingInfo]);
 
     // Refresh prices from checkout if available to ensure we show discounted prices
     useEffect(() => {
@@ -212,7 +205,6 @@ export default function CartDropDown() {
 
     // Use refreshed items and totals if available, otherwise fall back to store values
     const displayItems = pricesRefreshed ? refreshedItems : items;
-    const displayTotalItems = pricesRefreshed ? refreshedTotals.totalItems : totalItems;
     const displayTotalAmount = pricesRefreshed ? refreshedTotals.totalAmount : totalAmount;
 
     // Track view_cart GTM event when cart dropdown is opened/items change
@@ -261,7 +253,7 @@ export default function CartDropDown() {
             if (pricesRefreshed) {
                 // Update both store and local refreshed state
                 setRefreshedItems(prev => prev.filter(item => item.id !== itemId));
-                setRefreshedTotals(prev => {
+                setRefreshedTotals(() => {
                     const filteredItems = refreshedItems.filter(item => item.id !== itemId);
                     const totalItems = filteredItems.reduce((sum, item) => sum + item.quantity, 0);
                     const totalAmount = filteredItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -408,7 +400,7 @@ export default function CartDropDown() {
         } finally {
             setCreating(false);
         }
-    }, [accountBilling, accountShipping, checkoutId, endpoint, guestEmail, guestShippingInfo, isLoggedIn, displayItems, meData, meLoading, router, setCheckoutId, setCheckoutToken, user?.email]);
+    }, [accountBilling, accountShipping, checkoutId, endpoint, guestEmail, isLoggedIn, displayItems, meData, meLoading, router, setCheckoutId, setCheckoutToken, user?.email]);
 
     if (displayItems.length === 0) {
         return (

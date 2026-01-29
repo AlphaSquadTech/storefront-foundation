@@ -5,7 +5,6 @@ import Heading from "../components/reuseableUI/heading"
 import Breadcrumb from "../components/reuseableUI/breadcrumb"
 import BlogList from "../components/blog/BlogList"
 import { fetchBlogPages } from "@/graphql/queries/getBlogs"
-import { getStoreName } from "@/app/utils/branding"
 import {
   generateCollectionPageSchema,
   generateBreadcrumbSchema,

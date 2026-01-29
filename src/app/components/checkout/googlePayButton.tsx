@@ -3,16 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { PaymentProcessingState } from "@/graphql/types/checkout";
 
-// Google Pay Config Response Type
-interface GooglePayConfigResponse {
-  allowedPaymentMethods: AllowedPaymentMethod[];
-  merchantInfo: {
-    merchantId?: string;
-    merchantName?: string;
-  };
-  isEligible: boolean;
-}
-
 interface GooglePayButtonProps {
   checkoutId: string;
   totalAmount: number;

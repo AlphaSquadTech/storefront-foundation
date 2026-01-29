@@ -5,36 +5,7 @@ import { useRouter } from "next/navigation";
 import { PaymentProcessingState } from "@/graphql/types/checkout";
 import LoadingUI from "../reuseableUI/loadingUI";
 
-// PayPal SDK Types
-interface ApplePayConfig {
-  countryCode: string;
-  currencyCode: string;
-  merchantCapabilities: string[];
-  supportedNetworks: string[];
-}
-
-interface GooglePayConfigResponse {
-  allowedPaymentMethods: AllowedPaymentMethod[];
-  merchantInfo: {
-    merchantId?: string;
-    merchantName?: string;
-  };
-  isEligible: boolean;
-}
-
-interface PayPalButtonsConfig {
-  createOrder: () => Promise<string>;
-  onApprove: (data: { orderID: string }) => Promise<void>;
-  onError?: (err: Error) => void;
-  onCancel?: () => void;
-  style?: {
-    layout?: "vertical" | "horizontal";
-    color?: "gold" | "blue" | "silver" | "white" | "black";
-    shape?: "rect" | "pill";
-    label?: "paypal" | "checkout" | "buynow" | "pay";
-    height?: number;
-  };
-}
+// PayPal SDK Types are used via window.paypal
 
 interface PayPalPaymentProps {
   checkoutId: string;
@@ -61,7 +32,6 @@ export function PayPalPayment({
   onSuccess,
   onError,
   setIsProcessingPayment,
-  paypalClientId,
   environment = "sandbox",
   userEmail,
   guestEmail,
@@ -416,7 +386,7 @@ export function PayPalPayment({
         .catch(() => {
           setSdkError("Failed to render PayPal buttons");
         });
-    } catch (error) {
+    } catch {
       setSdkError("Failed to initialize PayPal buttons");
     }
   }, [

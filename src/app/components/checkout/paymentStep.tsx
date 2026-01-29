@@ -1,5 +1,5 @@
 'use client';
-import { useState, useCallback, Suspense } from 'react';
+import { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { PaymentProcessingState, KountConfigResponse } from '@/graphql/types/checkout';
 import { ProductInquiryIcon } from '@/app/utils/svgs/productInquiryIcon';

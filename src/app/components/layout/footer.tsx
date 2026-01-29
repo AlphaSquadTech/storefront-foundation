@@ -1,6 +1,5 @@
 import Link from "next/link";
 import PaymentMethods from "./paymentMethods";
-import SocialLinks from "./socialLinks";
 import SiteInfo from "./siteInfo";
 import Image from "next/image";
 import { fetchMenuBySlug } from "@/graphql/queries/getMenuBySlug";
