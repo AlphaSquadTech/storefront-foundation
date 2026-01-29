@@ -1,5 +1,5 @@
 export const ModalCrossIcon = (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
     <g clipPath="url(#clip0_1262_29632)">
       <path
         d="M12.5 3.5L3.5 12.5"

@@ -21,6 +21,7 @@ import "./globals.css";
 import GoogleAnalyticsProvider from "./components/providers/GoogleAnalyticsProvider";
 import { getStoreName } from "./utils/branding";
 import YMMStatusProvider from "./components/providers/YMMStatusProvider";
+import RouteAnnouncer from "./components/RouteAnnouncer";
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -169,6 +170,7 @@ export default async function RootLayout({
                   <GoogleTagManagerProvider>
                     <YMMStatusProvider />
                     <TokenExpirationHandler />
+                    <RouteAnnouncer />
                     <Layout>{children}</Layout>
                   </GoogleTagManagerProvider>
                 </GoogleAnalyticsProvider>
