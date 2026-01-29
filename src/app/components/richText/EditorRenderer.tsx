@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 
 export type EditorJsBlock = {
   id: string;
@@ -154,7 +153,7 @@ export default function EditorRenderer({
       if (Array.isArray(parsed?.blocks)) {
         blocks = parsed.blocks as EditorJsBlock[];
       }
-    } catch (_) {}
+    } catch {}
   }
 
   if (!blocks.length) {

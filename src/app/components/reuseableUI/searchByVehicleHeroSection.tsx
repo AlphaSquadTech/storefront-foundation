@@ -4,7 +4,6 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import PrimaryButton from "./primaryButton";
 import Select from "./select";
 import { useVehicleData } from "@/hooks/useVehicleData";
-import { useGlobalStore } from "@/store/useGlobalStore";
 
 interface SelectInputProps {
   onSearch?: (fitment: string) => void;
