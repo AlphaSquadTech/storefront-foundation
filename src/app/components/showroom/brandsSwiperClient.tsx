@@ -37,6 +37,7 @@ export const BrandsSwiperClient = ({ brands }: BrandSwiperProps) => {
       </div>
       <div className="relative flex items-center gap-3 lg:col-span-4">
         <button
+          aria-label="Previous brand"
           style={{
             backgroundColor: "var(--color-secondary-200)",
             color: "var(--color-secondary-800)",
@@ -87,6 +88,7 @@ export const BrandsSwiperClient = ({ brands }: BrandSwiperProps) => {
           ))}
         </Swiper>
         <button
+          aria-label="Next brand"
           style={{
             backgroundColor: "var(--color-secondary-200)",
             color: "var(--color-secondary-800)",

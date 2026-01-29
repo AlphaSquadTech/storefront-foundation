@@ -148,6 +148,7 @@ export const PromotionsSwiper = ({ slides }: PromotionsSwiperProps) => {
 
       {/* Prev */}
       <button
+        aria-label="Previous slide"
         style={{
           backgroundColor: "var(--color-secondary-50)",
           color: "var(--color-secondary-800)",
@@ -159,6 +160,7 @@ export const PromotionsSwiper = ({ slides }: PromotionsSwiperProps) => {
 
       {/* Next */}
       <button
+        aria-label="Next slide"
         style={{
           backgroundColor: "var(--color-secondary-50)",
           color: "var(--color-secondary-800)",
