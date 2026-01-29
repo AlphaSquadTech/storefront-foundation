@@ -255,7 +255,7 @@ export default function ProductDetailClient() {
                 redirectsValue = redirectsValue.replace(/([^"\]])\]/g, '$1"]'); // Add missing closing quote before ]
 
                 redirects = JSON.parse(redirectsValue);
-              } catch (jsonError) {
+              } catch {
                 // If JSON parse fails, try comma-separated format
                 redirects = redirectsValue
                   .replace(/^\[|\]$/g, "") // Remove [ and ]
@@ -277,7 +277,7 @@ export default function ProductDetailClient() {
             if (hasMatch) {
               return true;
             }
-          } catch (parseError) {
+          } catch {
             // Silent fail - continue to next product
           }
         }
@@ -331,7 +331,7 @@ export default function ProductDetailClient() {
             },
           };
         },
-      }).catch((error) => {
+      }).catch(() => {
         setIsFetchingMore(false);
         setAllProductsChecked(true);
       });

@@ -20,7 +20,6 @@ export const SearchByVehicleHeroSection = ({
   const params = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const isYMMActive = useGlobalStore((state) => state.isYMMActive);
   const previousPairsRef = useRef<string | null>(null);
   const isSearchPage = pathname === "/search";
 
@@ -31,7 +30,6 @@ export const SearchByVehicleHeroSection = ({
     loading,
     handleRootTypeChange,
     handleValueChange,
-    isComplete,
     getSelectedPairs,
     initializeFromPairs,
     resetInitialization,

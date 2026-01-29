@@ -416,7 +416,7 @@ export function PayPalPayment({
         .catch(() => {
           setSdkError("Failed to render PayPal buttons");
         });
-    } catch (error) {
+    } catch {
       setSdkError("Failed to initialize PayPal buttons");
     }
   }, [

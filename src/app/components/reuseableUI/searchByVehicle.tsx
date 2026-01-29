@@ -31,7 +31,6 @@ export const SearchByVehicle = ({
     loading,
     handleRootTypeChange,
     handleValueChange,
-    isComplete,
     getSelectedPairs,
     initializeFromPairs,
     resetInitialization,
