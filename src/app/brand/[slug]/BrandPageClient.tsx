@@ -22,7 +22,7 @@ export default function BrandPageClient({ slug, initialData }: BrandPageClientPr
   const [itemsPerPage, setItemsPerPage] = useState<ItemsPerPage>(
     (initialData?.pagination.per_page as ItemsPerPage) || 20
   );
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery] = useState("");
   const [products, setProducts] = useState<PLSearchProduct[]>(
     initialData?.products?.map((p) => ({
       id: p.id,
