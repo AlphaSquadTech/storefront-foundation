@@ -7,6 +7,7 @@ import { X } from "../../../../public/footer/x";
 import { facebook } from "../../../../public/footer/facebook";
 import { Instagram } from "../../../../public/footer/instagram";
 import { Youtube } from "../../../../public/footer/youtube";
+import { normalizeMenuUrl } from "./header/utils/normalizeMenuUrl";
 
 // Define types for footer sections and menu items
 type FooterChild = {
@@ -159,15 +160,16 @@ const Footer = async () => {
             {sectionsToRender.map((section) => (
               <div key={section.id} className="flex flex-col w-full gap-3">
                 <SectionTitle>
-                  <Link href={section.url || ""}>{section.name}</Link>
+                  <Link href={normalizeMenuUrl(section.url || "")}>{section.name}</Link>
                 </SectionTitle>
                 <div className="flex flex-col gap-2">
                   {section.children.map((child) => {
+                    const childUrl = normalizeMenuUrl(child.url || child.href || "#");
                     return (
                       <Link
                         prefetch={false}
                         key={child.id}
-                        href={child.url ? child.url : child.href || "#"}
+                        href={childUrl}
                         target={getTargetFromMetadata(child.metadata)}
                         rel={
                           getTargetFromMetadata(child.metadata) === "_blank"
