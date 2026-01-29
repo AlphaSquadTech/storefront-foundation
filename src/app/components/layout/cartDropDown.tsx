@@ -58,11 +58,6 @@ export default function CartDropDown() {
         return url;
     }, []);
 
-    const handleCountryChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-        setGuestShippingInfo({ country: value });
-    }, [setGuestShippingInfo]);
-
     // Refresh prices from checkout if available to ensure we show discounted prices
     useEffect(() => {
         const refreshPricesFromCheckout = async () => {
@@ -210,7 +205,6 @@ export default function CartDropDown() {
 
     // Use refreshed items and totals if available, otherwise fall back to store values
     const displayItems = pricesRefreshed ? refreshedItems : items;
-    const displayTotalItems = pricesRefreshed ? refreshedTotals.totalItems : totalItems;
     const displayTotalAmount = pricesRefreshed ? refreshedTotals.totalAmount : totalAmount;
 
     // Track view_cart GTM event when cart dropdown is opened/items change
@@ -259,7 +253,7 @@ export default function CartDropDown() {
             if (pricesRefreshed) {
                 // Update both store and local refreshed state
                 setRefreshedItems(prev => prev.filter(item => item.id !== itemId));
-                setRefreshedTotals(prev => {
+                setRefreshedTotals(() => {
                     const filteredItems = refreshedItems.filter(item => item.id !== itemId);
                     const totalItems = filteredItems.reduce((sum, item) => sum + item.quantity, 0);
                     const totalAmount = filteredItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);

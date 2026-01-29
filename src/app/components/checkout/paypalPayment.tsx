@@ -5,14 +5,7 @@ import { useRouter } from "next/navigation";
 import { PaymentProcessingState } from "@/graphql/types/checkout";
 import LoadingUI from "../reuseableUI/loadingUI";
 
-// PayPal SDK Types (unused interfaces removed)
-interface _PayPalButtonsStyle {
-  layout?: "vertical" | "horizontal";
-  color?: "gold" | "blue" | "silver" | "white" | "black";
-  shape?: "rect" | "pill";
-  label?: "paypal" | "checkout" | "buynow" | "pay";
-  height?: number;
-}
+// PayPal SDK Types are used via window.paypal
 
 interface PayPalPaymentProps {
   checkoutId: string;
