@@ -4,6 +4,7 @@ import MegaMenuDropdown from "../megaMenuDropdown";
 import { MenuItemDropdown } from "./MenuItemDropdown";
 import { useDropdown } from "../hooks/useDropdown";
 import { navbarStyles } from "../styles/navbarStyles";
+import { normalizeMenuUrl } from "../utils/normalizeMenuUrl";
 import type { CategoryNode, MenuItem } from "../hooks/useNavbarData";
 import { useMemo } from "react";
 import { usePathname } from "next/navigation";
@@ -104,13 +105,14 @@ export const NavigationLinks = ({
       )}
 
       {/* Dynamic menu items */}
-      {memoizedMenuItems.map((item) =>
-        item.hasChildren ? (
+      {memoizedMenuItems.map((item) => {
+        const normalizedUrl = normalizeMenuUrl(item.url);
+        return item.hasChildren ? (
           <MenuItemDropdown key={item.id} item={item} isActive={isActive} />
-        ) : item.url ? (
+        ) : normalizedUrl ? (
           <Link
             key={item.id}
-            href={item.url}
+            href={normalizedUrl}
             target={getTargetFromMetadata(item.metadata)}
             rel={
               getTargetFromMetadata(item.metadata) === "_blank"
@@ -122,13 +124,13 @@ export const NavigationLinks = ({
               (pathName === "/frequently-asked-questions" &&
                 item.name === "FAQ")
                 ? "text-[var(--color-primary-500)]"
-                : getLinkClassName(item.url)
+                : getLinkClassName(normalizedUrl)
             } whitespace-nowrap`}
           >
             {item.name}
           </Link>
-        ) : null
-      )}
+        ) : null;
+      })}
     </>
   );
 };

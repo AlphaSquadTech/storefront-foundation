@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ChevronDownIcon } from "@/app/utils/svgs/chevronDownIcon";
 import { useDropdown } from "../hooks/useDropdown";
 import { navbarStyles } from "../styles/navbarStyles";
+import { normalizeMenuUrl } from "../utils/normalizeMenuUrl";
 import type { MenuItem } from "../hooks/useNavbarData";
 
 interface MenuItemDropdownProps {
@@ -11,6 +12,7 @@ interface MenuItemDropdownProps {
 
 export const MenuItemDropdown = ({ item, isActive }: MenuItemDropdownProps) => {
   const { isOpen, handleMouseEnter, handleMouseLeave } = useDropdown(300);
+  const normalizedUrl = normalizeMenuUrl(item.url);
 
   return (
     <div
@@ -19,10 +21,10 @@ export const MenuItemDropdown = ({ item, isActive }: MenuItemDropdownProps) => {
       onMouseLeave={handleMouseLeave}
     >
       <Link
-        href={item.url}
+        href={normalizedUrl}
         prefetch={false}
         className={`${navbarStyles.navLinkBase} ${
-          isActive(item.url)
+          isActive(normalizedUrl)
             ? navbarStyles.navLinkActive
             : navbarStyles.navLinkInactive
         } whitespace-nowrap`}
@@ -53,7 +55,7 @@ export const MenuItemDropdown = ({ item, isActive }: MenuItemDropdownProps) => {
           {item.children?.map((child) => (
             <Link
               key={child.id}
-              href={child.url}
+              href={normalizeMenuUrl(child.url)}
               prefetch={false}
               className={navbarStyles.dropdown.item}
               role="menuitem"
