@@ -26,7 +26,7 @@ type CartItem = {
 };
 
 export default function CartDropDown() {
-    const { cartItems: items, totalItems, totalAmount, removeFromCart, updateQuantity, addToCart, checkoutId, setCheckoutId, setCheckoutToken, isLoggedIn, user, guestEmail, guestShippingInfo, setGuestShippingInfo } = useGlobalStore();
+    const { cartItems: items, totalAmount, removeFromCart, updateQuantity, addToCart, checkoutId, setCheckoutId, setCheckoutToken, isLoggedIn, user, guestEmail } = useGlobalStore();
     const { getGoogleTagManagerConfig } = useAppConfiguration();
     const router = useRouter();
     const [creating, setCreating] = useState(false);

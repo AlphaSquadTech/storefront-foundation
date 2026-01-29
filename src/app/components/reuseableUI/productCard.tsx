@@ -29,7 +29,6 @@ export const ProductCard = ({
   minPrice,
   maxPrice,
   category,
-  discount,
   isFeatured = false,
   onSale,
 }: ProductCardProps) => {
