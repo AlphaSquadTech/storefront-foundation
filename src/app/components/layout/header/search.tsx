@@ -149,7 +149,7 @@ const Search = ({ className }: { className?: string }) => {
             );
           }
         }
-      } catch (e) {
+      } catch {
         if (!controller.signal.aborted) {
           setProducts([]);
           setCategories([]);

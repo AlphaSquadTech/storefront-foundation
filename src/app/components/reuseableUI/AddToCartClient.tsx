@@ -52,7 +52,7 @@ export default function AddToCartClient({ id, name, price, image, sku, category 
       gtmAddToCart([product], 'USD', price * quantity, gtmConfig?.container_id);
       
       showToast('ITEM ADDED TO CART', "Your item has been added. You can continue shopping or proceed to checkout.", "success");
-    } catch (e) {
+    } catch {
       showToast('FAILED TO ADD TO CART', "Please try again later.", "error");
     } finally {
       setTimeout(() => setIsAdding(false), 400);

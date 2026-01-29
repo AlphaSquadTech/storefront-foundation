@@ -1,6 +1,5 @@
 "use client";
 import CommonButton from "./commonButton";
-import PrimaryButton from "./primaryButton";
 
 export interface OfferCardProps {
   title: string;
