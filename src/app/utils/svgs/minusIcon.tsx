@@ -1,5 +1,5 @@
 export const MinusIcon = (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
     <g clipPath="url(#clip0_1768_20324)">
       <path
         d="M3.125 10H16.875"
