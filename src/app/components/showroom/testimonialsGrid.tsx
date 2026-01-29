@@ -3,7 +3,6 @@ import { GET_TESTIMONIALS } from "@/graphql/queries/getTestimonials";
 import { GET_TESTIMONIAL_PAGE_TYPE } from "@/graphql/queries/getPageTypeId";
 import Heading from "../reuseableUI/heading";
 import { TestimonialCard } from "../reuseableUI/testimonialCard";
-import EmptyState from "../reuseableUI/emptyState";
 
 export const TestimonialsGrid = async ({ first = 6 }: { first?: number }) => {
   let items: Array<{

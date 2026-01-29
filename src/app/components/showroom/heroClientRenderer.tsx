@@ -9,6 +9,10 @@ type HeroClientProps = {
   bgSrc: string;
 };
 
+// Low-quality placeholder for LCP optimization (10x10 base64)
+const HERO_BLUR_DATA_URL =
+  "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADQAQCdASoKAAYAAUAmJYgCdAEO/hOMAAD++P/mof/Ij/5kf8zP/lr/3k/+ZT/mV/5bf9tP+5n/mT/5aAA=";
+
 const HeroBackground = ({ src, alt }: { src?: string | null; alt: string }) => {
   const imageSrc = src?.trim() || "/images/heroSection-fallback.webp";
 
@@ -24,6 +28,8 @@ const HeroBackground = ({ src, alt }: { src?: string | null; alt: string }) => {
         quality={70}
         sizes="100vw"
         fetchPriority="high"
+        placeholder="blur"
+        blurDataURL={HERO_BLUR_DATA_URL}
         className="w-full h-full object-cover object-center md:object-left"
       />
       <div className="absolute inset-0 bg-gradient-to-l from-transparent to-black/60" />

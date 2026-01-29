@@ -20,7 +20,6 @@ interface ListCardProps {
 }
 
 const ListCard = ({
-  id,
   name,
   image,
   href,

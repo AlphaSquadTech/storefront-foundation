@@ -1,4 +1,6 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
+// Note: <img> used for search result thumbnails with dynamic CMS URLs
 
 import { SearchIcon } from "@/app/utils/svgs/searchIcon";
 import {
@@ -147,7 +149,7 @@ const Search = ({ className }: { className?: string }) => {
             );
           }
         }
-      } catch (e) {
+      } catch {
         if (!controller.signal.aborted) {
           setProducts([]);
           setCategories([]);
@@ -229,11 +231,13 @@ const Search = ({ className }: { className?: string }) => {
       <form
         onSubmit={onSubmit}
         className="flex items-center w-full bg-transparent h-full justify-center"
+        role="search"
       >
+        <label htmlFor="header-search" className="sr-only">Search products</label>
         <InputField
           className="leading-none !bg-transparent w-full !px-0 !py-0 "
-          name="Search-product"
-          type="text"
+          name="header-search"
+          type="search"
           placeholder="Search product"
           value={term}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -241,8 +245,8 @@ const Search = ({ className }: { className?: string }) => {
           }
           onFocus={() => term.trim().length >= 2 && setOpen(true)}
         />
-        <button type="submit" className="h-full">
-          <span className="text-black">
+        <button type="submit" className="h-full" aria-label="Search">
+          <span className="text-black" aria-hidden="true">
             {SearchIcon}
           </span>
         </button>

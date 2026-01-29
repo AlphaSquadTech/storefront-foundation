@@ -4,7 +4,6 @@ import Breadcrumb from "@/app/components/reuseableUI/breadcrumb";
 import EmptyState from "@/app/components/reuseableUI/emptyState";
 import { ProductCard } from "@/app/components/reuseableUI/productCard";
 import ItemsPerPageSelectClient from "@/app/components/shop/ItemsPerPageSelectClient";
-import SearchFilterClient from "@/app/components/shop/SearchFilterClient";
 import { PLSearchProduct, shopApi } from "@/lib/api/shop";
 import { ServerProductsResponse } from "@/lib/api/fetchProductsServer";
 import { usePathname } from "next/navigation";
@@ -23,7 +22,7 @@ export default function BrandPageClient({ slug, initialData }: BrandPageClientPr
   const [itemsPerPage, setItemsPerPage] = useState<ItemsPerPage>(
     (initialData?.pagination.per_page as ItemsPerPage) || 20
   );
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery] = useState("");
   const [products, setProducts] = useState<PLSearchProduct[]>(
     initialData?.products?.map((p) => ({
       id: p.id,

@@ -109,7 +109,11 @@ function CategoryRow({
   const toggleLeaf = () => {
     const next = new Set(selected);
     const nodeId = String(node.id);
-    next.has(nodeId) ? next.delete(nodeId) : next.add(nodeId);
+    if (next.has(nodeId)) {
+      next.delete(nodeId);
+    } else {
+      next.add(nodeId);
+    }
     setSelected(next);
   };
 
@@ -252,7 +256,11 @@ function ControlledList({
 
   const toggle = (id: string) => {
     const next = new Set(selectedSet);
-    next.has(id) ? next.delete(id) : next.add(id);
+    if (next.has(id)) {
+      next.delete(id);
+    } else {
+      next.add(id);
+    }
     onChange?.(Array.from(next));
   };
 
@@ -306,21 +314,24 @@ export function FiltersCollapsible({
   return (
     <div className="flex flex-col gap-5">
       {/* Header with toggle */}
-      <div
+      <button
+        type="button"
+        aria-expanded={open}
         className={cn(
-          "flex items-center justify-between transition-all ease-in-out duration-300 px-2 py-1 cursor-pointer hover:bg-[var(--color-secondary-100)]"
+          "flex w-full items-center justify-between transition-all ease-in-out duration-300 px-2 py-1 cursor-pointer hover:bg-[var(--color-secondary-100)]"
         )}
         onClick={() => setOpen(!open)}
       >
         <h3 className="font-semibold text-xl uppercase text-[var(--color-secondary-75)]">{title}</h3>
         <span
+          aria-hidden="true"
           className={`size-5 transform transition-transform duration-300 ${
             open ? "rotate-180" : ""
           } text-[var(--color-secondary-75)]`}
         >
           {ChevronDownIcon}
         </span>
-      </div>
+      </button>
 
       {/* Content */}
       {open && (

@@ -21,6 +21,7 @@ import "./globals.css";
 import GoogleAnalyticsProvider from "./components/providers/GoogleAnalyticsProvider";
 import { getStoreName } from "./utils/branding";
 import YMMStatusProvider from "./components/providers/YMMStatusProvider";
+import RouteAnnouncer from "./components/RouteAnnouncer";
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -133,14 +134,23 @@ export default async function RootLayout({
             href={new URL(process.env.NEXT_PUBLIC_API_URL).origin}
           />
         )}
-        {/* Preconnect to common S3 media buckets */}
+        {/* Preconnect to common S3 media buckets for hero LCP optimization */}
         <link
-          rel="dns-prefetch"
+          rel="preconnect"
           href="https://wsmsaleormedia.s3.us-east-1.amazonaws.com"
+          crossOrigin="anonymous"
         />
         <link
-          rel="dns-prefetch"
+          rel="preconnect"
           href="https://wsm-saleor-assets.s3.us-west-2.amazonaws.com"
+          crossOrigin="anonymous"
+        />
+        {/* Preload hero fallback for faster LCP */}
+        <link
+          rel="preload"
+          as="image"
+          href="/images/heroSection-fallback.webp"
+          type="image/webp"
         />
         {configuration?.google?.search_console_verification_content && (
           <meta
@@ -160,6 +170,7 @@ export default async function RootLayout({
                   <GoogleTagManagerProvider>
                     <YMMStatusProvider />
                     <TokenExpirationHandler />
+                    <RouteAnnouncer />
                     <Layout>{children}</Layout>
                   </GoogleTagManagerProvider>
                 </GoogleAnalyticsProvider>

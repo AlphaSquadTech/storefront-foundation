@@ -676,7 +676,7 @@ export const useGlobalStore = create<GlobalState>()(
 
             // If YMM is active, load years data
             if (isActive) {
-              const state = useGlobalStore.getState();
+              // YMM active - future: load years data here
             }
           } else {
             set({ isYMMActive: false });
@@ -691,8 +691,7 @@ export const useGlobalStore = create<GlobalState>()(
       // Load YMM years (called only once)
       loadYMMYears: async () => {
         if (typeof window === "undefined") return;
-        const state = useGlobalStore.getState();
-        // if (state.ymmYearsLoaded) return; // Prevent multiple calls
+        // Prevent multiple calls check removed (disabled)
 
         try {
           const partsLogicUrl = process.env.NEXT_PUBLIC_PARTSLOGIC_URL;

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import PaymentMethods from "./paymentMethods";
-import SocialLinks from "./socialLinks";
 import SiteInfo from "./siteInfo";
 import Image from "next/image";
 import { fetchMenuBySlug } from "@/graphql/queries/getMenuBySlug";
@@ -41,18 +40,22 @@ const SocialIcons = [
   {
     icon: facebook,
     link: "https://www.facebook.com/Sparktecmotorsports/",
+    label: "Facebook",
   },
   {
     icon: Youtube,
     link: "https://www.youtube.com/user/sparktecmotorsports",
+    label: "YouTube",
   },
   {
     icon: X,
     link: "https://x.com/sparktec",
+    label: "X (Twitter)",
   },
   {
     icon: Instagram,
     link: "https://www.instagram.com/sparktec_motorsports/",
+    label: "Instagram",
   },
 ];
 
@@ -192,6 +195,7 @@ const Footer = async () => {
                 href={item.link}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`Follow us on ${item.label}`}
                 className="[&>svg]:size-5 [&>svg]:block [&>svg]:shrink-0 [&>svg]:text-white block bg-white hover:scale-105 transition-all ease-in-out duration-300 p-1.5 rounded-full"
               >
                 {item.icon}

@@ -37,13 +37,14 @@ export const BrandsSwiperClient = ({ brands }: BrandSwiperProps) => {
       </div>
       <div className="relative flex items-center gap-3 lg:col-span-4">
         <button
+          aria-label="Previous brand"
           style={{
             backgroundColor: "var(--color-secondary-200)",
             color: "var(--color-secondary-800)",
           }}
           className="p-2 rounded-full disabled:opacity-50 cursor-pointer brands-prev"
         >
-          <span className="size-6 block">{SwiperArrowIconLeft}</span>
+          <span aria-hidden="true" className="size-6 block">{SwiperArrowIconLeft}</span>
         </button>
 
         <Swiper
@@ -87,13 +88,14 @@ export const BrandsSwiperClient = ({ brands }: BrandSwiperProps) => {
           ))}
         </Swiper>
         <button
+          aria-label="Next brand"
           style={{
             backgroundColor: "var(--color-secondary-200)",
             color: "var(--color-secondary-800)",
           }}
           className="p-2 rounded-full disabled:opacity-50 cursor-pointer brands-next"
         >
-          <span className="size-6 flex-shrink-0 block">
+          <span aria-hidden="true" className="size-6 flex-shrink-0 block">
             {SwiperArrowIconRight}
           </span>
         </button>
