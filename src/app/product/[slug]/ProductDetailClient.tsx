@@ -994,7 +994,6 @@ export default function ProductDetailClient() {
           let remainingText = "";
 
           if (categoryHideDiv) {
-            const bodyContent = doc.body.textContent || "";
             const categoryShowDiv = doc.querySelector(".category-show");
 
             if (categoryShowDiv) {
