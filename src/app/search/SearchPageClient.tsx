@@ -48,7 +48,7 @@ const ChevronDownIcon = (
   </svg>
 );
 
-type ItemsPerPage = 10 | 20 | 50 | 100;
+type ItemsPerPage = 9 | 18 | 27 | 36;
 
 interface YMMProduct {
   id: string;
@@ -163,7 +163,7 @@ function SearchPageContent({ initialData }: SearchPageContentProps) {
   } : null;
 
   const [itemsPerPage, setItemsPerPage] = useState<ItemsPerPage>(
-    (initialData?.pagination.per_page as ItemsPerPage) || 20
+    (initialData?.pagination.per_page as ItemsPerPage) || 18
   );
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);

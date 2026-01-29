@@ -9,7 +9,7 @@ import { shopApi, type PLSearchProduct } from "@/lib/api/shop";
 import PaginationHead from "@/app/components/seo/PaginationHead";
 import type { ServerProductsResponse } from "@/lib/api/fetchProductsServer";
 
-type ItemsPerPage = 10 | 20 | 50 | 100;
+type ItemsPerPage = 9 | 18 | 27 | 36;
 
 interface CategoryPageClientProps {
   slug: string;
@@ -17,7 +17,7 @@ interface CategoryPageClientProps {
 }
 
 export default function CategoryPageClient({ slug, initialData }: CategoryPageClientProps) {
-  const [itemsPerPage, setItemsPerPage] = useState<ItemsPerPage>(20);
+  const [itemsPerPage, setItemsPerPage] = useState<ItemsPerPage>(18);
   const [searchQuery] = useState("");
   // Initialize with server-provided data for SEO
   const [products, setProducts] = useState<PLSearchProduct[]>(
@@ -33,7 +33,7 @@ export default function CategoryPageClient({ slug, initialData }: CategoryPageCl
     initialData?.pagination || {
       total: 0,
       page: 1,
-      per_page: 20,
+      per_page: 18,
       total_pages: 0,
     }
   );

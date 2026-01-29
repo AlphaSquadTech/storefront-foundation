@@ -31,7 +31,7 @@ import type { ServerProductsResponse } from "@/lib/api/fetchProductsServer";
 
 type ViewMode = "grid" | "list";
 
-type ItemsPerPage = 10 | 20 | 50 | 100;
+type ItemsPerPage = 9 | 18 | 27 | 36;
 
 interface YMMProduct {
   id: string;
@@ -115,7 +115,7 @@ function AllProductsClientInner({ initialData }: AllProductsClientInnerProps) {
 
   const selectedPairs = searchParams?.get("fitment_pairs") || "";
   const getSearch = searchParams?.get("q") || "";
-  const [itemsPerPage, setItemsPerPage] = useState<ItemsPerPage>(20);
+  const [itemsPerPage, setItemsPerPage] = useState<ItemsPerPage>(18);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);

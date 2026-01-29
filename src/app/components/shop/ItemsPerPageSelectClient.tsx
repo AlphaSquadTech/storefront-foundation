@@ -1,6 +1,7 @@
 "use client";
 
-const OPTIONS = [10, 20, 50, 100] as const;
+// Multiples of 3 to match 3-column product grid layout
+const OPTIONS = [9, 18, 27, 36] as const;
 
 type Option = (typeof OPTIONS)[number];
 
