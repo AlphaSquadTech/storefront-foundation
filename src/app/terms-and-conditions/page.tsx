@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import AncillaryContent from "@/app/components/ancillary/AncillaryContent";
 import ContentSkeleton from "@/app/components/skeletons/ContentSkeleton";
 import { getStoreName } from "@/app/utils/branding";
@@ -16,7 +15,6 @@ export const metadata: Metadata = {
 };
 
 export default function TermsAndConditionsPage() {
-  const derivedTitle = "Terms & Conditions";
 
   return (
     <main className="h-full w-full">
