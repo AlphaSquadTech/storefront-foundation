@@ -9,7 +9,7 @@ import { ServerProductsResponse } from "@/lib/api/fetchProductsServer";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-type ItemsPerPage = 10 | 20 | 50 | 100;
+type ItemsPerPage = 9 | 18 | 27 | 36;
 
 interface BrandPageClientProps {
   slug: string;
@@ -20,7 +20,7 @@ export default function BrandPageClient({ slug, initialData }: BrandPageClientPr
   const pathName = usePathname();
   const route = slug || pathName.split("/").slice(2).join("/");
   const [itemsPerPage, setItemsPerPage] = useState<ItemsPerPage>(
-    (initialData?.pagination.per_page as ItemsPerPage) || 20
+    (initialData?.pagination.per_page as ItemsPerPage) || 18
   );
   const [searchQuery] = useState("");
   const [products, setProducts] = useState<PLSearchProduct[]>(
@@ -56,7 +56,7 @@ export default function BrandPageClient({ slug, initialData }: BrandPageClientPr
     initialData?.pagination || {
       total: 0,
       page: 1,
-      per_page: 20,
+      per_page: 18,
       total_pages: 0,
     }
   );

@@ -52,7 +52,7 @@ export default async function BrandPage({
     .replace(/\b\w/g, (l) => l.toUpperCase());
 
   // Fetch initial products server-side for SEO
-  const initialData = await fetchBrandProductsServer(slug, { per_page: 20 });
+  const initialData = await fetchBrandProductsServer(slug, { per_page: 18 });
 
   // Return 404 if brand has no products (likely doesn't exist)
   if (initialData.pagination.total === 0) {

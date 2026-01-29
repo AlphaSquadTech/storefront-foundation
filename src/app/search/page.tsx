@@ -34,12 +34,12 @@ async function getInitialSearchData(
   // Only fetch server-side data if there are search parameters
   if (!params.fitment_pairs && !params.q && !params.category && !params.brand) {
     // Fetch default products for empty search page
-    return fetchProductsServer({ page: 1, per_page: 20 });
+    return fetchProductsServer({ page: 1, per_page: 18 });
   }
 
   return fetchProductsServer({
     page: params.page ? parseInt(params.page, 10) : 1,
-    per_page: 20,
+    per_page: 18,
     q: params.q,
     fitment_pairs: params.fitment_pairs,
     category_slug: params.category ? (Array.isArray(params.category) ? params.category : [params.category]) : undefined,
