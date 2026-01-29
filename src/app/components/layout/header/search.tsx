@@ -243,7 +243,7 @@ const Search = ({ className }: { className?: string }) => {
           }
           onFocus={() => term.trim().length >= 2 && setOpen(true)}
         />
-        <button type="submit" className="h-full">
+        <button type="submit" aria-label="Search" className="h-full">
           <span className="text-black">
             {SearchIcon}
           </span>
