@@ -142,7 +142,10 @@ async function performTokenRefresh(endpoint: string): Promise<{ token: string | 
     }
     
     const json = await res.json();
-    console.log('Token refresh response:', json);
+    // Token response logged only in dev, value redacted for security
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Token refresh response received (token redacted)');
+    }
     
     const payload = json?.data?.tokenRefresh;
     const errors = json.errors || payload?.errors || [];
