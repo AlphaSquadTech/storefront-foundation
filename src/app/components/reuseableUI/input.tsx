@@ -48,11 +48,14 @@ const Input = ({
   const [showPassword, setShowPassword] = React.useState(false);
   const defaultTheme =
     "text-[var(--color-secondary-800)] ring-[var(--color-secondary-200)] bg-white  disabled:bg-[var(--color-secondary-200)] disabled:text-[var(--color-secondary-400)] disabled:placeholder:text-[var(--color-secondary-400)] disabled:ring-[var(--color-secondary-300)]";
+  const inputId = id || htmlFor || name;
+  const errorId = inputId ? `${inputId}-error` : undefined;
+  
   return (
     <div className={parentClassName}>
       {label && (
         <label
-          htmlFor={htmlFor}
+          htmlFor={inputId}
           className={cn(
             "block text-sm font-medium pb-2 uppercase leading-5 tracking-[-0.035px]",
             darkTheme
@@ -65,7 +68,7 @@ const Input = ({
       )}
       <div className="relative">
         <input
-          id={id}
+          id={inputId}
           type={showPassword ? "text" : type}
           name={name}
           placeholder={placeholder}
@@ -78,6 +81,8 @@ const Input = ({
           readOnly={readOnly}
           maxLength={maxLength}
           autoComplete={autoComplete}
+          aria-invalid={hasError ? "true" : undefined}
+          aria-describedby={hasError && errorId ? errorId : undefined}
           className={cn(
             "w-full p-2 ring-1 focus-visible:ring-[var(--color-secondary-600)] outline-none disabled:pointer-events-none px-4 py-3.5 text-sm font-normal font-secondary",
             defaultTheme,
@@ -93,6 +98,7 @@ const Input = ({
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
+            aria-label={showPassword ? "Hide password" : "Show password"}
             className={cn(
               "absolute right-4 top-5 transform",
               disabled ? "pointer-events-none" : "cursor-pointer"
@@ -104,6 +110,8 @@ const Input = ({
       </div>
       {errorMessage && (
         <div
+          id={errorId}
+          role="alert"
           style={{ color: "var(--color-primary-600)" }}
           className="text-sm leading-5 tracking-[-0.035px] mt-1.5"
         >

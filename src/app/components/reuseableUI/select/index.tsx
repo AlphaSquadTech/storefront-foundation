@@ -37,6 +37,7 @@ const Select = ({
 }: SelectProps) => {
   const defaultTheme =
     "text-[var(--color-secondary-800)] ring-[var(--color-secondary-200)] disabled:bg-[var(--color-secondary-200)] disabled:ring-[var(--color-secondary-300)]";
+  const errorId = htmlFor ? `${htmlFor}-error` : undefined;
 
   return (
     <div className={cn("w-full", parentClassName)}>
@@ -58,6 +59,8 @@ const Select = ({
           id={htmlFor}
           value={value}
           style={style}
+          aria-invalid={hasError ? "true" : undefined}
+          aria-describedby={hasError && errorId ? errorId : undefined}
           className={cn(
             "w-full p-2 ring-1 bg-zinc-50 hover:bg-zinc-100 focus-visible:ring-[var(--color-secondary-600)] transition-all ease-in-out duration-300 outline-none disabled:text-black/20 cursor-pointer disabled:pointer-events-none px-4 pr-12 text-sm font-normal font-secondary appearance-none",
             defaultTheme,
@@ -80,12 +83,14 @@ const Select = ({
           ))}
         </select>
         {/* Custom dropdown arrow */}
-        <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+        <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none" aria-hidden="true">
           <svg
             className="w-4 h-4 text-[var(--color-secondary-600)]"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
           >
             <path
               strokeLinecap="round"
@@ -98,6 +103,8 @@ const Select = ({
       </div>
       {errorMessage && (
         <div
+          id={errorId}
+          role="alert"
           style={{ color: "var(--color-primary-600)" }}
           className="text-sm leading-5 tracking-[-0.035px] mt-1.5"
         >

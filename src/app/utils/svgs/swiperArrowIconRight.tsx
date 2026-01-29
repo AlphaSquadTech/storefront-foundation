@@ -1,5 +1,5 @@
 export const SwiperArrowIconRight = (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
     <g clipPath="url(#clip0_441_13493)">
       <path
         d="M9 4.5L16.5 12L9 19.5"
