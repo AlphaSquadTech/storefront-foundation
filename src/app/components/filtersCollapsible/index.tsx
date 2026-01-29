@@ -109,7 +109,11 @@ function CategoryRow({
   const toggleLeaf = () => {
     const next = new Set(selected);
     const nodeId = String(node.id);
-    next.has(nodeId) ? next.delete(nodeId) : next.add(nodeId);
+    if (next.has(nodeId)) {
+      next.delete(nodeId);
+    } else {
+      next.add(nodeId);
+    }
     setSelected(next);
   };
 
@@ -252,7 +256,11 @@ function ControlledList({
 
   const toggle = (id: string) => {
     const next = new Set(selectedSet);
-    next.has(id) ? next.delete(id) : next.add(id);
+    if (next.has(id)) {
+      next.delete(id);
+    } else {
+      next.add(id);
+    }
     onChange?.(Array.from(next));
   };
 

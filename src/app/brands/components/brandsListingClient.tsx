@@ -71,6 +71,7 @@ const BrandsListingClient = ({ brands }: BrandsListingClientProps) => {
             >
               <div className="w-full h-24 mb-4 flex items-center justify-center">
                 {brand.logo || brand.image ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
                   <img
                     src={brand.logo || brand.image}
                     alt={brand.name}

@@ -255,7 +255,7 @@ export default function ProductDetailClient() {
                 redirectsValue = redirectsValue.replace(/([^"\]])\]/g, '$1"]'); // Add missing closing quote before ]
 
                 redirects = JSON.parse(redirectsValue);
-              } catch (jsonError) {
+              } catch {
                 // If JSON parse fails, try comma-separated format
                 redirects = redirectsValue
                   .replace(/^\[|\]$/g, "") // Remove [ and ]
@@ -277,7 +277,7 @@ export default function ProductDetailClient() {
             if (hasMatch) {
               return true;
             }
-          } catch (parseError) {
+          } catch {
             // Silent fail - continue to next product
           }
         }
@@ -331,7 +331,7 @@ export default function ProductDetailClient() {
             },
           };
         },
-      }).catch((error) => {
+      }).catch(() => {
         setIsFetchingMore(false);
         setAllProductsChecked(true);
       });
@@ -948,6 +948,7 @@ export default function ProductDetailClient() {
             key={b.id}
             className={`my-4 ${imageData.stretched ? "w-full" : "max-w-2xl mx-auto"}`}
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={imageUrl}
               alt={imageData.caption || "Product description image"}
@@ -993,7 +994,6 @@ export default function ProductDetailClient() {
           let remainingText = "";
 
           if (categoryHideDiv) {
-            const bodyContent = doc.body.textContent || "";
             const categoryShowDiv = doc.querySelector(".category-show");
 
             if (categoryShowDiv) {

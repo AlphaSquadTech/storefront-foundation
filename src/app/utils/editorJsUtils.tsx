@@ -1,3 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
+// Note: <img> used intentionally for Editor.js CMS content with unknown dimensions
+
 import React from "react";
 
 export type EditorJsParagraphBlock = { id?: string; type: "paragraph"; data: { text?: string } };

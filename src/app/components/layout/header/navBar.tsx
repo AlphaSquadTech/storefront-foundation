@@ -19,7 +19,6 @@ interface NavBarProps {
 }
 
 export const NavBar = ({
-  initialIsLoggedIn = false,
   initialCategories = [],
   initialMenuItems = [],
 }: NavBarProps) => {

@@ -5,7 +5,6 @@ import Breadcrumb from "@/app/components/reuseableUI/breadcrumb";
 import { ErrorTag } from "@/app/components/reuseableUI/errorTag";
 import Heading from "@/app/components/reuseableUI/heading";
 import PrimaryButton from "@/app/components/reuseableUI/primaryButton";
-import SecondaryButton from "@/app/components/reuseableUI/secondaryButton";
 import Toast from "@/app/components/reuseableUI/Toast";
 import { SpinnerIcon } from "@/app/utils/svgs/spinnerIcon";
 import {
@@ -221,7 +220,7 @@ export const NewsLetterClient = ({
 
       // Show success toast
       if (isModalNewsletter) {
-        handleClose && handleClose();
+        if (handleClose) handleClose();
       } else {
         setShowSuccessToast(true);
       }
