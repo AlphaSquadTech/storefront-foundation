@@ -5,6 +5,8 @@ export const ShoppingCart = (
     height={20}
     viewBox="0 0 20 20"
     fill="none"
+    aria-hidden="true"
+    focusable="false"
   >
     <g clipPath="url(#clip0_412_11594)">
       <path

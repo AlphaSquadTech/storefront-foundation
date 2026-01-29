@@ -17,6 +17,8 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(({
   className = "",
   ...props
 }, ref) => {
+  const errorId = name ? `${name}-error` : undefined;
+  
   return (
     <div className="flex flex-col gap-1.5 w-full">
       {/* Label */}
@@ -45,6 +47,8 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(({
           id={name}
           name={name}
           ref={ref}
+          aria-invalid={error ? "true" : undefined}
+          aria-describedby={error && errorId ? errorId : undefined}
           className={`border font-secondary !placeholder-[var(--color-secondary-400)] placeholder:font-normal px-4 py-3 text-sm leading-6
             focus:outline-none custom-placeholder !bg-transparent w-full
             ${suffix ? 'pr-12' : ''}
@@ -56,6 +60,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(({
         {suffix && (
           <div 
             className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm pointer-events-none"
+            aria-hidden="true"
             style={{
               color: "var(--color-secondary-400)",
             }}
@@ -66,7 +71,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(({
       </div>
 
       {/* Error */}
-      {error && <p className="text-xs text-red-500">{error}</p>}
+      {error && <p id={errorId} className="text-xs text-red-500" role="alert">{error}</p>}
 
       {/* Placeholder styling */}
       <style jsx>{`

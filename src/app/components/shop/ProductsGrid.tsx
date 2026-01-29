@@ -27,7 +27,6 @@ export default function ProductsGrid({
   categoryIds,
   brandIds,
   search,
-  fitment,
   layout = 'shop',
 }: ProductsGridProps) {
   const { getGoogleTagManagerConfig } = useAppConfiguration();

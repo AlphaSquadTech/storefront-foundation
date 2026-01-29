@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
 import type { Metadata } from "next";
-import { getStoreName } from "@/app/utils/branding";
 
 export const metadata: Metadata = {
   title: "My Account",

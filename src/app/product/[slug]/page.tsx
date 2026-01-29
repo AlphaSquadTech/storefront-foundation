@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
+import { cache } from "react";
 import createApolloServerClient from "@/graphql/server-client";
 import {
   PRODUCT_DETAILS_BY_ID,
@@ -25,8 +26,8 @@ import ProductDetailClient from "./ProductDetailClient";
 // Product data will be cached and refreshed every 5 minutes
 export const revalidate = 300;
 
-// Lookup product slug by ID (for when PartsLogic ID is passed)
-async function getSlugById(id: string): Promise<string | null> {
+// Cached slug lookup by ID - deduplicates requests within the same render
+const getSlugById = cache(async (id: string): Promise<string | null> => {
   try {
     const client = createApolloServerClient();
     const channel = process.env.NEXT_PUBLIC_SALEOR_CHANNEL || "default-channel";
@@ -41,7 +42,7 @@ async function getSlugById(id: string): Promise<string | null> {
     console.error("[ProductPage] Error fetching product by ID:", error);
     return null;
   }
-}
+});
 
 // Convert a human-readable slug to a search term
 // e.g., "access-original-93-98-ford-ranger" → "access original ford ranger"
@@ -100,7 +101,8 @@ async function findProductByNameSearch(slug: string): Promise<string | null> {
   }
 }
 
-async function getProduct(slug: string) {
+// Cached product fetch - deduplicates requests within the same render
+const getProduct = cache(async (slug: string) => {
   try {
     const client = createApolloServerClient();
     const channel = process.env.NEXT_PUBLIC_SALEOR_CHANNEL || "default-channel";
@@ -118,7 +120,7 @@ async function getProduct(slug: string) {
     console.error("[ProductPage] Error fetching product:", error);
     return null;
   }
-}
+});
 
 export async function generateMetadata({
   params,

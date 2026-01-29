@@ -34,11 +34,15 @@ const BrandsListingClient = ({ brands }: BrandsListingClientProps) => {
     <div className="w-full">
       <div className="mb-8">
         <div className="relative max-w-2xl">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <label htmlFor="brand-search" className="sr-only">
+            Search brands
+          </label>
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none" aria-hidden="true">
             {brandSearchIcon}
           </div>
           <input
-            type="text"
+            id="brand-search"
+            type="search"
             placeholder="Search brands..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -71,6 +75,7 @@ const BrandsListingClient = ({ brands }: BrandsListingClientProps) => {
             >
               <div className="w-full h-24 mb-4 flex items-center justify-center">
                 {brand.logo || brand.image ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
                   <img
                     src={brand.logo || brand.image}
                     alt={brand.name}

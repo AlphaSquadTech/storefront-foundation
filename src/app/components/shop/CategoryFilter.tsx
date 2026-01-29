@@ -90,13 +90,6 @@ export default function CategoryFilter({ categories, selectedSlugs, onChangeSele
     onChangeSelected?.(Array.from(base));
   };
 
-  const clearAll = () => {
-    // Update state only, don't modify URL
-    setSelected(new Set());
-    // Notify parent component about the change
-    onChangeSelected?.([]);
-  };
-
   const isChecked = (slug: string) => selected.has(slug);
 
   const toggleParent = (id: string) => {
@@ -136,7 +129,8 @@ export default function CategoryFilter({ categories, selectedSlugs, onChangeSele
                 {node.children?.edges?.length ? (
                   <button
                     type="button"
-                    aria-label={expanded.has(node.id) ? "Collapse" : "Expand"}
+                    aria-expanded={expanded.has(node.id)}
+                    aria-label={expanded.has(node.id) ? "Collapse subcategories" : "Expand subcategories"}
                     className="p-2 md:p-1 text-[var(--color-secondary-700)] hover:text-[var(--color-secondary-900)] transition-transform cursor-pointer"
                     onClick={() => toggleParent(node.id)}
                   >

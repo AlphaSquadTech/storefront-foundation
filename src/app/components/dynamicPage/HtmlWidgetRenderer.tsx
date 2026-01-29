@@ -63,7 +63,7 @@ export default function HtmlWidgetRenderer({ content }: HtmlWidgetRendererProps)
     // Debug image loading issues
     const images = containerRef.current.querySelectorAll('img');
     
-    images.forEach((img, index) => {
+    images.forEach((img) => {
       
       // Fix relative paths and ensure proper src attributes
       const originalSrc = img.getAttribute('src');
@@ -87,7 +87,7 @@ export default function HtmlWidgetRenderer({ content }: HtmlWidgetRendererProps)
       }
       
       // Add error handling to images
-      img.addEventListener('error', (e) => {
+      img.addEventListener('error', () => {
         // Just log the error, don't modify the styling
         img.alt = img.alt || `Failed to load image: ${originalSrc}`;
       });
@@ -96,7 +96,7 @@ export default function HtmlWidgetRenderer({ content }: HtmlWidgetRendererProps)
     // Extract and execute script tags
     const scripts = containerRef.current.querySelectorAll('script');
     
-    scripts.forEach((oldScript, index) => {
+    scripts.forEach((oldScript) => {
       const newScript = document.createElement('script');
       
       // Copy all attributes

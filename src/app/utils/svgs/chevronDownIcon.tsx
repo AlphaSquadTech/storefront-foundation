@@ -3,6 +3,8 @@ export const ChevronDownIcon = (
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 16 16"
     fill="none"
+    aria-hidden="true"
+    focusable="false"
   >
     <g clipPath="url(#clip0_944_758)">
       <path

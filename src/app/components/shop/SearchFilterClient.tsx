@@ -67,8 +67,12 @@ export default function SearchFilterClient({ value, onChange, onSearch }: Search
   return (
     <div className="w-full md:max-w-md relative">
       <div className="relative">
+        <label htmlFor="product-search-client" className="sr-only">
+          Search products
+        </label>
         <input
-          type="text"
+          id="product-search-client"
+          type="search"
           placeholder="Search products..."
           value={searchTerm}
           onChange={handleInputChange}
@@ -76,9 +80,9 @@ export default function SearchFilterClient({ value, onChange, onSearch }: Search
         />
 
         {/* Search icon or loading spinner */}
-        <div className="absolute left-3 top-1/2 -translate-y-1/2">
+        <div className="absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true">
           {isSearching ? (
-            <div className="w-4 h-4 border-2 border-[var(--color-secondary-300)] border-t-[var(--color-primary-500)] rounded-full animate-spin" />
+            <div className="w-4 h-4 border-2 border-[var(--color-secondary-300)] border-t-[var(--color-primary-500)] rounded-full animate-spin" role="status" aria-label="Searching" />
           ) : (
             <span className="w-4 h-4 block text-[var(--color-secondary-600)]">
               {SearchIcon}
@@ -89,13 +93,14 @@ export default function SearchFilterClient({ value, onChange, onSearch }: Search
         {/* Clear button or loading text */}
         <div className="absolute right-3 top-1/2 -translate-y-1/2">
           {isSearching ? (
-            <span className="text-xs text-[var(--color-secondary-500)] font-medium">
+            <span className="text-xs text-[var(--color-secondary-500)] font-medium" aria-live="polite">
               Searching...
             </span>
           ) : searchTerm ? (
             <button
               type="button"
               onClick={clearSearch}
+              aria-label="Clear search"
               className="text-[var(--color-secondary-400)] hover:text-[var(--color-secondary-600)] transition-colors"
             >
               <svg
@@ -104,6 +109,8 @@ export default function SearchFilterClient({ value, onChange, onSearch }: Search
                 width="16"
                 height="16"
                 fill="none"
+                aria-hidden="true"
+                focusable="false"
               >
                 <path
                   d="M12 4L4 12M4 4L12 12"

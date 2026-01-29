@@ -18,7 +18,7 @@ interface CategoryPageClientProps {
 
 export default function CategoryPageClient({ slug, initialData }: CategoryPageClientProps) {
   const [itemsPerPage, setItemsPerPage] = useState<ItemsPerPage>(20);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery] = useState("");
   // Initialize with server-provided data for SEO
   const [products, setProducts] = useState<PLSearchProduct[]>(
     (initialData?.products as PLSearchProduct[]) || []

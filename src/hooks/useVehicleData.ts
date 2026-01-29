@@ -70,17 +70,6 @@ export const useVehicleData = () => {
     return deepestPath;
   };
 
-  const flattenHierarchy = (
-    node: FitmentAPIMakesType,
-    result: FitmentAPIMakesType[] = []
-  ): FitmentAPIMakesType[] => {
-    result.push({ id: node.id, name: node.name });
-    if (node.children && node.children.length > 0) {
-      flattenHierarchy(node.children[0], result);
-    }
-    return result;
-  };
-
   useEffect(() => {
     const fetchRootTypes = async () => {
       try {

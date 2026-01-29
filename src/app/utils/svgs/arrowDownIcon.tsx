@@ -5,6 +5,8 @@ export const ArrowDownIcon = (
     height="7"
     viewBox="0 0 12 7"
     fill="none"
+    aria-hidden="true"
+    focusable="false"
   >
     <path
       d="M11 1L6 6L1 1"

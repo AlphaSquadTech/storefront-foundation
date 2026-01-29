@@ -1,10 +1,16 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Breadcrumb from "@/app/components/reuseableUI/breadcrumb";
 import CommonButton from "@/app/components/reuseableUI/commonButton";
 import PrimaryButton from "@/app/components/reuseableUI/primaryButton";
 import Toast from "@/app/components/reuseableUI/Toast";
-import EditorRenderer from "@/app/components/richText/EditorRenderer";
+
+// Lazy load content renderer for description section
+const EditorRenderer = dynamic(
+  () => import("@/app/components/richText/EditorRenderer"),
+  { loading: () => <div className="animate-pulse h-32 bg-gray-100 rounded" /> }
+);
 import { MinusIcon } from "@/app/utils/svgs/minusIcon";
 import { PlusIcon } from "@/app/utils/svgs/plusIcon";
 import { ProductInquiryIcon } from "@/app/utils/svgs/productInquiryIcon";
@@ -48,7 +54,11 @@ import {
   gtmViewItem,
   Product,
 } from "../../utils/googleTagManager";
-import ItemInquiryModal from "./components/itemInquiryModal";
+// Lazy load inquiry modal (only shown on user action)
+const ItemInquiryModal = dynamic(
+  () => import("./components/itemInquiryModal"),
+  { ssr: false }
+);
 /* ---------------- helpers (local) ---------------- */
 type AddressInputTS = {
   firstName: string;
@@ -245,7 +255,7 @@ export default function ProductDetailClient() {
                 redirectsValue = redirectsValue.replace(/([^"\]])\]/g, '$1"]'); // Add missing closing quote before ]
 
                 redirects = JSON.parse(redirectsValue);
-              } catch (jsonError) {
+              } catch {
                 // If JSON parse fails, try comma-separated format
                 redirects = redirectsValue
                   .replace(/^\[|\]$/g, "") // Remove [ and ]
@@ -267,7 +277,7 @@ export default function ProductDetailClient() {
             if (hasMatch) {
               return true;
             }
-          } catch (parseError) {
+          } catch {
             // Silent fail - continue to next product
           }
         }
@@ -321,7 +331,7 @@ export default function ProductDetailClient() {
             },
           };
         },
-      }).catch((error) => {
+      }).catch(() => {
         setIsFetchingMore(false);
         setAllProductsChecked(true);
       });
@@ -938,6 +948,7 @@ export default function ProductDetailClient() {
             key={b.id}
             className={`my-4 ${imageData.stretched ? "w-full" : "max-w-2xl mx-auto"}`}
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={imageUrl}
               alt={imageData.caption || "Product description image"}
@@ -983,7 +994,6 @@ export default function ProductDetailClient() {
           let remainingText = "";
 
           if (categoryHideDiv) {
-            const bodyContent = doc.body.textContent || "";
             const categoryShowDiv = doc.querySelector(".category-show");
 
             if (categoryShowDiv) {

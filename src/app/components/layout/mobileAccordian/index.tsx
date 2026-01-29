@@ -24,6 +24,7 @@ const AccordionSection = memo(function AccordionSection({ section }: { section: 
     <div style={{ borderBottom: "1px solid var(--color-secondary-800)" }}>
       <button
         onClick={() => setOpen((prev) => !prev)}
+        aria-expanded={open}
         className="flex w-full justify-between items-center py-6 lg:py-3 text-left"
       >
         <span
@@ -32,7 +33,7 @@ const AccordionSection = memo(function AccordionSection({ section }: { section: 
         >
           {section.name}
         </span>
-        <span className={cn("transition ease-in-out duration-300", open ? "rotate-180" : "")}>
+        <span aria-hidden="true" className={cn("transition ease-in-out duration-300", open ? "rotate-180" : "")}>
           {ArrowDownIcon}
         </span>
       </button>

@@ -1,4 +1,7 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
+// Note: <img> used for search result thumbnails with dynamic CMS URLs
+
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Select from "../reuseableUI/select";
@@ -139,7 +142,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ setShowSearch }) => {
           });
           setShowDropdown(true);
         }
-      } catch (error) {
+      } catch {
         // If PartsLogic API fails, try GraphQL as fallback
         try {
           const response: GlobalSearchResponse =
@@ -160,7 +163,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ setShowSearch }) => {
               response.productTypes?.edges.map((edge) => edge.node) || [],
           });
           setShowDropdown(true);
-        } catch (fallbackError) {
+        } catch {
           setSearchResults(null);
         }
       } finally {
@@ -198,7 +201,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ setShowSearch }) => {
           }));
           setCategories(categoryOptions);
         }
-      } catch (error) {
+      } catch {
         // Failed to load categories
       }
     };
