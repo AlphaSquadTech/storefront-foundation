@@ -400,7 +400,7 @@ export default function CartDropDown() {
         } finally {
             setCreating(false);
         }
-    }, [accountBilling, accountShipping, checkoutId, endpoint, guestEmail, guestShippingInfo, isLoggedIn, displayItems, meData, meLoading, router, setCheckoutId, setCheckoutToken, user?.email]);
+    }, [accountBilling, accountShipping, checkoutId, endpoint, guestEmail, isLoggedIn, displayItems, meData, meLoading, router, setCheckoutId, setCheckoutToken, user?.email]);
 
     if (displayItems.length === 0) {
         return (

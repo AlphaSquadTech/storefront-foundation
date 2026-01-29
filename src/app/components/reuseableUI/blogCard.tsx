@@ -21,7 +21,6 @@ export const BlogCard = ({
   return (
     <Link
       href={`/blog/${slug}`}
-      key={id}
       className="flex flex-col gap-4 p-6 border border-[var(--color-secondary-200)] rounded-lg hover:border-[var(--color-primary-600)] hover:shadow-lg h-full transition-all duration-200 bg-white"
     >
       <div className="flex flex-col gap-3 w-full">
