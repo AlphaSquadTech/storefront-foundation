@@ -90,13 +90,6 @@ export default function CategoryFilter({ categories, selectedSlugs, onChangeSele
     onChangeSelected?.(Array.from(base));
   };
 
-  const clearAll = () => {
-    // Update state only, don't modify URL
-    setSelected(new Set());
-    // Notify parent component about the change
-    onChangeSelected?.([]);
-  };
-
   const isChecked = (slug: string) => selected.has(slug);
 
   const toggleParent = (id: string) => {

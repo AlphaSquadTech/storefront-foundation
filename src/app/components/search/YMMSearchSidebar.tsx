@@ -30,8 +30,6 @@ export default function YMMSearchSidebar({
 
   // Get years from global store (same as main search component)
   const ymmYears = useGlobalStore((state) => state.ymmYears);
-  const ymmYearsLoaded = useGlobalStore((state) => state.ymmYearsLoaded);
-  const loadingYears = !ymmYearsLoaded;
 
   const selectedYearData = ymmYears.find((y) => String(y.id) === String(year));
   const selectedMakeData = makes.find((m) => String(m.id) === String(make));
