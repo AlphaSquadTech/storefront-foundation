@@ -155,7 +155,7 @@ export const PromotionsSwiper = ({ slides }: PromotionsSwiperProps) => {
         }}
         className="p-2 rounded-full hidden md:block disabled:opacity-50 absolute left-4 top-1/2 cursor-pointer promotion-prev z-[5]"
       >
-        <span className="size-6 block">{SwiperArrowIconLeft}</span>
+        <span aria-hidden="true" className="size-6 block">{SwiperArrowIconLeft}</span>
       </button>
 
       {/* Next */}
@@ -167,7 +167,7 @@ export const PromotionsSwiper = ({ slides }: PromotionsSwiperProps) => {
         }}
         className="p-2 rounded-full hidden md:block absolute right-4 top-1/2 z-[5] disabled:opacity-50 cursor-pointer promotion-next"
       >
-        <span className="size-6 flex-shrink-0 block">
+        <span aria-hidden="true" className="size-6 flex-shrink-0 block">
           {SwiperArrowIconRight}
         </span>
       </button>
