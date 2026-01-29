@@ -56,7 +56,7 @@ export default async function CategoryPage({
     .replace(/\b\w/g, (l) => l.toUpperCase());
 
   // Fetch initial products server-side for SEO
-  const initialData = await fetchCategoryProductsServer(slug, { per_page: 20 });
+  const initialData = await fetchCategoryProductsServer(slug, { per_page: 18 });
 
   const storeName = getStoreName();
 
