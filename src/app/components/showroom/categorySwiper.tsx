@@ -27,6 +27,7 @@ const CategorySwiper: React.FC<CategorySwiperProps> = ({ categories }) => {
         <Heading content="Shop by Category" as="h2" />
         <div className="hidden lg:flex gap-4 items-center">
           <button
+            aria-label="Previous category"
             style={{
               color: "var(--color-primary-800)",
             }}
@@ -35,6 +36,7 @@ const CategorySwiper: React.FC<CategorySwiperProps> = ({ categories }) => {
             <span className="size-6 block">{SwiperArrowIconLeft}</span>
           </button>
           <button
+            aria-label="Next category"
             style={{
               color: "var(--color-primary-800)",
             }}
