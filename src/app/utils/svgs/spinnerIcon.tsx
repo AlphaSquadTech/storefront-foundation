@@ -6,7 +6,6 @@ export const SpinnerIcon = (
   viewBox="0 0 24 24"
   aria-hidden="true"
   focusable="false"
-  role="status"
 >
   <circle
     className="opacity-25"

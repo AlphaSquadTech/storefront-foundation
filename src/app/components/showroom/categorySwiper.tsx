@@ -27,20 +27,22 @@ const CategorySwiper: React.FC<CategorySwiperProps> = ({ categories }) => {
         <Heading content="Shop by Category" as="h2" />
         <div className="hidden lg:flex gap-4 items-center">
           <button
+            aria-label="Previous category"
             style={{
               color: "var(--color-primary-800)",
             }}
             className="p-2 rounded-full disabled:opacity-50 cursor-pointer category-prev bg-[var(--color-secondary-50)]"
           >
-            <span className="size-6 block">{SwiperArrowIconLeft}</span>
+            <span aria-hidden="true" className="size-6 block">{SwiperArrowIconLeft}</span>
           </button>
           <button
+            aria-label="Next category"
             style={{
               color: "var(--color-primary-800)",
             }}
             className="p-2 rounded-full disabled:opacity-50 cursor-pointer category-next bg-[var(--color-secondary-50)]"
           >
-            <span className="size-6 flex-shrink-0 block">
+            <span aria-hidden="true" className="size-6 flex-shrink-0 block">
               {SwiperArrowIconRight}
             </span>
           </button>
