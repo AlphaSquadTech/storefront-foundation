@@ -1,4 +1,6 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
+// Note: <img> used for search result thumbnails with dynamic CMS URLs
 
 import { SearchIcon } from "@/app/utils/svgs/searchIcon";
 import {

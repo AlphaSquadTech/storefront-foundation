@@ -1,5 +1,9 @@
 "use client";
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// Note: _gtmId parameters are kept for API backwards compatibility but no longer used
+// GTM ID is now obtained from app configuration service dynamically
+
 declare global {
   interface Window {
     dataLayer?: object[];
