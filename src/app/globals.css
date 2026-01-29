@@ -5,6 +5,29 @@
   --font-secondary: var(--font-archivo);
 }
 
+/* Focus visible styles for accessibility (FM-001, FM-002, FM-003) */
+:focus-visible {
+  outline: 2px solid var(--color-primary-600, #d51330);
+  outline-offset: 2px;
+}
+
+/* Ensure focus is never completely removed */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Skip link focus styles */
+.sr-only:focus {
+  position: absolute;
+  width: auto;
+  height: auto;
+  padding: 1rem;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
 /* default + utilities */
 .font-primary {
   font-family: var(--font-primary), ui-sans-serif, system-ui, sans-serif;

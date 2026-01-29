@@ -1,5 +1,5 @@
 export const HourglassIcon = (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true" focusable="false">
     <rect fill="none" />
     <path
       d="M128,128,67.2,82.4A8,8,0,0,1,64,76V40a8,8,0,0,1,8-8H184a8,8,0,0,1,8,8V75.64A8,8,0,0,1,188.82,82L128,128h0"

@@ -5,6 +5,8 @@ export const PaymentFailedIcon = (
     height={80}
     viewBox="0 0 80 80"
     fill="none"
+    aria-hidden="true"
+    focusable="false"
   >
     <rect width={80} height={80} rx={40} fill="#DC2626" fillOpacity="0.1" />
     <rect
