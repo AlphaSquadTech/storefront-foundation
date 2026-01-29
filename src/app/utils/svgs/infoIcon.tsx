@@ -1,5 +1,5 @@
 export const InfoIcon = (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
     <g clipPath="url(#clip0_2116_69868)">
       <path
         opacity="0.2"

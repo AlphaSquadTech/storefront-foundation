@@ -303,12 +303,17 @@ useEffect(() => {
             />
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-[var(--color-secondary-800)] pb-2 uppercase">
+              <label htmlFor="phoneNumber" className="block text-sm font-medium text-[var(--color-secondary-800)] pb-2 uppercase">
                 Phone Number
               </label>
               <div className="relative">
                 <PhoneInput
                   name="phoneNumber"
+                  inputProps={{
+                    id: "phoneNumber",
+                    "aria-invalid": fieldErrors.phone ? "true" : undefined,
+                    "aria-describedby": fieldErrors.phone ? "phoneNumber-error" : undefined,
+                  }}
                   defaultCountry="us"
                   value={formData.phone}
                   className={cn(
@@ -324,12 +329,14 @@ useEffect(() => {
                     }))
                   }
                 />
-                <div className="size-4 text-[var(--color-primary-600)] absolute left-14 rotate-[270deg] top-1/2 -translate-y-1/2 pointer-events-none">
+                <div className="size-4 text-[var(--color-primary-600)] absolute left-14 rotate-[270deg] top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true">
                   {SwiperArrowIconLeft}
                 </div>
               </div>
               {fieldErrors.phone && (
                 <div
+                  id="phoneNumber-error"
+                  role="alert"
                   style={{ color: "var(--color-primary-600)" }}
                   className="text-sm leading-5 tracking-[-0.035px] mt-1.5"
                 >

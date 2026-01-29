@@ -36,6 +36,7 @@ interface QuestionFieldProps {
 
 function QuestionField({ question, value, onChange, error }: QuestionFieldProps) {
   const fieldId = `question-${question.id}`;
+  const errorId = `${fieldId}-error`;
   
   const baseInputClasses = `w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-[var(--color-primary-500)] focus:border-[var(--color-primary-500)] transition-colors ${
     error 
@@ -48,7 +49,8 @@ function QuestionField({ question, value, onChange, error }: QuestionFieldProps)
       <div className="space-y-2">
         <label htmlFor={fieldId} className="block text-sm font-medium text-gray-700">
           {question.question}
-          {question.required && <span className="text-red-500 ml-1">*</span>}
+          {question.required && <span className="text-red-500 ml-1" aria-hidden="true">*</span>}
+          {question.required && <span className="sr-only"> (required)</span>}
         </label>
         <textarea
           id={fieldId}
@@ -57,8 +59,11 @@ function QuestionField({ question, value, onChange, error }: QuestionFieldProps)
           className={`${baseInputClasses} min-h-[80px] outline-none resize-vertical`}
           placeholder={`Enter your answer${question.required ? ' (required)' : ''}`}
           required={question.required}
+          aria-required={question.required}
+          aria-invalid={error ? "true" : undefined}
+          aria-describedby={error ? errorId : undefined}
         />
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p id={errorId} className="text-sm text-red-600" role="alert">{error}</p>}
       </div>
     );
   }
@@ -68,7 +73,8 @@ function QuestionField({ question, value, onChange, error }: QuestionFieldProps)
       <div className="space-y-2">
         <label htmlFor={fieldId} className="block text-sm font-medium text-gray-700">
           {question.question}
-          {question.required && <span className="text-red-500 ml-1">*</span>}
+          {question.required && <span className="text-red-500 ml-1" aria-hidden="true">*</span>}
+          {question.required && <span className="sr-only"> (required)</span>}
         </label>
         <select
           id={fieldId}
@@ -76,6 +82,9 @@ function QuestionField({ question, value, onChange, error }: QuestionFieldProps)
           onChange={(e) => onChange(e.target.value)}
           className={baseInputClasses}
           required={question.required}
+          aria-required={question.required}
+          aria-invalid={error ? "true" : undefined}
+          aria-describedby={error ? errorId : undefined}
         >
           <option value="">Please select an option{question.required ? ' (required)' : ''}</option>
           {question.options.map((option, index) => (
@@ -84,7 +93,7 @@ function QuestionField({ question, value, onChange, error }: QuestionFieldProps)
             </option>
           ))}
         </select>
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p id={errorId} className="text-sm text-red-600" role="alert">{error}</p>}
       </div>
     );
   }
@@ -92,12 +101,13 @@ function QuestionField({ question, value, onChange, error }: QuestionFieldProps)
   if (question.type === 'radio' && question.options) {
     return (
       <div className="space-y-3">
-        <fieldset>
+        <fieldset aria-invalid={error ? "true" : undefined} aria-describedby={error ? errorId : undefined}>
           <legend className="block text-sm font-medium text-gray-700">
             {question.question}
-            {question.required && <span className="text-red-500 ml-1">*</span>}
+            {question.required && <span className="text-red-500 ml-1" aria-hidden="true">*</span>}
+            {question.required && <span className="sr-only"> (required)</span>}
           </legend>
-          <div className="mt-2 space-y-2">
+          <div className="mt-2 space-y-2" role="radiogroup" aria-required={question.required}>
             {question.options.map((option, index) => (
               <label 
                 key={index} 
@@ -121,7 +131,7 @@ function QuestionField({ question, value, onChange, error }: QuestionFieldProps)
             ))}
           </div>
         </fieldset>
-        {error && <p className="text-sm text-red-600 mt-2">{error}</p>}
+        {error && <p id={errorId} className="text-sm text-red-600 mt-2" role="alert">{error}</p>}
       </div>
     );
   }

@@ -5,6 +5,8 @@ export const SuccessTickIcon = (
     height={80}
     viewBox="0 0 80 80"
     fill="none"
+    aria-hidden="true"
+    focusable="false"
   >
     <rect width={80} height={80} rx={40} fill="#16A34A" fillOpacity="0.1" />
     <rect
