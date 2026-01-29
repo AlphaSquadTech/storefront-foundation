@@ -13,10 +13,8 @@ export interface CategoryCardProps {
 }
 
 export const BlogCard = ({
-  id,
   title,
   slug,
-  excerpt,
   date,
   metadata,
 }: CategoryCardProps) => {
