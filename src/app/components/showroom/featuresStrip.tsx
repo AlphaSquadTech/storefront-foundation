@@ -87,6 +87,7 @@ export const FeaturesStrip = async ({
               height={32}
               priority
               unoptimized={i1.startsWith("data:")}
+              className="w-8 h-8 object-contain brightness-0 invert"
             />
             <div className="leading-none">
               <p className="font-primary uppercase text-[var(--color-secondary-910)] text-base lg:text-xl/8 tracking-tight">
@@ -106,6 +107,7 @@ export const FeaturesStrip = async ({
               width={32}
               height={32}
               unoptimized={i2.startsWith("data:")}
+              className="w-8 h-8 object-contain brightness-0 invert"
             />
             <div className="leading-none">
               <p className="font-primary uppercase text-[var(--color-secondary-910)] text-base lg:text-xl/8 tracking-tight">
@@ -125,7 +127,7 @@ export const FeaturesStrip = async ({
               width={32}
               height={32}
               unoptimized={i3.startsWith("data:")}
-              className="w-6 h-7"
+              className="w-8 h-8 object-contain brightness-0 invert"
             />
             <div className="leading-none">
               <p className="font-primary uppercase text-[var(--color-secondary-910)] text-base lg:text-xl/8 tracking-tight">
@@ -136,6 +138,7 @@ export const FeaturesStrip = async ({
               </p>
             </div>
           </div>
+          {/* Feature 4 */}
           <div className="flex items-center gap-4">
             <Image
               src={i4}
@@ -143,6 +146,7 @@ export const FeaturesStrip = async ({
               width={32}
               height={32}
               unoptimized={i4.startsWith("data:")}
+              className="w-8 h-8 object-contain brightness-0 invert"
             />
             <div className="leading-none">
               <p className="font-primary uppercase text-[var(--color-secondary-910)] text-base lg:text-xl/8 tracking-tight">
