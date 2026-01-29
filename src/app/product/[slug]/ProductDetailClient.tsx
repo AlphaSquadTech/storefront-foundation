@@ -948,6 +948,7 @@ export default function ProductDetailClient() {
             key={b.id}
             className={`my-4 ${imageData.stretched ? "w-full" : "max-w-2xl mx-auto"}`}
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={imageUrl}
               alt={imageData.caption || "Product description image"}

@@ -1,4 +1,7 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
+// Note: <img> used for search result thumbnails with dynamic CMS URLs
+
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Select from "../reuseableUI/select";
