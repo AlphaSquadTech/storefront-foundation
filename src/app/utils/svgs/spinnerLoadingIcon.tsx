@@ -9,7 +9,6 @@ export const SpinnerLoadingIcon = ({ className }: { className?: string }) => {
             viewBox="0 0 24 24"
             aria-hidden="true"
             focusable="false"
-            role="status"
         >
             <circle
                 className="opacity-25"
