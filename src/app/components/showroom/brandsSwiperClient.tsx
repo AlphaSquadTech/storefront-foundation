@@ -43,7 +43,7 @@ export const BrandsSwiperClient = ({ brands }: BrandSwiperProps) => {
           }}
           className="p-2 rounded-full disabled:opacity-50 cursor-pointer brands-prev"
         >
-          <span className="size-6 block">{SwiperArrowIconLeft}</span>
+          <span aria-hidden="true" className="size-6 block">{SwiperArrowIconLeft}</span>
         </button>
 
         <Swiper
@@ -93,7 +93,7 @@ export const BrandsSwiperClient = ({ brands }: BrandSwiperProps) => {
           }}
           className="p-2 rounded-full disabled:opacity-50 cursor-pointer brands-next"
         >
-          <span className="size-6 flex-shrink-0 block">
+          <span aria-hidden="true" className="size-6 flex-shrink-0 block">
             {SwiperArrowIconRight}
           </span>
         </button>
