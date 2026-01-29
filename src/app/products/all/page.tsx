@@ -48,7 +48,7 @@ export async function generateMetadata({
 
 export default async function ProductsPage() {
   // Fetch initial products server-side for SEO
-  const initialData = await fetchAllProductsServer({ per_page: 20 });
+  const initialData = await fetchAllProductsServer({ per_page: 18 });
 
   // Generate schema.org structured data
   const collectionSchema = generateCollectionPageSchema(

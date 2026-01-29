@@ -4,7 +4,8 @@ import { useMemo } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 // import { ChevronDownIcon } from "@/app/utils/svgs/chevronDownIcon";
 
-const OPTIONS = [10, 20, 50, 100] as const;
+// Multiples of 3 to match 3-column product grid layout
+const OPTIONS = [9, 18, 27, 36] as const;
 
 type Option = (typeof OPTIONS)[number];
 
@@ -16,7 +17,7 @@ export default function ItemsPerPageSelect() {
   const value: Option = useMemo(() => {
     const raw = searchParams?.get("first");
     const n = raw ? parseInt(raw, 10) : NaN;
-    return (OPTIONS as readonly number[]).includes(n) ? (n as Option) : 20;
+    return (OPTIONS as readonly number[]).includes(n) ? (n as Option) : 18;
   }, [searchParams]);
 
   const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

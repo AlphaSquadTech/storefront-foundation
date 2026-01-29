@@ -7,6 +7,7 @@ import SecondaryButton from "@/app/components/reuseableUI/secondaryButton";
 import { useAppConfiguration } from "@/app/components/providers/ServerAppConfigurationProvider";
 import useGlobalStore from "@/store/useGlobalStore";
 import Link from "next/link";
+import { normalizeMenuUrl } from "./utils/normalizeMenuUrl";
 
 type MenuItem = {
   id: string;
@@ -77,11 +78,12 @@ const HamMenuSlide = ({
   ) => {
     setIsHamMenuOpen(false);
     const target = getTargetFromMetadata(metadata);
+    const normalizedUrl = normalizeMenuUrl(url);
 
     if (target === "_blank") {
-      window.open(url, "_blank", "noopener,noreferrer");
+      window.open(normalizedUrl, "_blank", "noopener,noreferrer");
     } else {
-      route.push(url);
+      route.push(normalizedUrl);
     }
   };
 
