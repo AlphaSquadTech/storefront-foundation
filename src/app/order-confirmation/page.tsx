@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 import Summary from "./summary";
 import LoadingUI from "../components/reuseableUI/loadingUI";
-import { getStoreName } from "@/app/utils/branding";
+
 
 export const metadata: Metadata = {
   title: "Order Confirmation",

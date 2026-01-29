@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getStoreName } from "./utils/branding";
 
 export const metadata: Metadata = {
   title: "Page Not Found",
