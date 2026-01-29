@@ -1,5 +1,5 @@
 export const CrossIcon = (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 20" fill="none">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 20" fill="none" aria-hidden="true" focusable="false">
     <g clipPath="url(#clip0_968_1434)">
       <path
         d="M16.125 4.375L4.875 15.625"
