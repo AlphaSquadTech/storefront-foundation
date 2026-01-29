@@ -1,6 +1,5 @@
 "use client";
 
-import { InfoIcon } from "@/app/utils/svgs/infoIcon";
 import { ProductInquiryIcon } from "@/app/utils/svgs/productInquiryIcon";
 
 interface ShippingMethod {

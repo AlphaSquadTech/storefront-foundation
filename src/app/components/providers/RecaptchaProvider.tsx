@@ -10,7 +10,8 @@ interface RecaptchaProviderProps {
 export default function RecaptchaProvider({ children }: RecaptchaProviderProps) {
   const { getGoogleRecaptchaConfig } = useAppConfiguration();
   
-  const recaptchaConfig = getGoogleRecaptchaConfig();
+  // Config fetched for future use (script injection)
+  const _recaptchaConfig = getGoogleRecaptchaConfig();
   
   // For now, just return children. In the future, this could inject reCAPTCHA scripts
   // based on the dynamic configuration

@@ -44,7 +44,7 @@ export const pushToDataLayer = (data: Record<string, unknown>) => {
   }
 };
 
-export const gtmPageView = (url: string, title?: string, gtmId?: string | null) => {
+export const gtmPageView = (url: string, title?: string, _gtmId?: string | null) => {
   // GTM ID validation removed - events should fire regardless
   
   pushToDataLayer({
@@ -77,7 +77,7 @@ export interface Product {
   quantity?: number;
 }
 
-export const gtmViewItemList = (items: Product[], listName?: string, listId?: string, gtmId?: string | null) => {
+export const gtmViewItemList = (items: Product[], listName?: string, listId?: string, _gtmId?: string | null) => {
   if (!items.length) return;
   
   pushToDataLayer({
@@ -88,7 +88,7 @@ export const gtmViewItemList = (items: Product[], listName?: string, listId?: st
   });
 };
 
-export const gtmSelectItem = (items: Product[], listName?: string, listId?: string, gtmId?: string | null) => {
+export const gtmSelectItem = (items: Product[], listName?: string, listId?: string, _gtmId?: string | null) => {
   if (!items.length) return;
   
   pushToDataLayer({
@@ -99,7 +99,7 @@ export const gtmSelectItem = (items: Product[], listName?: string, listId?: stri
   });
 };
 
-export const gtmViewItem = (items: Product[], currency: string = 'USD', value?: number, gtmId?: string | null) => {
+export const gtmViewItem = (items: Product[], currency: string = 'USD', value?: number, _gtmId?: string | null) => {
   if (!items.length) return;
   
   pushToDataLayer({
@@ -110,7 +110,7 @@ export const gtmViewItem = (items: Product[], currency: string = 'USD', value?: 
   });
 };
 
-export const gtmAddToCart = (items: Product[], currency: string = 'USD', value?: number, gtmId?: string | null) => {
+export const gtmAddToCart = (items: Product[], currency: string = 'USD', value?: number, _gtmId?: string | null) => {
   if (!items.length) return;
   
   pushToDataLayer({
@@ -121,7 +121,7 @@ export const gtmAddToCart = (items: Product[], currency: string = 'USD', value?:
   });
 };
 
-export const gtmRemoveFromCart = (items: Product[], currency: string = 'USD', value?: number, gtmId?: string | null) => {
+export const gtmRemoveFromCart = (items: Product[], currency: string = 'USD', value?: number, _gtmId?: string | null) => {
   if (!items.length) return;
   
   pushToDataLayer({
@@ -132,7 +132,7 @@ export const gtmRemoveFromCart = (items: Product[], currency: string = 'USD', va
   });
 };
 
-export const gtmViewCart = (items: Product[], currency: string = 'USD', value?: number, gtmId?: string | null) => {
+export const gtmViewCart = (items: Product[], currency: string = 'USD', value?: number, _gtmId?: string | null) => {
   if (!items.length) return;
   
   pushToDataLayer({
@@ -143,7 +143,7 @@ export const gtmViewCart = (items: Product[], currency: string = 'USD', value?: 
   });
 };
 
-export const gtmBeginCheckout = (items: Product[], currency: string = 'USD', value?: number, coupon?: string, gtmId?: string | null) => {
+export const gtmBeginCheckout = (items: Product[], currency: string = 'USD', value?: number, coupon?: string, _gtmId?: string | null) => {
   if (!items.length) return;
   
   pushToDataLayer({
@@ -173,7 +173,7 @@ export const gtmAddShippingInfo = (
   coupon?: string,
   shippingTier?: string,
   shippingAddress?: ShippingAddress,
-  gtmId?: string | null
+  _gtmId?: string | null
 ) => {
   if (!items.length) return;
   
@@ -194,7 +194,7 @@ export const gtmAddPaymentInfo = (
   value?: number, 
   coupon?: string,
   paymentType?: string,
-  gtmId?: string | null
+  _gtmId?: string | null
 ) => {
   if (!items.length) return;
   
@@ -219,7 +219,7 @@ export interface PurchaseData {
   items: Product[];
 }
 
-export const gtmPurchase = (purchaseData: PurchaseData, gtmId?: string | null) => {
+export const gtmPurchase = (purchaseData: PurchaseData, _gtmId?: string | null) => {
   // GTM ID validation removed - events should fire regardless
   
   pushToDataLayer({
@@ -240,7 +240,7 @@ export const gtmRefund = (
   items?: Product[], 
   currency: string = 'USD', 
   value?: number,
-  gtmId?: string | null
+  _gtmId?: string | null
 ) => {
   // GTM ID validation removed - events should fire regardless
   
@@ -260,7 +260,7 @@ export const gtmRefund = (
   pushToDataLayer(refundData);
 };
 
-export const gtmSearch = (searchTerm: string, numberOfResults?: number, gtmId?: string | null) => {
+export const gtmSearch = (searchTerm: string, numberOfResults?: number, _gtmId?: string | null) => {
   // GTM ID validation removed - events should fire regardless
   
   pushToDataLayer({
@@ -270,7 +270,7 @@ export const gtmSearch = (searchTerm: string, numberOfResults?: number, gtmId?: 
   });
 };
 
-export const gtmShare = (method: string, contentType: string, itemId: string, gtmId?: string | null) => {
+export const gtmShare = (method: string, contentType: string, itemId: string, _gtmId?: string | null) => {
   // GTM ID validation removed - events should fire regardless
   
   pushToDataLayer({
@@ -281,7 +281,7 @@ export const gtmShare = (method: string, contentType: string, itemId: string, gt
   });
 };
 
-export const gtmLogin = (method?: string, gtmId?: string | null) => {
+export const gtmLogin = (method?: string, _gtmId?: string | null) => {
   // GTM ID validation removed - events should fire regardless
   
   pushToDataLayer({
@@ -290,7 +290,7 @@ export const gtmLogin = (method?: string, gtmId?: string | null) => {
   });
 };
 
-export const gtmSignUp = (method?: string, gtmId?: string | null) => {
+export const gtmSignUp = (method?: string, _gtmId?: string | null) => {
   // GTM ID validation removed - events should fire regardless
   
   pushToDataLayer({
@@ -299,7 +299,7 @@ export const gtmSignUp = (method?: string, gtmId?: string | null) => {
   });
 };
 
-export const gtmGenerateLead = (currency: string = 'USD', value?: number, gtmId?: string | null) => {
+export const gtmGenerateLead = (currency: string = 'USD', value?: number, _gtmId?: string | null) => {
   // GTM ID validation removed - events should fire regardless
   
   pushToDataLayer({
@@ -309,7 +309,7 @@ export const gtmGenerateLead = (currency: string = 'USD', value?: number, gtmId?
   });
 };
 
-export const gtmCustomEvent = (eventName: string, parameters?: Record<string, unknown>, gtmId?: string | null) => {
+export const gtmCustomEvent = (eventName: string, parameters?: Record<string, unknown>, _gtmId?: string | null) => {
   // GTM ID validation removed - events should fire regardless
   
   pushToDataLayer({
@@ -318,7 +318,7 @@ export const gtmCustomEvent = (eventName: string, parameters?: Record<string, un
   });
 };
 
-export const gtmSetUserProperties = (userId?: string, properties?: Record<string, unknown>, gtmId?: string | null) => {
+export const gtmSetUserProperties = (userId?: string, properties?: Record<string, unknown>, _gtmId?: string | null) => {
   // GTM ID validation removed - events should fire regardless
   
   const userData: Record<string, unknown> = {
@@ -353,7 +353,7 @@ export const gtmEnhancedConversion = (
   conversionData: EnhancedConversionData,
   conversionValue?: number,
   conversionCurrency: string = 'USD',
-  gtmId?: string | null
+  _gtmId?: string | null
 ) => {
   // GTM ID validation removed - events should fire regardless
   
@@ -373,7 +373,7 @@ export const gtmSelectPromotion = (
   creativeSlot?: string,
   locationId?: string,
   items?: Product[],
-  gtmId?: string | null
+  _gtmId?: string | null
 ) => {
   // GTM ID validation removed - events should fire regardless
   
@@ -396,7 +396,7 @@ export const gtmViewPromotion = (
   creativeSlot?: string,
   locationId?: string,
   items?: Product[],
-  gtmId?: string | null
+  _gtmId?: string | null
 ) => {
   // GTM ID validation removed - events should fire regardless
   
@@ -412,7 +412,7 @@ export const gtmViewPromotion = (
 };
 
 // User Engagement Events
-export const gtmEngagementTime = (engagementTimeMs: number, gtmId?: string | null) => {
+export const gtmEngagementTime = (engagementTimeMs: number, _gtmId?: string | null) => {
   // GTM ID validation removed - events should fire regardless
   
   pushToDataLayer({
@@ -421,7 +421,7 @@ export const gtmEngagementTime = (engagementTimeMs: number, gtmId?: string | nul
   });
 };
 
-export const gtmScrollDepth = (scrollDepthPercent: number, pagePath?: string, gtmId?: string | null) => {
+export const gtmScrollDepth = (scrollDepthPercent: number, pagePath?: string, _gtmId?: string | null) => {
   // GTM ID validation removed - events should fire regardless
   
   pushToDataLayer({
@@ -432,7 +432,7 @@ export const gtmScrollDepth = (scrollDepthPercent: number, pagePath?: string, gt
 };
 
 // Enhanced Search with Result Count
-export const gtmSearchWithResults = (searchTerm: string, numberOfResults: number, searchCategory?: string, gtmId?: string | null) => {
+export const gtmSearchWithResults = (searchTerm: string, numberOfResults: number, searchCategory?: string, _gtmId?: string | null) => {
   // GTM ID validation removed - events should fire regardless
   
   pushToDataLayer({

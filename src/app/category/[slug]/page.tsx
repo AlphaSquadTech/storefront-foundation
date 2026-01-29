@@ -5,7 +5,6 @@ import {
 } from "@/lib/schema";
 import { Metadata } from "next";
 import { Suspense } from "react";
-import { notFound } from "next/navigation";
 import { fetchCategoryProductsServer } from "@/lib/api/fetchProductsServer";
 import { getStoreName } from "@/app/utils/branding";
 
