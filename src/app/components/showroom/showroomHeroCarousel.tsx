@@ -39,7 +39,8 @@ export async function ShowroomHeroCarousel() {
       description: getVal("paragraph") || heroData.description,
       bgSrc: getVal("background-image-url") || heroData.bgSrc,
     };
-  } catch (error) {
+  } catch {
+    // Silently fail - use default hero data
   }
 
   return <HeroClientRenderer {...heroData} />;

@@ -1,11 +1,9 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import AncillaryContent from "@/app/components/ancillary/AncillaryContent";
 import ContentSkeleton from "@/app/components/skeletons/ContentSkeleton";
 import Breadcrumb from "../components/reuseableUI/breadcrumb";
 import Heading from "../components/reuseableUI/heading";
-import { getStoreName } from "@/app/utils/branding";
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -16,8 +14,6 @@ export const metadata: Metadata = {
 };
 
 export default function ContactUsPage() {
-  const derivedTitle = "Contact Us";
-
   return (
     <main className="h-full w-full">
       <div className="container mx-auto max-w-[1276px]">
