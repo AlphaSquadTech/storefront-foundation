@@ -1,5 +1,11 @@
 # @alphasquad/create-storefront
 
+## 0.2.1
+
+### Patch Changes
+
+- c137a19: Fix scaffolded tenant dependency versions to match published @alphasquad packages.
+
 ## 0.2.0
 
 ### Minor Changes
