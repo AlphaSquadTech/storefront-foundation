@@ -1,0 +1,70 @@
+{
+  "name": "@alphasquad/storefront-base",
+  "version": "0.1.0",
+  "description": "Shared AlphaSquad storefront foundation for Next.js tenants",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./head": {
+      "types": "./dist/head.d.ts",
+      "default": "./dist/head.js"
+    },
+    "./runtime/app-configuration": {
+      "types": "./dist/runtime/app-configuration.d.ts",
+      "default": "./dist/runtime/app-configuration.js"
+    },
+    "./runtime/configuration-service": {
+      "types": "./dist/runtime/configuration-service.d.ts",
+      "default": "./dist/runtime/configuration-service.js"
+    },
+    "./runtime/server-configuration-service": {
+      "types": "./dist/runtime/server-configuration-service.d.ts",
+      "default": "./dist/runtime/server-configuration-service.js"
+    },
+    "./runtime/middleware": {
+      "types": "./dist/runtime/middleware.d.ts",
+      "default": "./dist/runtime/middleware.js"
+    },
+    "./runtime/next-config": {
+      "types": "./dist/runtime/next-config.d.ts",
+      "default": "./dist/runtime/next-config.js"
+    },
+    "./runtime/head-links": {
+      "types": "./dist/runtime/head-links.d.ts",
+      "default": "./dist/runtime/head-links.js"
+    },
+    "./runtime/root-shell": {
+      "types": "./dist/runtime/root-shell.d.ts",
+      "default": "./dist/runtime/root-shell.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "peerDependencies": {
+    "next": "^15.4.10",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "dependencies": {
+    "@alphasquad/storefront-config": "0.1.0",
+    "jwt-decode": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.13",
+    "typescript": "^5.9.2"
+  }
+}
