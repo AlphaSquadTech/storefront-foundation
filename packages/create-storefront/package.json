@@ -3,8 +3,13 @@
   "version": "0.2.0",
   "description": "CLI to scaffold storefront tenants powered by @alphasquad/storefront-base",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AlphaSquadTech/storefront-foundation",
+    "directory": "packages/create-storefront"
+  },
   "bin": {
-    "create-storefront": "./src/cli.js"
+    "create-storefront": "src/cli.js"
   },
   "files": [
     "src"

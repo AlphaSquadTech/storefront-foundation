@@ -3,6 +3,11 @@
   "version": "0.2.0",
   "description": "Typed tenant configuration contract for AlphaSquad storefronts",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AlphaSquadTech/storefront-foundation",
+    "directory": "packages/storefront-config"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
