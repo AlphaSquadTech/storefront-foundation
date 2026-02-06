@@ -1,5 +1,12 @@
 # @alphasquad/storefront-base
 
+## 0.2.2
+
+### Patch Changes
+
+- Updated dependencies [287a528]
+  - @alphasquad/storefront-config@0.2.2
+
 ## 0.2.1
 
 ### Patch Changes

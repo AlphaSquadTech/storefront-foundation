@@ -1,5 +1,11 @@
 # @alphasquad/storefront-config
 
+## 0.2.2
+
+### Patch Changes
+
+- 287a528: Scaffold tenants with expanded .env.example variables and config fields (theme layout, PartsLogic URL).
+
 ## 0.2.1
 
 ### Patch Changes
