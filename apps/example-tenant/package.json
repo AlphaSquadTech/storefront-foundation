@@ -13,7 +13,7 @@
     "@alphasquad/storefront-base": "0.2.0",
     "@alphasquad/storefront-config": "0.2.0",
     "@apollo/client": "^3.13.9",
-    "@next/third-parties": "^15.5.4",
+    "@next/third-parties": "^16.1.6",
     "@types/googlemaps": "^3.43.3",
     "clsx": "^2.1.1",
     "country-state-city": "^3.2.1",
