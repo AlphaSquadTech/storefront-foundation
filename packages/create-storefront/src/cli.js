@@ -54,8 +54,8 @@ const packageJson = {
     start: "next start"
   },
   dependencies: {
-    "@alphasquad/storefront-base": "^0.1.0",
-    "@alphasquad/storefront-config": "^0.1.0",
+    "@alphasquad/storefront-base": "^0.2.0",
+    "@alphasquad/storefront-config": "^0.2.0",
     next: "15.4.10",
     react: "19.1.0",
     "react-dom": "19.1.0"
