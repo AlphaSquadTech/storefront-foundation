@@ -1,4 +1,9 @@
-import { AppConfigurationResponse, AppConfig, InternalAppConfig, ExternalAppConfig } from './appConfiguration';
+import {
+  AppConfig,
+  AppConfigurationResponse,
+  ExternalAppConfig,
+  InternalAppConfig,
+} from "./app-configuration";
 
 // Cache for configuration to avoid repeated API calls in middleware
 let configurationCache: { data: AppConfigurationResponse; timestamp: number } | null = null;
@@ -191,11 +196,11 @@ export async function refreshConfiguration(): Promise<AppConfigurationResponse> 
 
 // Development helper: expose cache clearing functions to window for easy access
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
-  (window as Record<string, unknown>).clearServerConfigCache = () => {
+  (window as unknown as Record<string, unknown>).clearServerConfigCache = () => {
     clearConfigurationCache();
   };
   
-  (window as Record<string, unknown>).refreshServerConfig = async () => {
+  (window as unknown as Record<string, unknown>).refreshServerConfig = async () => {
     const config = await refreshConfiguration();
     return config;
   };

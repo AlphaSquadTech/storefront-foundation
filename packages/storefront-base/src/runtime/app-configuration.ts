@@ -310,17 +310,17 @@ export const appConfigService = new AppConfigurationService();
 
 // Development helper: expose cache clearing functions to window for easy access
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
-  (window as Record<string, unknown>).clearAppConfigCache = () => {
+  (window as unknown as Record<string, unknown>).clearAppConfigCache = () => {
     appConfigService.clearCache();
   };
   
-  (window as Record<string, unknown>).refreshAppConfig = async () => {
+  (window as unknown as Record<string, unknown>).refreshAppConfig = async () => {
     appConfigService.clearCache();
     const config = await appConfigService.fetchConfiguration();
     return config;
   };
   
-  (window as Record<string, unknown>).setAppConfigCacheTimeout = (timeoutMs: number) => {
+  (window as unknown as Record<string, unknown>).setAppConfigCacheTimeout = (timeoutMs: number) => {
     appConfigService.setCacheTimeout(timeoutMs);
 
   };

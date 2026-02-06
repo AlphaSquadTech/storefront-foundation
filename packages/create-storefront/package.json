@@ -1,0 +1,19 @@
+{
+  "name": "@alphasquad/create-storefront",
+  "version": "0.1.0",
+  "description": "CLI to scaffold storefront tenants powered by @alphasquad/storefront-base",
+  "type": "module",
+  "bin": {
+    "create-storefront": "./src/cli.js"
+  },
+  "files": [
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "typecheck": "node --check src/cli.js"
+  }
+}

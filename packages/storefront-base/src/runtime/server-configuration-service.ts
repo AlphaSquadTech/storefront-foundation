@@ -1,6 +1,6 @@
-import { AppConfigurationResponse } from './appConfiguration';
-import { fetchConfigurationDirect } from './configurationService';
-import { cache } from 'react';
+import { cache } from "react";
+import { AppConfigurationResponse } from "./app-configuration";
+import { fetchConfigurationDirect } from "./configuration-service";
 
 /**
  * Cached server-side configuration fetcher
@@ -114,7 +114,9 @@ export async function getClientSafeConfiguration(): Promise<ClientSafeConfigurat
       token: (() => {
         const app = findExternalApp('dealer_locator');
         if (app?.is_active && app.configurations) {
-          return (app.configurations as import('./appConfiguration').DealerLocatorConfig).token || null;
+          return (
+            app.configurations as import("./app-configuration").DealerLocatorConfig
+          ).token || null;
         }
         return null;
       })(),
@@ -174,7 +176,11 @@ export async function getClientSafeConfiguration(): Promise<ClientSafeConfigurat
       search_console_verification_content: (() => {
         const app = findExternalApp('google_search_console');
         if (app?.is_active && app.configurations) {
-          const metaTag = (app.configurations as import('./appConfiguration').GoogleSearchConsoleConfig).verification_meta_tag;
+          const metaTag = (
+            app.configurations as import(
+              "./app-configuration"
+            ).GoogleSearchConsoleConfig
+          ).verification_meta_tag;
           if (metaTag) {
             // Check if it's a full meta tag or just the verification code
             const contentMatch = metaTag.match(/content="([^"]+)"/);

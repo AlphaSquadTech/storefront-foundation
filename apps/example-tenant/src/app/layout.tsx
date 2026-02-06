@@ -1,4 +1,10 @@
 import Layout from "@/app/components/layout/rootLayout";
+import {
+  applyMetadataOverrides,
+  buildBaseMetadata,
+  buildBaseViewport,
+} from "@alphasquad/storefront-base";
+import { getBaseHeadLinks } from "@alphasquad/storefront-base/runtime/head-links";
 import { ThemeProvider } from "@/app/components/theme/theme-provider";
 import { Theme } from "@/app/utils/functions";
 import ConditionalGoogleAnalytics from "./components/analytics/ConditionalGoogleAnalytics";
@@ -19,9 +25,9 @@ import { getClientSafeConfiguration } from "./utils/serverConfigurationService";
 import RecaptchaProvider from "./components/providers/RecaptchaProvider";
 import "./globals.css";
 import GoogleAnalyticsProvider from "./components/providers/GoogleAnalyticsProvider";
-import { getStoreName } from "./utils/branding";
 import YMMStatusProvider from "./components/providers/YMMStatusProvider";
 import RouteAnnouncer from "./components/RouteAnnouncer";
+import { storefrontConfig } from "../../storefront.config";
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -37,61 +43,27 @@ const daysOne = Days_One({
   variable: "--font-days-one",
 });
 
-const appIcon = "/favicon.ico";
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const baseMetadata = buildBaseMetadata(storefrontConfig);
 
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
-  ],
-};
+export const viewport: Viewport = buildBaseViewport();
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: getStoreName(),
-    template: `%s | ${getStoreName()}`,
-  },
+export const metadata: Metadata = applyMetadataOverrides(baseMetadata, {
   description:
     "Your premier online destination for quality products with fast shipping and exceptional service",
   manifest: "/site.webmanifest",
-  authors: [{ name: getStoreName() }],
-  creator: getStoreName(),
-  publisher: getStoreName(),
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  icons: {
-    icon: [
-      {
-        url: appIcon,
-        sizes: "32x32",
-        type: "image/png",
-      },
-    ],
-    shortcut: [
-      {
-        url: appIcon,
-        sizes: "32x32",
-        type: "image/png",
-      },
-    ],
-  },
   openGraph: {
-    type: "website",
-    siteName: getStoreName(),
     locale: "en_US",
     images: [
       {
         url: "/og-default.png",
         width: 1200,
         height: 630,
-        alt: getStoreName(),
+        alt: storefrontConfig.branding.storeName,
       },
     ],
   },
@@ -102,7 +74,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
-};
+});
 
 export default async function RootLayout({
   children,
@@ -113,45 +85,21 @@ export default async function RootLayout({
 
   // Fetch configuration on server side
   const configuration = await getClientSafeConfiguration();
+  const headLinks = getBaseHeadLinks(process.env.NEXT_PUBLIC_API_URL);
 
   return (
     <html lang="en" className={`${archivo.variable} ${daysOne.variable}`}>
       <head>
-        {/* Preconnect hints for performance optimization */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        <link rel="dns-prefetch" href="https://www.google.com" />
-        {/* Preconnect to API endpoint if configured */}
-        {process.env.NEXT_PUBLIC_API_URL && (
+        {headLinks.map((link) => (
           <link
-            rel="preconnect"
-            href={new URL(process.env.NEXT_PUBLIC_API_URL).origin}
+            key={`${link.rel}:${link.href}`}
+            rel={link.rel}
+            href={link.href}
+            as={link.as}
+            type={link.type}
+            crossOrigin={link.crossOrigin}
           />
-        )}
-        {/* Preconnect to common S3 media buckets for hero LCP optimization */}
-        <link
-          rel="preconnect"
-          href="https://wsmsaleormedia.s3.us-east-1.amazonaws.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preconnect"
-          href="https://wsm-saleor-assets.s3.us-west-2.amazonaws.com"
-          crossOrigin="anonymous"
-        />
-        {/* Preload hero fallback for faster LCP */}
-        <link
-          rel="preload"
-          as="image"
-          href="/images/heroSection-fallback.webp"
-          type="image/webp"
-        />
+        ))}
         {configuration?.google?.search_console_verification_content && (
           <meta
             name="google-site-verification"

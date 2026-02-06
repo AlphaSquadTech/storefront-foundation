@@ -1,49 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AlphaSquad Storefront Workspace
 
-## Getting Started
+This repository is now organized as an npm workspace to support a reusable storefront foundation package for multi-tenant deployments.
 
-First, run the development server:
+## Workspace Layout
+- `packages/storefront-base`: shared storefront foundation package (`@alphasquad/storefront-base`)
+- `packages/storefront-config`: typed tenant config contract (`@alphasquad/storefront-config`)
+- `packages/create-storefront`: CLI scaffolder (`@alphasquad/create-storefront`)
+- `apps/example-tenant`: reference tenant app that consumes the shared packages
+
+## Dependency Policy
+`@alphasquad/storefront-base` uses:
+- `peerDependencies`: `next`, `react`, `react-dom`
+- `dependencies`: package-owned runtime dependencies
+
+This keeps framework runtime ownership in each tenant app and avoids duplicate React/Next runtime issues.
+
+## Local Development
+From repo root:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This starts `apps/example-tenant`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build and Checks
+From repo root:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-## Environment Variables
-
-Create a `.env.local` file in the root directory with the following variables:
-```env
-NEXT_PUBLIC_API_URL=your_graphql_api_endpoint
-NEXT_PUBLIC_BRAND_NAME=Your Brand Name
-NEXT_PUBLIC_THEME_PALETTE=asphalt
-NEXT_PUBLIC_APP_ICON=/icons/appIcon.png
+```bash
+npm run build
+npm run lint
+npm run typecheck
 ```
-The `NEXT_PUBLIC_API_URL` is required for fetching menu data and other content. Without it, the application will use a default localhost URL which may not work in all environments.
- 
- 
+
+## Release Workflow
+This workspace uses Changesets for versioning and npm publishing.
+
+```bash
+npm run changeset
+npm run version-packages
+npm run release
+```
+
+Automation:
+- `.github/workflows/release.yml`: creates release PRs and publishes on merge to `main`.
+- `.github/workflows/ci.yml`: validates build/typecheck/lint and runs a package install smoke test.
+
+Required GitHub secret:
+- `NPM_TOKEN`: npm token with publish permission for `@alphasquad/*`.
+
+## Tenant Bootstrapping (CLI)
+After publishing:
+
+```bash
+npx @alphasquad/create-storefront my-tenant
+```
+
+## Tenant Patch Auto-Sync
+Patch dependency updates can auto-merge using:
+- `templates/tenant/.github/dependabot.yml`
+- `templates/tenant/.github/workflows/dependabot-automerge.yml`
+
+Copy these into each tenant repository to enforce automatic patch adoption.
+
+## Head Sync Strategy
+Shared metadata defaults are defined in `@alphasquad/storefront-base` and consumed by tenant layouts. Tenants can override all head fields through metadata overrides while still inheriting package defaults.
