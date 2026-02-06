@@ -37,8 +37,8 @@ jobs:
           echo "npm:  $(npm -v)"
           npm ping
           npm whoami
-          # Helpful when publishing scoped packages: confirms the token can see the org's packages.
-          npm access ls-packages @alphasquad || npm access ls-packages alphasquad
+          # Optional: can help diagnose scope access issues; don't fail the job if org access is restricted.
+          npm access list packages @alphasquad || true
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
