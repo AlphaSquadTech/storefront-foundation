@@ -1,6 +1,6 @@
 {
   "name": "@alphasquad/create-storefront",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "CLI to scaffold storefront tenants powered by @alphasquad/storefront-base",
   "type": "module",
   "bin": {
