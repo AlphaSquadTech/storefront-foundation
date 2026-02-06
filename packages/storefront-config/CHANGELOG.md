@@ -1,5 +1,11 @@
 # @alphasquad/storefront-config
 
+## 0.2.1
+
+### Patch Changes
+
+- a24bc5a: Add package README files and document the tenant creation workflow.
+
 ## 0.2.0
 
 ### Minor Changes
