@@ -1,6 +1,6 @@
 {
   "name": "@alphasquad/storefront-base",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Shared AlphaSquad storefront foundation for Next.js tenants",
   "type": "module",
   "main": "dist/index.js",
@@ -60,7 +60,7 @@
     "react-dom": "^19.1.0"
   },
   "dependencies": {
-    "@alphasquad/storefront-config": "0.1.0",
+    "@alphasquad/storefront-config": "0.2.0",
     "jwt-decode": "^4.0.0"
   },
   "devDependencies": {
