@@ -16,7 +16,8 @@
     "smoke": "node ./scripts/smoke-test-packages.mjs",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "release:ci": "npm run build && npm run release"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.7"
