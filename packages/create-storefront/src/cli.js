@@ -69,17 +69,26 @@ const packageJson = {
 
 const configTs = `import type { TenantStorefrontConfig } from "@alphasquad/storefront-config";
 
+const tenantName = process.env.NEXT_PUBLIC_TENANT_NAME || "${tenantName}";
+const brandName =
+  process.env.NEXT_PUBLIC_BRAND_NAME || "${tenantName.replace(/-/g, " ")} Store";
+
 export const storefrontConfig: TenantStorefrontConfig = {
   branding: {
-    tenantName: "${tenantName}",
-    storeName: "${tenantName.replace(/-/g, " ")} Store",
+    tenantName,
+    storeName: brandName,
+    logoUrl: process.env.NEXT_PUBLIC_LOGO_URL,
+    appIconUrl: process.env.NEXT_PUBLIC_APP_ICON,
   },
   theme: {
-    palette: "base-template",
+    palette: process.env.NEXT_PUBLIC_THEME_PALETTE || "base-template",
+    layout: process.env.NEXT_PUBLIC_THEME_LAYOUT,
   },
   integrations: {
     apiUrl: process.env.NEXT_PUBLIC_API_URL || "",
-    siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+    siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000/",
+    searchUrl: process.env.NEXT_PUBLIC_SEARCH_URL,
+    partsLogicUrl: process.env.NEXT_PUBLIC_PARTSLOGIC_URL,
   },
 };
 `;
@@ -105,8 +114,25 @@ const pageTsx = `export default function Page() {
 }
 `;
 
-const envExample = `NEXT_PUBLIC_API_URL=
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
+const envExample = `NEXT_PUBLIC_TENANT_NAME='${tenantName}'
+NEXT_PUBLIC_BRAND_NAME='${tenantName}'
+NEXT_PUBLIC_LOGO_URL='/logo.png'
+NEXT_PUBLIC_APP_ICON='/icons/appIcon.png'
+NEXT_PUBLIC_THEME_PALETTE='forest-green'
+NEXT_PUBLIC_THEME_LAYOUT='showroom'
+#GrapQL API Configuration
+NEXT_PUBLIC_API_URL="https://api.${tenantName.replace(/-/g, "")}.com/graphql/"
+
+
+NODE_ENV="production"
+
+#search engine base URL
+NEXT_PUBLIC_SEARCH_URL="https://wsm-migrator-api.alphasquadit.com"
+
+#PartsLogic API URL (for YMM - Year/Make/Model)
+NEXT_PUBLIC_PARTSLOGIC_URL="https://pl-${tenantName}.wsm-dev.com"
+
+NEXT_PUBLIC_SITE_URL="http://localhost:3000/"
 `;
 
 const tsconfig = `{

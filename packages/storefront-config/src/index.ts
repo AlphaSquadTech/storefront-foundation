@@ -7,12 +7,14 @@ export interface BrandingConfig {
 
 export interface ThemeConfig {
   palette: string;
+  layout?: string;
 }
 
 export interface IntegrationsConfig {
   apiUrl: string;
   siteUrl: string;
   searchUrl?: string;
+  partsLogicUrl?: string;
 }
 
 export interface TenantHeadConfig {
