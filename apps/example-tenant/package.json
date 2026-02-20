@@ -12,7 +12,7 @@
   "dependencies": {
     "@alphasquad/storefront-base": "0.2.2",
     "@alphasquad/storefront-config": "0.2.2",
-    "@apollo/client": "^3.13.9",
+    "@apollo/client": "^4.1.5",
     "@next/third-parties": "^15.5.4",
     "@types/googlemaps": "^3.43.3",
     "clsx": "^2.1.1",
