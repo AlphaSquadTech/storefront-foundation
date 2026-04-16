@@ -62,7 +62,7 @@
   "peerDependencies": {
     "next": "^15.4.10",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.2.5"
   },
   "dependencies": {
     "@alphasquad/storefront-config": "0.2.2",
